@@ -14,7 +14,7 @@ export const publicMenuItems: IMenuItem[] = [
     },
     {
         name: "Actualités nationales",
-        href: "/actualites-nationales",
+        href: "#",
         hasSubMenu: true,
         subMenuItems: [
             {

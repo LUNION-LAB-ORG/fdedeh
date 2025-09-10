@@ -9,83 +9,69 @@ import {Badge} from "@/components/ui/badge";
 import {cn} from "@/lib/utils";
 import SocialShare from "@/features/articles/components/social-share";
 import {sendGAEvent} from '@next/third-parties/google'
+import AvisForm from "@/features/commentaire/components/avis-form";
+import {useRouter} from "next/navigation";
+import DailyContent from "@/features/dailies/components/daily-content";
+import DailyIntroduction from "@/features/dailies/components/daily-introduction";
 
-const colors = [
-    "bg-blue-100 text-blue-800",
-    "bg-green-100 text-green-800",
-    "bg-red-100 text-red-800",
-    "bg-yellow-100 text-yellow-800",
-    "bg-purple-100 text-purple-800",
-    "bg-pink-100 text-pink-800",
-    "bg-indigo-100 text-indigo-800",
-];
+function DailyDetails({dailyDate}: { dailyDate: string }) {
+	const {isLoading, isFetching, getDailyByDate} = useDailyStore();
+	const router = useRouter();
 
-function DailyDetails({dailyId}: { dailyId: string }) {
-    const {getDailyById, isLoading, isFetching} = useDailyStore();
+	const daily = getDailyByDate(dailyDate);
+	const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
-    const daily = getDailyById(dailyId);
-    const [selectedDate, setSelectedDate] = useState<string | null>(null);
+	useEffect(() => {
+		sendGAEvent('page_view', 'daily', {daily_id: daily?.id});
+		const date = new Date(dailyDate);
+		if (!isNaN(date.getTime())) {
+			setSelectedDate(new Date().toISOString())
+		}
+		setSelectedDate(new Date(date).toISOString().split('T')[0]);
+	}, [daily, dailyDate]);
 
-    useEffect(() => {
-        sendGAEvent('page_view', 'daily', {daily_id: dailyId});
-    }, [dailyId]);
+	const handleDateChange = async (date: string) => {
+		const shortDate = date.split('T')[0];
+		router.push(`/dailies/${shortDate}`);
+	}
 
-    useEffect(() => {
-        if (daily && daily.published_at) {
-            setSelectedDate(new Date(daily.published_at).toISOString().split('T')[0]);
-        }
-    }, [daily]);
+	if (isLoading || isFetching) {
+		return <LoadingIndicator/>;
+	}
 
-    if (isLoading || isFetching) {
-        return <LoadingIndicator/>;
-    }
-
-    if (!daily) {
-        return (
-            <div className="mb-10">
-                <p className="text-center text-gray-500">Aucun daily disponible.</p>
-            </div>
-        );
-    }
-
-    return (
-        <article>
-            <SectionTitle text="A Barthelemy Zouzoua Inabo" className="my-6"/>
-            <DailyCarouselWithPagination
-                daily={daily}
-            />
-            <div className="flex flex-wrap gap-10 mt-12">
-                <div>
-                    <input
-                        type="date"
-                        className="mb-4 p-2 border border-gray-300 rounded-full w-full min-w-64"
-                        placeholder="selectionner une date"
-                        value={selectedDate || ''}
-                        onChange={(e) => setSelectedDate(e.target.value)}
-                        max={new Date().toISOString().split('T')[0]}
-                    />
-                </div>
-                <div className="prose flex-1 space-y-8">
-                    <p
-                        className="text-justify text-pretty"
-                    >
-                        {daily.introduction}
-                    </p>
-                    {daily.contents.map((content: IDailyContent, index: number) => {
-                        return (
-                            <div className="text-justify" key={index}>
-                                <Badge className={cn("mb-3 text-base", colors[index % colors.length])}>
-                                    {content.hashtag.hashtag}
-                                </Badge>
-                                <div dangerouslySetInnerHTML={{__html: content.body}}></div>
-                            </div>
-                        );
-                    })}
-                    <SocialShare/>
-                </div>
-            </div>
-        </article>
-    );
+	return (
+		<article>
+			<SectionTitle text="A Barthelemy Zouzoua Inabo" className="my-6"/>
+			{daily && <DailyCarouselWithPagination
+				daily={daily}
+			/>}
+			<div className="flex flex-wrap gap-10 mt-12">
+				<div>
+					<input
+						type="date"
+						className="mb-4 p-2 border border-gray-300 rounded-full w-full min-w-64"
+						placeholder="selectionner une date"
+						value={selectedDate || ''}
+						onChange={(e) => handleDateChange(e.target.value)}
+						max={new Date().toISOString().split('T')[0]}
+					/>
+				</div>
+				{daily ? <div className="prose flex-1 space-y-8">
+					<DailyIntroduction introduction={daily.introduction}/>
+					{daily.contents.map((content: IDailyContent, index: number) => {
+						return (
+							<DailyContent key={content.id} content={content} index={index}/>
+						);
+					})}
+					<SocialShare/>
+					<AvisForm
+						data={daily}
+						type="daily"
+					/>
+				</div> : <p>Aucun article trouvé pour cette date.</p>}
+			</div>
+		</article>
+	);
 }
 
 export default DailyDetails;

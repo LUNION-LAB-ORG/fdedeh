@@ -330,9 +330,6 @@ importers:
       shadcn:
         specifier: ^2.10.0
         version: 2.10.0(@types/node@20.19.9)(typescript@5.9.2)
-      sharp:
-        specifier: ^0.34.3
-        version: 0.34.3
       sonner:
         specifier: ^2.0.7
         version: 2.0.7(react-dom@19.1.1(react@19.1.1))(react@19.1.1)

@@ -6,7 +6,7 @@ async function DailyDetailsPage({params}: { params: Promise<{ slug: string }> })
 	return (
 		<div className="page-container">
 			<DailyDetails
-				dailyId={slug}
+				dailyDate={slug}
 			/>
 		</div>
 	);
