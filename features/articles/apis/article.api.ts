@@ -4,7 +4,7 @@ import {PaginatedResponse} from "@/types";
 
 export interface IArticleAPI {
 		obtenirTousArticles(params: IArticleParams): Promise<PaginatedResponse<IArticle>>;
-		obtenirArticle(id: string): Promise<IArticle>;
+		obtenirArticle(id: string): Promise<{data: IArticle}>;
 }
 
 export const articleAPI: IArticleAPI = {
@@ -16,8 +16,8 @@ export const articleAPI: IArticleAPI = {
 				});
 		},
 
-		obtenirArticle(id: string): Promise<IArticle> {
-				return api.request<IArticle>({
+		obtenirArticle(id: string): Promise<{data: IArticle}> {
+				return api.request<{data: IArticle}>({
 						endpoint: `/articles/${id}`,
 						method: "GET",
 				});

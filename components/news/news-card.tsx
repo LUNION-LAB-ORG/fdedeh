@@ -1,20 +1,18 @@
 import React from 'react';
 import Image from "next/image";
-import ArticleCard, {IMedia, MediaCardProps} from "@/components/media/article-card";
+import ArticleCard, { IMedia, MediaCardProps } from "@/components/media/article-card";
 import CategoryBadge from "@/components/category-badge";
-import {IArticle} from "@/features/articles/types/article.type";
-import {addDomainToBackendImagePath} from "@/utils/image-utils";
-import {slugify} from "@/features/articles/utils/slugify";
+import { IArticle } from "@/features/articles/types/article.type";
+import { addDomainToBackendImagePath } from "@/utils/image-utils";
 
 type NewsCardProps = {
 	news: IArticle;
 } & MediaCardProps
 
-function NewsCard({news, ...props}: NewsCardProps) {
-	const slug = slugify(news.title)
+function NewsCard({ news, ...props }: NewsCardProps) {
 	const media: IMedia = {
 		title: news.title,
-		url: `/articles/${slug}`,
+		url: `/articles/${news.slug}`,
 		createdAt: news.created_at,
 	}
 

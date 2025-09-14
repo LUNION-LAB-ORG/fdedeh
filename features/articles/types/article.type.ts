@@ -8,6 +8,7 @@ export interface IArticle {
 	id: number;
 	type: ArticleType;
 	title: string;
+	slug: string;
 	content: string;
 	path_resource: string;
 	status: boolean;

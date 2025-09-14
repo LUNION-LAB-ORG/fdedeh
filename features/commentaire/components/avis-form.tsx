@@ -79,7 +79,7 @@ function AvisForm<T>({data, type="article"}: { data?: T, type?: string }) {
 					)}
 				</div>
 			</div>
-			<Button type="submit" className="rounded-full bg-custom-gradient self-end">
+			<Button disabled type="submit" className="rounded-full bg-custom-gradient self-end">
 				Ajouter
 			</Button>
 		</form>

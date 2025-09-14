@@ -6,25 +6,19 @@ import {cn} from "@/lib/utils";
 const socialNetworks: ISocialNetworkProps[] = [
     {
         name: "Facebook",
-        href: "https://www.facebook.com/yourpage",
+        href: "https://www.facebook.com/fernand.tagro",
         icon: "fa6-brands:facebook-f",
         className: "bg-[#448AE9]"
     },
     {
         name: "Twitter",
-        href: "https://www.twitter.com/yourpage",
+        href: "https://x.com/FernandDdeh",
         icon: "mdi:twitter",
         className: "bg-[#1CA1F2]"
     },
     {
-        name: "Instagram",
-        href: "https://www.instagram.com/yourpage",
-        icon: "fa6-brands:instagram",
-        className: "bg-gradient-to-r from-[#863FA6] via-[#E12C61] to-[#F46F46]"
-    },
-    {
         name: "YouTube",
-        href: "https://www.youtube.com/yourchannel",
+        href: "https://www.youtube.com/@fernanddedeh1580",
         icon: "fa6-brands:youtube",
         className: "bg-[#F1563E]"
     },

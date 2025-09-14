@@ -1,19 +1,27 @@
 "use client";
 
-import React, {useEffect} from "react";
-import {useArticleStore} from "@/features/articles/stores/article.store";
-import {useArticleListQuery} from "@/features/articles/queries/article-list.query";
-import {useDailyListQuery} from "@/features/dailies/query/dailies-list.query";
-import {useDailyStore} from "@/features/dailies/store/dailiesStore";
-import {useBannerListQuery} from "@/features/banner/queries/banner-list";
-import {useBannerStore} from "@/features/banner/banner.store";
-import {useFlashStore} from "@/features/infos-flash/flash.store";
-import {useExclusivityListQuery} from "@/features/infos-flash/queries/flash-list";
-import {useQuestionListQuery} from "@/features/question/queries/question-list";
-import {useQuestionStore} from "@/features/question/question.store";
+import React, { useEffect } from "react";
+import { useArticleStore } from "@/features/articles/stores/article.store";
+import { useArticleListQuery } from "@/features/articles/queries/article-list.query";
+import { useDailyListQuery } from "@/features/dailies/query/dailies-list.query";
+import { useDailyStore } from "@/features/dailies/store/dailiesStore";
+import { useBannerListQuery } from "@/features/banner/queries/banner-list";
+import { useBannerStore } from "@/features/banner/banner.store";
+import { useFlashStore } from "@/features/infos-flash/flash.store";
+import { useExclusivityListQuery } from "@/features/infos-flash/queries/flash-list";
+import { useQuestionListQuery } from "@/features/question/queries/question-list";
+import { useQuestionStore } from "@/features/question/question.store";
 
 export default function DataProvider() {
-	const {data, isLoading, isError, error, isFetching} = useArticleListQuery({})
+	const {
+		data,
+		isLoading,
+		isError,
+		error,
+		isFetching
+	} = useArticleListQuery({})
+
+
 	const {
 		data: dailies,
 		isLoading: dailiesLoading,
@@ -21,6 +29,7 @@ export default function DataProvider() {
 		error: dailiesError,
 		isFetching: dailiesIsFetching
 	} = useDailyListQuery();
+
 
 	const {
 		data: bannersList,
@@ -30,6 +39,7 @@ export default function DataProvider() {
 		isFetching: bannersIsFetching
 	} = useBannerListQuery();
 
+
 	const {
 		data: exclusivities,
 		isLoading: exclusivitiesLoading,
@@ -37,6 +47,7 @@ export default function DataProvider() {
 		error: exclusivitiesError,
 		isFetching: exclusivitiesIsFetching
 	} = useExclusivityListQuery();
+
 
 	const {
 		data: questionsData,
@@ -55,16 +66,16 @@ export default function DataProvider() {
 	const flashInfos = React.useMemo(() => exclusivities?.data || [], [exclusivities]);
 
 	// Stockage dans Zustand
-	const {setAllArticles, setQueryState} = useArticleStore();
-	const {setAllDailies, setQueryState: setDailyQueryState} = useDailyStore();
-	const {setAllBanners, setQueryState: setBannerQueryState} = useBannerStore();
-	const {setAllFlashInfos, setQueryState: setFlashQueryState} = useFlashStore();
-	const {setAllQuestions, setQueryState:setQuestionsQueryState} = useQuestionStore();
+	const { setAllArticles, setQueryState } = useArticleStore();
+	const { setAllDailies, setQueryState: setDailyQueryState } = useDailyStore();
+	const { setAllBanners, setQueryState: setBannerQueryState } = useBannerStore();
+	const { setAllFlashInfos, setQueryState: setFlashQueryState } = useFlashStore();
+	const { setAllQuestions, setQueryState: setQuestionsQueryState } = useQuestionStore();
 
 
 	// Effets pour mettre à jour les états
 	useEffect(() => {
-		setQueryState({isLoading, isError, error, isFetching});
+		setQueryState({ isLoading, isError, error, isFetching });
 		if (data?.data?.length) {
 			setAllArticles(data.data);
 		}

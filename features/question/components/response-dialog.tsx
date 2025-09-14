@@ -8,17 +8,17 @@ import {
 	DialogTitle,
 	DialogTrigger
 } from "@/components/ui/dialog";
-import {Button} from "@/components/ui/button";
-import {Textarea} from "@/components/ui/textarea";
-import {reponseQuestionAddSchema} from "@/features/question/question.schema";
-import {useForm} from "react-hook-form";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form"
-import {zodResolver} from "@hookform/resolvers/zod";
-import {questionApi} from "@/features/question/question.api";
-import {toast} from "sonner";
-import {z} from "zod";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { reponseQuestionAddSchema } from "@/features/question/question.schema";
+import { useForm } from "react-hook-form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { questionApi } from "@/features/question/question.api";
+import { toast } from "sonner";
+import { z } from "zod";
 
-function ResponseDialog({questionId}: { questionId: string }) {
+function ResponseDialog({ questionId }: { questionId: string }) {
 
 	const form = useForm<z.infer<typeof reponseQuestionAddSchema>>({
 		resolver: zodResolver(reponseQuestionAddSchema),
@@ -39,7 +39,10 @@ function ResponseDialog({questionId}: { questionId: string }) {
 				console.error(res)
 				toast.error("Erreur lors de l'envoi de la réponse.");
 			}
-		})
+		}).catch(err => {
+			console.error(err)
+			toast.error("Erreur lors de l'envoi de la réponse.");
+		}).finally();
 	}
 
 	return (
@@ -66,7 +69,7 @@ function ResponseDialog({questionId}: { questionId: string }) {
 						<FormField
 							control={form.control}
 							name="contenu"
-							render={({field}) => (
+							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Votre réponse</FormLabel>
 									<FormControl>
@@ -80,7 +83,7 @@ function ResponseDialog({questionId}: { questionId: string }) {
 									<FormDescription>
 										Partagez vos pensées et opinions.
 									</FormDescription>
-									<FormMessage/>
+									<FormMessage />
 								</FormItem>
 							)}
 						/>

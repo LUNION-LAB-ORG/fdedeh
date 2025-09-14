@@ -48,5 +48,6 @@ export const useArticleDetailsQuery = (id: string) => {
 export const prefetchArticleQuery = (
 	id: string
 ) => {
-	return queryClient.prefetchQuery(articleQueryOption(id));
+	const prefetch = queryClient.prefetchQuery(articleQueryOption(id));
+	return { prefetch, queryClient };
 }

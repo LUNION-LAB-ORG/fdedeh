@@ -28,3 +28,7 @@ export interface IDaily {
 	updated_at: string;
 	deleted_at: string;
 }
+
+export interface IDailyParams {
+	
+}
