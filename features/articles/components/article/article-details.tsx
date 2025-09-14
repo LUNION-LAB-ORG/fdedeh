@@ -11,6 +11,7 @@ import SocialShare from "@/features/articles/components/social-share";
 import { sendGAEvent } from "@next/third-parties/google";
 import AvisForm from "@/features/commentaire/components/avis-form";
 import { useArticleDetailsQuery } from "@/features/articles/queries/article-detail.query";
+import { ar } from 'date-fns/locale';
 
 function ArticleDetails({ slug }: { slug: string }) {
 
@@ -39,7 +40,7 @@ function ArticleDetails({ slug }: { slug: string }) {
     <article className="page-container">
       <figure className="relative mt-6">
         {!isArticleLoading ? (
-          <>
+          article && <>
             <Image
               src={addDomainToBackendImagePath(article?.path_resource)}
               alt={article?.title || 'Article Image'}
@@ -62,7 +63,7 @@ function ArticleDetails({ slug }: { slug: string }) {
       <section className="mt-6 grid grid-cols-1 lg:grid-cols-[1fr,minmax(100px,25%)] grid-rows-2 gap-16">
         <div className="prose max-w-none row-span-2">
           {!isArticleLoading ? (
-            <>
+            article && <>
               <div className="text-justify text-sm md:text-base"
                 dangerouslySetInnerHTML={{ __html: article.content }}>
               </div>
