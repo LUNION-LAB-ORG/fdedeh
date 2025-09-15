@@ -9,7 +9,6 @@ type Props = {
 
 export async function generateMetadata({ params }: Props) {
 	const { slug } = await params;
-
 	await prefetchArticleQuery(slug);
 
 	const article = await obtenirUnArticleAction(slug)
@@ -32,8 +31,7 @@ export async function generateMetadata({ params }: Props) {
 async function ArticleDetailPage({ params }: Props) {
 
 	const { slug } = await params;
-	const { prefetch } = prefetchArticleQuery(slug);
-	await prefetch;
+	await prefetchArticleQuery(slug);
 
 	return (
 		<ArticleDetails slug={slug} />
