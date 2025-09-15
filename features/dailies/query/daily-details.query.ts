@@ -45,6 +45,5 @@ export const useDailyDetailsQuery = (id: string) => {
 
 // 3- Fonction pour précharger un daily
 export const prefetchDailyQuery = (id: string) => {
-    const prefetch = queryClient.prefetchQuery(dailyQueryOption(id));
-    return { prefetch, queryClient };
+    return queryClient.prefetchQuery(dailyQueryOption(id));
 };

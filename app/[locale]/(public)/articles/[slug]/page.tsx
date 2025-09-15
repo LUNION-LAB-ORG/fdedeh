@@ -25,6 +25,12 @@ export async function generateMetadata({ params }: Props) {
 			url: `https://fdedeh.com/articles/${article?.slug}`,
 			images: addDomainToBackendImagePath(article?.path_resource),
 		},
+		twitter: {
+			card: 'summary_large_image',
+			title: `${article?.title} - Fdedeh`,
+			description: 'Lire cet article sur Fdedeh',
+			images: addDomainToBackendImagePath(article?.path_resource),
+		},
 	} : {};
 }
 
