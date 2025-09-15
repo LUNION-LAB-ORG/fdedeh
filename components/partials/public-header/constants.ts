@@ -1,4 +1,4 @@
-import {slugify} from "@/features/articles/utils/slugify";
+import { slugify } from "@/features/articles/utils/slugify";
 
 export interface IMenuItem {
     name: string;
@@ -30,8 +30,8 @@ export const publicMenuItems: IMenuItem[] = [
                 href: "/actualites-nationales/societe",
             },
             {
-                name: "Sociale",
-                href: "/actualites-nationales/culture",
+                name: "Social",
+                href: "/actualites-nationales/social",
             },
             {
                 name: "Culture & Art",

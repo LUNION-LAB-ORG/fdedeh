@@ -14,7 +14,6 @@ export async function generateMetadata({ params }: Props) {
 	await prefetch;
 
 	const article = (dehydrate(queryClient).queries[0].state.data as any).data as IArticle;
-	
 
 	return {
 		title: article?.title,
