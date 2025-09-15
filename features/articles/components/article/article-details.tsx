@@ -1,17 +1,14 @@
 "use client";
 
-import React from 'react';
-import Image from "next/image";
-import SectionTitle from "@/components/section-title";
 import Publicite from "@/components/publicite";
-import { addDomainToBackendImagePath } from "@/utils/image-utils";
+import SectionTitle from "@/components/section-title";
 import SimilarArticle from "@/features/articles/components/article/similar-article";
-import { useArticleStore } from "@/features/articles/stores/article.store";
 import SocialShare from "@/features/articles/components/social-share";
-import { sendGAEvent } from "@next/third-parties/google";
-import AvisForm from "@/features/commentaire/components/avis-form";
 import { useArticleDetailsQuery } from "@/features/articles/queries/article-detail.query";
-import { ar } from 'date-fns/locale';
+import AvisForm from "@/features/commentaire/components/avis-form";
+import { addDomainToBackendImagePath } from "@/utils/image-utils";
+import { sendGAEvent } from "@next/third-parties/google";
+import Image from "next/image";
 
 function ArticleDetails({ slug }: { slug: string }) {
 
