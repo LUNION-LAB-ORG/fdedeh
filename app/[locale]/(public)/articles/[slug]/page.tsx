@@ -1,10 +1,7 @@
 import { obtenirUnArticleAction } from "@/features/articles/actions/article.action";
 import ArticleDetails from "@/features/articles/components/article/article-details";
 import { prefetchArticleQuery } from "@/features/articles/queries/article-detail.query";
-import { IArticle } from '@/features/articles/types/article.type';
 import { addDomainToBackendImagePath } from '@/utils/image-utils';
-import { dehydrate } from "@tanstack/react-query";
-import { ar } from "date-fns/locale";
 
 type Props = {
 	params: Promise<{ slug: string }>
@@ -12,8 +9,8 @@ type Props = {
 
 export async function generateMetadata({ params }: Props) {
 	const { slug } = await params;
-	const { prefetch, queryClient } = prefetchArticleQuery(slug);
-	await prefetch;
+
+	await prefetchArticleQuery(slug);
 
 	const article = await obtenirUnArticleAction(slug)
 		.then(res => res.data)

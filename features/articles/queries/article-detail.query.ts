@@ -1,10 +1,10 @@
 import React from 'react';
 
-import {useQuery,} from '@tanstack/react-query';
+import { useQuery, } from '@tanstack/react-query';
 import getQueryClient from '@/lib/get-query-client';
-import {obtenirUnArticleAction} from '../actions/article.action';
-import {articlesKeyQuery} from './index.query';
-import {toast} from 'sonner';
+import { obtenirUnArticleAction } from '../actions/article.action';
+import { articlesKeyQuery } from './index.query';
+import { toast } from 'sonner';
 
 const queryClient = getQueryClient();
 
@@ -48,6 +48,5 @@ export const useArticleDetailsQuery = (id: string) => {
 export const prefetchArticleQuery = (
 	id: string
 ) => {
-	const prefetch = queryClient.prefetchQuery(articleQueryOption(id));
-	return { prefetch, queryClient };
+	return queryClient.prefetchQuery(articleQueryOption(id));
 }
