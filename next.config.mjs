@@ -38,7 +38,6 @@ const nextConfig = {
             }
 		],
 	},
-	// output: 'standalone',
 };
 
 export default withNextVideo(withNextIntl(nextConfig));
