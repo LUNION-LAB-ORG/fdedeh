@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: fdedeh-web
+    restart: always
+    ports:
+      - "3002:3000"
+    env_file:
+      - path: .env
+        required: true
+    networks:
+      - fdedeh-network
+    
+networks:
+  fdedeh-network:
+    external: true
+
+      
+      
+    

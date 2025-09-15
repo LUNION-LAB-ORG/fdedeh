@@ -45,8 +45,8 @@ function DailyDetails({ dailyDate }: { dailyDate: string }) {
 			{daily && <DailyCarouselWithPagination
 				daily={daily}
 			/>}
-			<div className="flex flex-wrap gap-10 mt-12">
-				<div>
+			<div className="grid md:grid-cols-6 gap-10 mt-12">
+				<div className="md:col-span-2 flex flex-col items-start space-y-4">
 					<input
 						type="date"
 						className="mb-4 p-2 border border-gray-300 rounded-full w-full min-w-64"
@@ -56,7 +56,7 @@ function DailyDetails({ dailyDate }: { dailyDate: string }) {
 						max={new Date().toISOString().split('T')[0]}
 					/>
 				</div>
-				{daily ? <div className="prose flex-1 space-y-8">
+				{daily ? <div className="prose flex-1 space-y-8 md:col-span-4">
 					<DailyIntroduction introduction={daily.introduction} />
 					{daily.contents.map((content: IDailyContent, index: number) => {
 						return (

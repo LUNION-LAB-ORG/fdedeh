@@ -1,0 +1,10 @@
+.idea
+.env
+node_modules
+dist
+coverage
+*.log
+.git
+.next/cache
+Dockerfile
+.dockerignore
