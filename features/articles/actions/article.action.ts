@@ -18,11 +18,9 @@ export const obtenirTousArticlesAction = async (params: IArticleParams): Promise
 	}
 }
 
-export const obtenirUnArticleAction = async (id: string): Promise<ActionResponse<IArticle >> => {
+export const obtenirUnArticleAction = async (id: string): Promise<ActionResponse<IArticle>> => {
 	try {
 		const data = await articleAPI.obtenirArticle(id);
-		console.log('api article data:', data.data);
-
 		return {
 			success: true,
 			data: data.data,

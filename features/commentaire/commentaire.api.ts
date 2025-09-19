@@ -1,13 +1,14 @@
-import {ICommentaire} from "@/features/commentaire/commentaire.type";
-import {CommentaireAddDTO} from "@/features/commentaire/commentaire.schema";
-import {api} from "@/lib/api";
+import { ICommentaire } from "@/features/commentaire/commentaire.type";
+import { CommentaireAddDTO } from "@/features/commentaire/commentaire.schema";
+import { api } from "@/lib/api";
+import { LaravelPaginatedResponse } from "@/types";
 
 export interface ICommentaireApi {
 	ajouterCommentaire(data: CommentaireAddDTO): Promise<any>;
 	obtenirCommentaires({ entityId, entityType }: {
 		entityId: string;
 		entityType: string;
-	}): Promise<ICommentaire[]>;
+	}): Promise<LaravelPaginatedResponse<ICommentaire>>;
 }
 
 export const commentaireApi: ICommentaireApi = {
@@ -15,15 +16,21 @@ export const commentaireApi: ICommentaireApi = {
 		return api.request<any>({
 			endpoint: `/comments`,
 			method: "POST",
-			data,
+			data: {
+				item_id: data.entityId,
+				type: data.entityType.toUpperCase(),
+				lastName: data.fullName,
+				email: data.email,
+				comments: data.comment,
+			},
 		});
 	},
 
-	obtenirCommentaires({ entityId, entityType }: { entityId: string; entityType: string; }): Promise<ICommentaire[]> {
-		return api.request<ICommentaire[]>({
-			endpoint: `/comments`,
+	obtenirCommentaires({ entityId, entityType }: { entityId: string; entityType: string; }): Promise<LaravelPaginatedResponse<ICommentaire>> {
+		return api.request<LaravelPaginatedResponse<ICommentaire>>({
+			endpoint: `/items/${entityType}/${entityId}/comments`,
 			method: "GET",
-			searchParams: { entityId, entityType },
+			searchParams: { entityType },
 		})
 	}
 }

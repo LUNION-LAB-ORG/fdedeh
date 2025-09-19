@@ -6,6 +6,7 @@ import SimilarArticle from "@/features/articles/components/article/similar-artic
 import SocialShare from "@/features/articles/components/social-share";
 import { useArticleDetailsQuery } from "@/features/articles/queries/article-detail.query";
 import AvisForm from "@/features/commentaire/components/avis-form";
+import AvisList from "@/features/commentaire/components/avis-list";
 import { addDomainToBackendImagePath } from "@/utils/image-utils";
 import { sendGAEvent } from "@next/third-parties/google";
 import Image from "next/image";
@@ -68,6 +69,12 @@ function ArticleDetails({ slug }: { slug: string }) {
               <div className="mt-5 ">
                 <AvisForm
                   data={article}
+                />
+              </div>
+              <div className="mt-10">
+                <AvisList
+                  entityId={article.id.toLocaleString()}
+                  entityType="article"
                 />
               </div>
               <div className="mt-14">

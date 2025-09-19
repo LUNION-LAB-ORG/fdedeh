@@ -1,6 +1,7 @@
 import {cn} from "@/lib/utils";
 import PublicHeader from "@/components/partials/public-header";
 import PublicFooter from "@/components/partials/public-footer";
+import BannerDialog from "@/features/banner/components/banner-dialog";
 
 const LayoutPublic = async ({children}: { children: React.ReactNode }) => {
     return (
@@ -14,7 +15,8 @@ const LayoutPublic = async ({children}: { children: React.ReactNode }) => {
             >
                 {children}
             </div>
-            <PublicFooter/>
+            <BannerDialog/>
+            <PublicFooter />
         </>
     );
 };

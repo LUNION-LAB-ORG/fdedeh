@@ -13,65 +13,74 @@ import AvisForm from "@/features/commentaire/components/avis-form";
 import { useRouter } from "next/navigation";
 import DailyContent from "@/features/dailies/components/daily-content";
 import DailyIntroduction from "@/features/dailies/components/daily-introduction";
+import AvisList from '@/features/commentaire/components/avis-list';
 
 function DailyDetails({ dailyDate }: { dailyDate: string }) {
-	const { isLoading, isFetching, getDailyByDate } = useDailyStore();
-	const router = useRouter();
+  const { isLoading, isFetching, getDailyByDate } = useDailyStore();
+  const router = useRouter();
 
-	const daily = getDailyByDate(dailyDate);
-	const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const daily = getDailyByDate(dailyDate);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
-	useEffect(() => {
-		sendGAEvent('page_view', 'daily', { daily_id: daily?.id });
-		const date = new Date(dailyDate);
-		if (!isNaN(date.getTime())) {
-			setSelectedDate(new Date().toISOString())
-		}
-		setSelectedDate(new Date(date).toISOString().split('T')[0]);
-	}, [daily, dailyDate]);
+  useEffect(() => {
+    sendGAEvent('page_view', 'daily', { daily_id: daily?.id });
+    const date = new Date(dailyDate);
+    if (!isNaN(date.getTime())) {
+      setSelectedDate(new Date().toISOString())
+    }
+    setSelectedDate(new Date(date).toISOString().split('T')[0]);
+  }, [daily, dailyDate]);
 
-	const handleDateChange = async (date: string) => {
-		const shortDate = date.split('T')[0];
-		router.push(`/dailies/${shortDate}`);
-	}
+  const handleDateChange = async (date: string) => {
+    const shortDate = date.split('T')[0];
+    router.push(`/dailies/${shortDate}`);
+  }
 
-	if (isLoading || isFetching) {
-		return <LoadingIndicator />;
-	}
+  if (isLoading || isFetching) {
+    return <LoadingIndicator />;
+  }
 
-	return (
-		<article>
-			<SectionTitle text="A Barthelemy Zouzoua Inabo" className="my-6" />
-			{daily && <DailyCarouselWithPagination
-				daily={daily}
-			/>}
-			<div className="grid md:grid-cols-6 gap-10 mt-12">
-				<div className="md:col-span-2 flex flex-col items-start space-y-4">
-					<input
-						type="date"
-						className="mb-4 p-2 border border-gray-300 rounded-full w-full min-w-64"
-						placeholder="selectionner une date"
-						value={selectedDate || ''}
-						onChange={(e) => handleDateChange(e.target.value)}
-						max={new Date().toISOString().split('T')[0]}
-					/>
-				</div>
-				{daily ? <div className="prose flex-1 space-y-8 md:col-span-4">
-					<DailyIntroduction introduction={daily.introduction} />
-					{daily.contents.map((content: IDailyContent, index: number) => {
-						return (
-							<DailyContent key={content.id} content={content} index={index} />
-						);
-					})}
-					<SocialShare />
-					<AvisForm
-						data={daily}
-						type="daily"
-					/>
-				</div> : <p>Aucun article trouvé pour cette date.</p>}
-			</div>
-		</article>
-	);
+  return (
+    <article>
+      <SectionTitle text="A Barthelemy Zouzoua Inabo" className="my-6" />
+      {daily && <DailyCarouselWithPagination
+        daily={daily}
+      />}
+      <div className="grid md:grid-cols-6 gap-10 mt-12">
+        <div className="md:col-span-2 flex flex-col items-start space-y-4">
+          <input
+            type="date"
+            className="mb-4 p-2 border border-gray-300 rounded-full w-full min-w-64"
+            placeholder="selectionner une date"
+            value={selectedDate || ''}
+            onChange={(e) => handleDateChange(e.target.value)}
+            max={new Date().toISOString().split('T')[0]}
+          />
+        </div>
+        {daily ? <div className="prose flex-1 space-y-8 md:col-span-4">
+          <DailyIntroduction introduction={daily.introduction} />
+          {daily.contents.map((content: IDailyContent, index: number) => {
+            return (
+              <DailyContent key={content.id} content={content} index={index} />
+            );
+          })}
+          <SocialShare />
+          <div className="mt-5 ">
+            <AvisForm
+              data={daily}
+              type="daily"
+            />
+          </div>
+          <div className="mt-10">
+            <AvisList
+              entityId={daily.id.toLocaleString()}
+              entityType="DAILY"
+            />
+          </div>
+        </div> : <p>Aucun article trouvé pour cette date.</p>}
+      </div>
+    </article>
+  );
 }
 
 export default DailyDetails;

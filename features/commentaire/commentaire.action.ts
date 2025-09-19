@@ -1,9 +1,10 @@
 "use server";
 
-import {commentaireApi} from "@/features/commentaire/commentaire.api";
-import {CommentaireAddDTO} from "@/features/commentaire/commentaire.schema";
-import {ICommentaire} from "@/features/commentaire/commentaire.type";
-import {handleServerActionError} from "@/utils/handleServerActionError";
+import { commentaireApi } from "@/features/commentaire/commentaire.api";
+import { CommentaireAddDTO } from "@/features/commentaire/commentaire.schema";
+import { ICommentaire } from "@/features/commentaire/commentaire.type";
+import { LaravelPaginatedResponse } from "@/types";
+import { handleServerActionError } from "@/utils/handleServerActionError";
 
 // Types de réponse génériques
 interface ActionResponse<T> {
@@ -16,6 +17,7 @@ interface ActionResponse<T> {
 export const ajouterCommentaireAction = async (formdata: CommentaireAddDTO): Promise<ActionResponse<any>> => {
     try {
         const data = await commentaireApi.ajouterCommentaire(formdata);
+        
         return {
             success: true,
             data,
@@ -26,9 +28,10 @@ export const ajouterCommentaireAction = async (formdata: CommentaireAddDTO): Pro
     }
 };
 
-export const obtenirCommentairesAction = async ({ entityId, entityType }: { entityId: string; entityType: string; }): Promise<ActionResponse<ICommentaire[]>> => {
+export const obtenirCommentairesAction = async ({ entityId, entityType }: { entityId: string; entityType: string; }): Promise<ActionResponse<LaravelPaginatedResponse<ICommentaire>>> => {
     try {
         const data = await commentaireApi.obtenirCommentaires({ entityId, entityType });
+
         return {
             success: true,
             data,

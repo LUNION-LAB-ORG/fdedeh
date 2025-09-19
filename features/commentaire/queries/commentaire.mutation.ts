@@ -1,11 +1,11 @@
 "use client";
 
-import {useInvalidateCommentaireQuery} from "@/features/commentaire/queries/index.query";
-import {useMutation} from "@tanstack/react-query";
-import {CommentaireAddDTO, CommentaireAddSchema} from "@/features/commentaire/commentaire.schema";
-import {processAndValidateFormData} from "ak-zod-form-kit";
-import {ajouterCommentaireAction} from "@/features/commentaire/commentaire.action";
-import {toast} from "sonner";
+import { useInvalidateCommentaireQuery } from "@/features/commentaire/queries/index.query";
+import { useMutation } from "@tanstack/react-query";
+import { CommentaireAddDTO, CommentaireAddSchema } from "@/features/commentaire/commentaire.schema";
+import { processAndValidateFormData } from "ak-zod-form-kit";
+import { ajouterCommentaireAction } from "@/features/commentaire/commentaire.action";
+import { toast } from "sonner";
 
 export const useAjouterCommentaireMutation = () => {
 	const invalidateCommentaireQuery = useInvalidateCommentaireQuery()
@@ -17,13 +17,6 @@ export const useAjouterCommentaireMutation = () => {
 			const validation = processAndValidateFormData(CommentaireAddSchema, data,
 				{
 					outputFormat: "object",
-					transformations: {
-						fullName: (value) => value.trim(),
-						email: (value) => value.trim().toLowerCase(),
-						comment: (value) => value.trim(),
-						entityId: (value) => value.trim(),
-						entityType: (value) => value.trim(),
-					}
 				})
 
 			if (!validation.success) {
