@@ -28,9 +28,9 @@ export const ajouterCommentaireAction = async (formdata: CommentaireAddDTO): Pro
     }
 };
 
-export const obtenirCommentairesAction = async ({ entityId, entityType }: { entityId: string; entityType: string; }): Promise<ActionResponse<LaravelPaginatedResponse<ICommentaire>>> => {
+export const obtenirCommentairesAction = async ({ entityId, entityType, page = 1 }: { entityId: string; entityType: string; page?: number }): Promise<ActionResponse<LaravelPaginatedResponse<ICommentaire>>> => {
     try {
-        const data = await commentaireApi.obtenirCommentaires({ entityId, entityType });
+        const data = await commentaireApi.obtenirCommentaires({ entityId, entityType, page });
 
         return {
             success: true,

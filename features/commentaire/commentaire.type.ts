@@ -1,6 +1,6 @@
 export interface ICommentaire {
   id: string;
-  fullName: string;
+  fullname: string;
   email: string;
   comments: string;
   entityId: string;

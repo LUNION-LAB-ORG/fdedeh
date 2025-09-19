@@ -7,6 +7,7 @@ import { commentaireKeyQuery } from "./index.query";
 type listQuery = {
     entityId: string;
     entityType: string;
+    page?: number;
 }
 
 const queryClient = getQueryClient();
@@ -14,11 +15,12 @@ const queryClient = getQueryClient();
 // 1- Option de requête optimisée
 export const commentaireListQueryOption = ({
     entityId,
-    entityType
+    entityType,
+    page = 1
 }: listQuery) => ({
-    queryKey: commentaireKeyQuery("list"),
+    queryKey: commentaireKeyQuery("list", { entityId, entityType, page }),
     queryFn: async () => {
-        const result = await obtenirCommentairesAction({ entityId, entityType });
+        const result = await obtenirCommentairesAction({ entityId, entityType, page });
         if (!result.success) {
             throw new Error("Erreur lors de la récupération des commentaires");
         }
@@ -30,8 +32,8 @@ export const commentaireListQueryOption = ({
     refetchOnMount: true,
 });
 
-export default function useCommentaireListQuery({ entityId, entityType }: listQuery) {
-    const query = useQuery(commentaireListQueryOption({ entityId, entityType }));
+export default function useCommentaireListQuery({ entityId, entityType, page }: listQuery) {
+    const query = useQuery(commentaireListQueryOption({ entityId, entityType, page }));
 
     // Gestion des erreurs dans le hook
     React.useEffect(() => {

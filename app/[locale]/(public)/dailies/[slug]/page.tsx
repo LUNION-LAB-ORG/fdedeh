@@ -1,10 +1,8 @@
-import React from 'react';
 import DailyDetails from "@/features/dailies/components/daily-details";
+import { obtenirUnDailyAction } from '@/features/dailies/dailies.action';
 import { prefetchDailyQuery } from '@/features/dailies/query/daily-details.query';
-import { dehydrate } from '@tanstack/react-query';
 import { IDaily } from '@/features/dailies/types';
 import { addDomainToBackendImagePath } from '@/utils/image-utils';
-import { obtenirUnDailyAction } from '@/features/dailies/dailies.action';
 
 type Props = {
   params: Promise<{ slug: string }>

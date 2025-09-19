@@ -5,9 +5,10 @@ import { LaravelPaginatedResponse } from "@/types";
 
 export interface ICommentaireApi {
 	ajouterCommentaire(data: CommentaireAddDTO): Promise<any>;
-	obtenirCommentaires({ entityId, entityType }: {
+	obtenirCommentaires({ entityId, entityType, page }: {
 		entityId: string;
 		entityType: string;
+		page?: number;
 	}): Promise<LaravelPaginatedResponse<ICommentaire>>;
 }
 
@@ -19,18 +20,18 @@ export const commentaireApi: ICommentaireApi = {
 			data: {
 				item_id: data.entityId,
 				type: data.entityType.toUpperCase(),
-				lastName: data.fullName,
+				fullname: data.fullName,
 				email: data.email,
 				comments: data.comment,
 			},
 		});
 	},
 
-	obtenirCommentaires({ entityId, entityType }: { entityId: string; entityType: string; }): Promise<LaravelPaginatedResponse<ICommentaire>> {
+	obtenirCommentaires({ entityId, entityType, page = 1 }: { entityId: string; entityType: string; page?: number }): Promise<LaravelPaginatedResponse<ICommentaire>> {
 		return api.request<LaravelPaginatedResponse<ICommentaire>>({
 			endpoint: `/items/${entityType}/${entityId}/comments`,
 			method: "GET",
-			searchParams: { entityType },
+			searchParams: { entityType, page },
 		})
 	}
 }

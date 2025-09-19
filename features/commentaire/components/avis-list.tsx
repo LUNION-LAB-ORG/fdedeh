@@ -1,10 +1,10 @@
-import React from 'react';
-import { formatDistanceToNow } from 'date-fns';
-import { fr } from 'date-fns/locale';
+"use client";
+
+import { parseAsInteger, useQueryState } from 'nuqs';
 import useCommentaireListQuery from '../queries/commentaire-list.query';
-import {
-  ChevronLeft, ChevronRight
-} from 'lucide-react'
+import AvisPagination from './avis-pagination';
+import AvisItem from './avis-item';
+import AvisSkeleton from './avis-skeleton';
 
 type Props = {
   entityType: string;
@@ -13,89 +13,39 @@ type Props = {
 
 export default function AvisList({ entityType, entityId }: Props) {
 
-  const avisPaginated = useCommentaireListQuery({ entityId, entityType }).data || null;
+  const [currentPage, setCurrentPage] = useQueryState('page', parseAsInteger.withDefault(1));
+
+  const { data: avisPaginated, isFetching, isLoading, isError, refetch } = useCommentaireListQuery({ entityId, entityType, page: currentPage });
+
+  const showLoader = isLoading || isFetching;
 
   const avis = avisPaginated ? avisPaginated.data : [];
 
-  console.log("avis", avisPaginated);
+  if (isError) {
+    return (
+      <div className="p-4 bg-red-100 text-red-700 rounded">
+        Une erreur est survenue lors du chargement des avis. <button className="underline" onClick={() => refetch()}>Réessayer</button>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-2">
-      {avis.map((item) => (
-        <div key={item.id} className="bg-white p-4 rounded-lg border">
-          <div className="font-medium">
-            {"Anonyme"}
-          </div>
-          <div className="text-sm text-gray-500">
-            {formatDistanceToNow(new Date(item.created_at), {
-              addSuffix: true,
-              locale: fr
-            })}
-          </div>
-          <div className="mt-2">
-            {item.comments}
-          </div>
-        </div>
+      {!showLoader && avis.map((item) => (
+        <AvisItem key={item.id} avis={item} />
       ))}
 
-      {avisPaginated && avisPaginated.meta && (
-        <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
-          <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-            <div>
-              <p className="text-sm text-gray-700">
-                Affichage de <span className="font-medium">{avisPaginated.meta.from}</span> à <span className="font-medium">{avisPaginated.meta.to}</span> sur <span className="font-medium">{avisPaginated.meta.total}</span> avis
-              </p>
-            </div>
-            <div>
-              <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-                <button
-                  onClick={() => {
-                    if (avisPaginated.links.prev) {
-                      const url = new URL(avisPaginated.links.prev);
-                      const page = url.searchParams.get('page');
-                      if (page) {
-                        // Handle page navigation here
-                      }
-                    }
-                  }}
-                  disabled={!avisPaginated.links.prev}
-                  className={`relative inline-flex items-center px-2 py-2 rounded-l-md text-sm font-medium ${!avisPaginated.links.prev
-                    ? 'text-gray-300 cursor-not-allowed'
-                    : 'text-gray-500 hover:bg-gray-50'
-                    }`}
-                  aria-label="Previous"
-                >
-                  <ChevronLeft className="h-5 w-5" />
-                </button>
+      {showLoader && Array.from({ length: 5 }).map((_, index) => (
+        <AvisSkeleton key={index} />
+      ))}
 
-                <span className="px-4 py-2 text-sm text-gray-700">
-                  Page {avisPaginated.meta.current_page} sur {avisPaginated.meta.last_page}
-                </span>
-
-                <button
-                  onClick={() => {
-                    if (avisPaginated.links.next) {
-                      const url = new URL(avisPaginated.links.next);
-                      const page = url.searchParams.get('page');
-                      if (page) {
-                        // Handle page navigation here
-                      }
-                    }
-                  }}
-                  disabled={!avisPaginated.links.next}
-                  className={`relative inline-flex items-center px-2 py-2 rounded-r-md text-sm font-medium ${!avisPaginated.links.next
-                    ? 'text-gray-300 cursor-not-allowed'
-                    : 'text-gray-500 hover:bg-gray-50'
-                    }`}
-                  aria-label="Next"
-                >
-                  <ChevronRight className="h-5 w-5" />
-                </button>
-              </nav>
-            </div>
-          </div>
-        </div>
-      )}
+      <AvisPagination
+        avisPaginated={avisPaginated!}
+        changePage={(newPage) => {
+          setCurrentPage(newPage);
+          console.log('Change to page:', newPage);
+        }}
+      />
     </div >
   );
 };
