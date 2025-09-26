@@ -8,10 +8,7 @@ import StayConnected from "@/components/home/stay-connected";
 import NewsletterBox from "@/components/home/newsletter-box";
 import DailiesSliderSection from "@/features/dailies/components/dailies-slider-section";
 
-export default async function HomePage(props: {
-	params: Promise<{ locale: string }>;
-}) {
-
+export default async function HomePage() {
 	return (
 		<>
 			<FlashInfo/>

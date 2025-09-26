@@ -16,21 +16,22 @@ import Image from "next/image";
 import Autoplay from "embla-carousel-autoplay";
 import CategoryBadge from "@/components/category-badge";
 import {AnimatePresence, motion} from "framer-motion";
-import {ICategory} from "@/app/api/news";
+
+import {ICategorie} from "@/features/categories/types/categorie.type";
 
 type CarouselWithPaginationProps = {
     caourselItems?: {
         src: string;
         alt: string;
         title: string;
-        category: ICategory;
+        category: ICategorie;
     }[];
 }
 
 export default function CarouselWithPagination({caourselItems}: CarouselWithPaginationProps) {
     const [api, setApi] = React.useState<CarouselApi>();
     const [current, setCurrent] = React.useState(0);
-    const [count, setCount] = React.useState(0);
+    const [, setCount] = React.useState(0);
 
     React.useEffect(() => {
         if (!api) {

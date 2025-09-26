@@ -2,20 +2,15 @@
 
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+  AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { motion } from "framer-motion";
 import ContactButton from "./contact-button";
 
 export default function BannerDialog() {
@@ -28,7 +23,7 @@ export default function BannerDialog() {
   return (
     <AlertDialog open={open} onOpenChange={handleClose}>
       <AlertDialogTrigger className="hidden" />
-      <AlertDialogContent className="max-w-2xl w-full aspect-square p-2.5">
+      <AlertDialogContent className="max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl w-full aspect-square p-2.5 max-h-screen">
         <ContactButton />
         <Button size="icon" className="absolute right-2 top-2 rounded-full bg-custom-gradient" onClick={handleClose}>
           <span className="sr-only">Close</span>

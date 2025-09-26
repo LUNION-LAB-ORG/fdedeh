@@ -1,3 +1,5 @@
+import {ICategorie} from "@/features/categories/types/categorie.type";
+
 export enum ArticleType {
 	ARTICLE = 'ARTICLE',
 	NEWS = 'NEWS',
@@ -17,7 +19,7 @@ export interface IArticle {
 	deleted_at: string | null;
 	created_by: number;
 	category_id: number;
-	category: ICategory;
+	category: ICategorie;
 }
 
 export interface IArticleParams {
@@ -31,14 +33,4 @@ export interface IArticleParams {
 	page?: number;
 	limit?: number;
 	skip?:number;
-}
-
-export interface ICategory {
-	id?: string;
-	name: string;
-	description?: string;
-	created_at?: string;
-	updated_at?: string;
-	deleted_at?: string | null;
-	created_by?: number;
 }

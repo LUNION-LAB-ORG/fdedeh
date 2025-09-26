@@ -12,7 +12,7 @@ function OtherDailyNews() {
 	//
 	// const articles = React.useMemo(() => data?.data || [], [data]);
 
-	const {isLoading, isError, error, isFetching, allArticles: articles, getFilteredArticles} = useArticleStore();
+	const {isLoading, isError, error, isFetching, getFilteredArticles} = useArticleStore();
 
 	const showLoading = isLoading || isFetching;
 
@@ -31,7 +31,7 @@ function OtherDailyNews() {
 					Voir tout
 				</Link>
 			</div>
-			<div className="grid grid-cols-1 gap-4 lg:gap-6 md:grid-cols-2 lg:grid-cols-3">
+			<div className="grid-article-container lg:grid-cols-3">
 				{showLoading ? Array.from({length: 3}).map((_, index) => (
 					<SkeletonCard key={index}/>
 				)) : getFilteredArticles({limit: 6})

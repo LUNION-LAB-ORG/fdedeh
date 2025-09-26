@@ -83,8 +83,12 @@
     }
 }
 
+.grid-article-container {
+    @apply grid grid-cols-1 gap-8 md:grid-cols-2;
+}
+
 .grid-article-screen {
-    @apply grid sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8
+    @apply grid sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8
 }
 
 .text-primary-gradient {
@@ -144,7 +148,7 @@
 
     .input-group.merged :not(:first-child) input {
         border-left-width: 0 !important;
-        padding-left: 0px !important;
+        padding-left: 0 !important;
     }
 
     .input-group :not(:last-child) input {
@@ -153,12 +157,12 @@
     }
 
     .input-group.merged :not(:last-child) input {
-        border-right: 0px !important;
-        padding-right: 0px !important;
+        border-right: 0 !important;
+        padding-right: 0 !important;
     }
 
     .no-scrollbar::-webkit-scrollbar {
-        width: 0px;
+        width: 0;
     }
 
     .no-scrollbar::-webkit-scrollbar-thumb {
