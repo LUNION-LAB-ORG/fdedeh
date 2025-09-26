@@ -22,7 +22,7 @@ export const useEnregistrerStatsMutation = () => {
 			const result = await enregistrerStatsAction(validation.data as Stats);
 
 			if (!result.success) {
-				throw new Error(result.error || "Erreur lors de l'enregistrement des statistiques");
+				throw new Error("Erreur lors de l'enregistrement des statistiques");
 			}
 
 			return result.data!;
