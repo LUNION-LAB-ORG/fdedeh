@@ -2,12 +2,13 @@ import { obtenirUnArticleAction } from "@/features/articles/actions/article.acti
 import ArticleDetails from "@/features/articles/components/article/article-details";
 import { prefetchArticleQuery } from "@/features/articles/queries/article-detail.query";
 import { addDomainToBackendImagePath } from '@/utils/image-utils';
+import {Metadata} from "next";
 
 type Props = {
 	params: Promise<{ slug: string }>
 }
 
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { slug } = await params;
 	await prefetchArticleQuery(slug);
 
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: Props) {
 			title: `${article?.title} - Fdedeh`,
 			description: 'Lire cet article sur Fdedeh',
 			type: 'article',
-			url: `https://fdedeh.com/articles/${article?.slug}`,
+			url: `${process.env.NEXT_PUBLIC_BASE_URL ?? 'https://www.fdedeh.info/fr'}/articles/${article?.slug}`,
 			images: addDomainToBackendImagePath(article?.path_resource),
 		},
 		twitter: {

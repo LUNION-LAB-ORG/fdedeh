@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import DailyContent from "@/features/dailies/components/daily-content";
 import DailyIntroduction from "@/features/dailies/components/daily-introduction";
 import AvisList from '@/features/commentaire/components/avis-list';
+import { useStats } from "@/hooks/use-stats";
 
 function DailyDetails({ dailyDate }: { dailyDate: string }) {
   const { isLoading, isFetching, getDailyByDate } = useDailyStore();
@@ -22,8 +23,12 @@ function DailyDetails({ dailyDate }: { dailyDate: string }) {
   const daily = getDailyByDate(dailyDate);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
+  useStats({
+    type: "DAILY",
+    id: daily?.id,
+  })
+
   useEffect(() => {
-    sendGAEvent('page_view', 'daily', { daily_id: daily?.id });
     const date = new Date(dailyDate);
     if (!isNaN(date.getTime())) {
       setSelectedDate(new Date().toISOString())

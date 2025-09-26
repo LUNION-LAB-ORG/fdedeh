@@ -39,7 +39,7 @@ function AvisForm<T>({ data, type = "article" }: { data: T, type?: string }) {
       entityId: data && typeof data === 'object' && 'id' in data ? (data as any).id.toString() : '',
       entityType: type,
     };
-    console.log("payload", payload);
+
     ajouterCommentaire(payload)
       .then(() => {
         resetForm();

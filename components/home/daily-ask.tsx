@@ -27,7 +27,7 @@ function DailyAsk() {
             <p className="text-gray-600 mb-4">
               {question ? `Partagez vos réflexions et engagez-vous dans la discussion.` : "Veuillez revenir plus tard pour une nouvelle question."}
             </p>
-            {/* {question && <ResponseDialog questionId={question.id} />} */}
+            {question && <ResponseDialog questionId={question.id} />}
           </div>
         </article>
       </div>

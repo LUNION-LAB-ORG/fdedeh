@@ -18,9 +18,9 @@ export const questionApi: IQuestionAPI = {
 
 	repondreQuestion({questionId, response}): Promise<{ data: any }> {
 		return api.request<{ data: any }>({
-			endpoint: `/comments`, // Assuming this is the correct endpoint
+			endpoint: `/replies`, // Assuming this is the correct endpoint
 			method: "POST",
-			data: {comments: response, question_id: questionId}
+			data: {reply: response, question_id: questionId}
 		});
 	}
 };

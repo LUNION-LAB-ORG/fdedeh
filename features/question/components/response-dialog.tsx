@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import {
 	Dialog,
@@ -20,6 +22,8 @@ import { z } from "zod";
 
 function ResponseDialog({ questionId }: { questionId: string }) {
 
+	const [open, setOpen] = React.useState(false);
+
 	const form = useForm<z.infer<typeof reponseQuestionAddSchema>>({
 		resolver: zodResolver(reponseQuestionAddSchema),
 		defaultValues: {
@@ -39,14 +43,16 @@ function ResponseDialog({ questionId }: { questionId: string }) {
 				console.error(res)
 				toast.error("Erreur lors de l'envoi de la réponse.");
 			}
+
+			setOpen(false);
 		}).catch(err => {
 			console.error(err)
 			toast.error("Erreur lors de l'envoi de la réponse.");
-		}).finally();
+		});
 	}
 
 	return (
-		<Dialog>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
 				<Button
 					type={"button"}

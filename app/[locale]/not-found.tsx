@@ -6,22 +6,18 @@ import Image from "next/image";
 export default function NotFound() {
     return (
         <div className="min-h-screen flex flex-col justify-center items-center text-center py-20 bg-background">
-            <Image src="/assets/images/all-img/404-2.svg" alt="" height={300} width={300} />
-            <div className="max-w-[546px] mx-auto w-full mt-12">
-                <h4 className="text-default-900 mb-4">Page not found</h4>
-                <div className="dark:text-white text-base font-normal mb-10">
-                    The page you are looking for might have been removed had its name
-                    changed or is temporarily unavailable.
-                </div>
-            </div>
-            <div className="max-w-[300px] mx-auto w-full">
-                <Link
-                    href="/analytics"
-                    className="btn bg-white hover:bg-opacity-75 transition-all duration-150 block text-center"
-                >
-                    Go to homepage
-                </Link>
-            </div>
+            <Image
+              src="/images/illustrations/page-not-found.svg"
+              alt="illustrations 404"
+              width={300}
+              height={300}
+              className="mb-8"
+            />
+            <h1 className="text-4xl font-bold mt-6 mb-2">Page non trouvée</h1>
+            <p className="text-lg mb-6">Désolé, la page que vous recherchez n&#39;existe pas.</p>
+            <Link href="/" className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark transition">
+                Retour à l&#39;accueil
+            </Link>
         </div>
     );
 }

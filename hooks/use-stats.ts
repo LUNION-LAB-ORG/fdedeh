@@ -1,41 +1,66 @@
-import {useEffect} from "react";
-import {sendGAEvent} from "@next/third-parties/google";
+import { useEnregistrerStatsMutation } from "@/features/stats/queries/stats.mutation";
+import { sendGAEvent } from "@next/third-parties/google";
+import { useEffect } from "react";
 
-// Fonction pour envoyer les stats au backend (à implémenter plus tard)
-async function sendStatsToBackend(eventType: string, data: any) {
-	// await fetch("/api/stats", { method: "POST", body: JSON.stringify({ eventType, ...data }) });
-}
+export function useStats({
+	type,
+	id
+}: { type?: string; id?: string | number }) {
+	const {
+		mutateAsync: sendStatsToBackend,
+		isPending: isSendingStats,
+	} = useEnregistrerStatsMutation();
 
-type StatsData = {
-	entitySlug?: string;
-	entityId?: string | number;
-	timeSpent?: number;
-};
-
-export function useStats({entityType, entitySlug, entityId,}: StatsData) {
 	useEffect(() => {
+		if (!type || !id) return;
+
 		const begin = Date.now();
+
 		const handleScroll = () => {
 			if (window.innerHeight + window.scrollY >= document.body.offsetHeight * 0.8) {
-				sendGAEvent("event", `${entityType}_lu`, {
-					entity_slug: entitySlug,
-					entity_id: entityId,
+				sendGAEvent("event", `${type}_read`, {
+					entity_slug: id,
+					time_spent: Date.now() - begin,
 				});
-				sendStatsToBackend(`${entityType}_lu`, {entitySlug, entityId});
+				sendStatsToBackend({
+					type,
+					id: id ? String(id) : "unknown",
+					event: "read",
+				});
 				window.removeEventListener("scroll", handleScroll);
 			}
 		};
 
+		// Apres 10 secondes envoyer la stats view
+		const timer = setTimeout(() => {
+			sendGAEvent("event", `${type}_view`, {
+				entity_slug: id,
+				time_spent: Date.now() - begin,
+			});
+			sendStatsToBackend({
+				type,
+				id: id ? String(id) : "unknown",
+				event: "view",
+			});
+			sendStatsToBackend({
+				type,
+				id: id ? String(id) : "unknown",
+				event: "click",
+			});
+		}, 10 * 1000);
+
 		window.addEventListener("scroll", handleScroll);
 		return () => {
 			const timeSpent = Date.now() - begin;
-			sendGAEvent("event", `${entityType}_vu`, {
-				entity_slug: entitySlug,
-				entity_id: entityId,
+
+			sendGAEvent("event", `${type}_view`, {
+				entity_slug: id,
 				time_spent: timeSpent,
 			});
-			sendStatsToBackend(`${entityType}_vu`, {entitySlug, entityId, timeSpent});
+
+			clearTimeout(timer);
+
 			window.removeEventListener("scroll", handleScroll);
 		};
-	}, [entityType, entitySlug, entityId]);
+	}, [type, id, sendStatsToBackend]);
 }
