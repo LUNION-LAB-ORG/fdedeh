@@ -1,9 +1,9 @@
 "use server"
 
-import {ActionResponse} from "@/types";
-import {handleServerActionError} from "@/utils/handleServerActionError";
-import {statsAPI} from "./stats.api";
-import {StatsDto} from "@/features/stats/stats.schema";
+import { ActionResponse } from "@/types";
+import { handleServerActionError } from "@/utils/handleServerActionError";
+import { statsAPI } from "./stats.api";
+import { StatsDto } from "@/features/stats/stats.schema";
 import { IStats } from "./stats.type";
 
 export const enregistrerStatsAction = async (payload: StatsDto) => {

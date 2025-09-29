@@ -12,8 +12,6 @@ import { useForm } from "react-hook-form";
 
 function AvisForm<T>({ data, type = "article" }: { data: T, type?: string }) {
 
-  const [isAnonymous, setIsAnonymous] = React.useState(true);
-
   const {
     register,
     handleSubmit,
@@ -59,11 +57,9 @@ function AvisForm<T>({ data, type = "article" }: { data: T, type?: string }) {
           disabled={isAddingCommentaire}
           {...register('comment')}
         />
-        {errors.comment && (
-          <p className="text-xs text-red-500">{errors.comment.message}</p>
-        )}
+        <ErrorMessage message={errors.comment?.message} />
       </div>
-      <div className="flex items-center mb-4 space-x-2">
+      {/* <div className="flex items-center mb-4 space-x-2">
         <Switch
           id='anonymous'
           checked={isAnonymous}
@@ -72,38 +68,41 @@ function AvisForm<T>({ data, type = "article" }: { data: T, type?: string }) {
           }}
         />
         <Label htmlFor='anonymous'>Publier anonymement</Label>
-      </div>
-      {!isAnonymous && <div className="grid sm:grid-cols-2 gap-4 mb-4">
+      </div> */}
+      <div className="grid sm:grid-cols-2 gap-4 mb-4">
         <div>
           <Input
             disabled={isAddingCommentaire}
             {...register('fullName')}
             type="text"
-            placeholder="Nom & Prénoms (optionnel)"
+            placeholder="Nom & Prénoms"
             className="text-sm bg-[#F5F5F5] focus:bg-white focus-visible:ring-1 focus-visible:ring-primary"
           />
-          {errors.fullName && (
-            <p className="text-xs text-red-500">{errors.fullName.message}</p>
-          )}
+          <ErrorMessage message={errors.fullName?.message} />
         </div>
         <div>
           <Input
             disabled={isAddingCommentaire}
             {...register('email')}
             type="email"
-            placeholder="Email (optionnel)"
+            placeholder="Email"
             className="text-sm bg-[#F5F5F5] focus:bg-white focus-visible:ring-1 focus-visible:ring-primary"
           />
-          {errors.email && (
-            <p className="text-xs text-red-500">{errors.email.message}</p>
-          )}
+          <ErrorMessage message={errors.email?.message} />
         </div>
-      </div>}
+      </div>
       <Button type="submit" className="rounded-full bg-custom-gradient self-end">
         Ajouter
         {isAddingCommentaire && <Loader className={`ml-2 h-4 w-4 animate-spin`} />}
       </Button>
     </form>
+  );
+}
+
+function ErrorMessage({ message }: { message: string | undefined }) {
+  if (!message) return null;
+  return (
+    <small className="text-xs text-red-500 mt-1">{message}</small>
   );
 }
 

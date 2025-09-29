@@ -1,5 +1,5 @@
-import {api} from "@/lib/api";
-import {StatsDto} from "@/features/stats/stats.schema";
+import { api } from "@/lib/api";
+import { StatsDto } from "@/features/stats/stats.schema";
 
 export interface IstatsAPI {
 	enregistrerStats(payload: StatsDto): Promise<{ data: any }>;

@@ -4,9 +4,19 @@ export const CommentaireSchema = z.object({
   id: z.string(),
   entityId: z.string(),
   entityType: z.string(),
-  fullName: z.string().max(100).optional(),
-  email: z.email().max(100).or(z.literal("").optional()),
-  comment: z.string().max(1000),
+  fullName: z.string({
+    message: "Le nom complet est requis",
+  })
+    .min(2, "Le nom complet doit contenir au moins 2 caractères")
+    .max(100)
+    .trim(),
+  email: z.email({
+    message: "L'email doit être une adresse valide",
+  }).max(100),
+  comment: z.string()
+    .min(5, "Le commentaire doit contenir au moins 5 caractères")
+    .max(1000)
+    .trim(),
   createdAt: z.string().refine((date) => !isNaN(Date.parse(date)), {
     message: "La date de création doit être une date valide",
   }).transform((date) => new Date(date)),
@@ -31,13 +41,11 @@ export const CommentaireAddSchema = z.object({
     .trim(),
   fullName: z.string({ message: "Le nom complet est requis" })
     .max(100, "Le nom complet ne doit pas dépasser 100 caractères")
-    .trim()
-    .optional(),
+    .trim(),
   email: z.email("L'email doit être une adresse valide")
     .max(100, "L'email ne doit pas dépasser 100 caractères")
     .toLowerCase()
-    .trim()
-    .or(z.literal("").optional()),
+    .trim(),
   comment: z.string({ message: "Le commentaire est requis" })
     .max(1000, "Le commentaire ne doit pas dépasser 1000 caractères")
     .trim(),
