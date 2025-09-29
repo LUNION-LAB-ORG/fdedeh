@@ -25,7 +25,7 @@ export default function BannerDialog() {
       <AlertDialogTrigger className="hidden" />
       <AlertDialogContent className="max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl w-full aspect-square p-2.5 max-h-screen">
         <ContactButton />
-        <Button size="icon" className="absolute right-2 top-2 rounded-full bg-custom-gradient" onClick={handleClose}>
+        <Button size="icon" className="absolute right-2 top-2 rounded-full bg-custom-gradient z-10" onClick={handleClose}>
           <span className="sr-only">Close</span>
           <X />
         </Button>
@@ -33,7 +33,7 @@ export default function BannerDialog() {
           <AlertDialogTitle className="sr-only">Bienvenue sur FDedeh!</AlertDialogTitle>
         </AlertDialogHeader>
         <Image
-          src="/images/popup-banner.jpg"
+          src="/images/popup/inp.png"
           alt="Banner"
           className="aspect-square"
           width={650}
