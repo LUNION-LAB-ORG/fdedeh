@@ -5,6 +5,6 @@ dist
 coverage
 *.log
 .git
-.next/cache
 Dockerfile
 .dockerignore
+.next

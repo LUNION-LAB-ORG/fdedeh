@@ -4,7 +4,7 @@ services:
     container_name: fdedeh-web
     restart: always
     ports:
-      - "3002:3000"
+      - "4002:3000"
     env_file:
       - path: .env
         required: true
