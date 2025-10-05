@@ -19,7 +19,7 @@ function Publicite({bannerPosition, ...props}: React.HTMLAttributes<HTMLDivEleme
 	if (banner) {
 		const orientation = positionToOrientation(banner.position)
 		return (
-			<Link href={banner.link} className={cn("items-center justify-center", props.className)} target="_blank" rel="noopener noreferrer">
+			<Link href={banner.link} className={cn("items-center justify-center", props.className, orientation == 'horizontal' ? 'aspect-[4/1]' : 'aspect-[1/1]')} target="_blank" rel="noopener noreferrer">
 				<Image
 					className="rounded"
 					src={addDomainToBackendImagePath(banner.image_path)}
