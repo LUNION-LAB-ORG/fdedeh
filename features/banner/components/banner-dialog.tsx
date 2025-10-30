@@ -33,7 +33,7 @@ export default function BannerDialog() {
           <AlertDialogTitle className="sr-only">Bienvenue sur FDedeh!</AlertDialogTitle>
         </AlertDialogHeader>
         <Image
-          src="/images/popup/3.png"
+          src="/images/popup/4.png"
           alt="Banner"
           className="aspect-square"
           width={650}
