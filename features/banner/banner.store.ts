@@ -28,7 +28,7 @@ export const useBannerStore = create<BannerStoreState>((set, getState) => ({
 	setQueryState: (state) => set(state),
 
 	getBannerByPosition: (position: string) => {
-		return getState().allBanners.find(banner => banner.position == position);
+		return getState().allBanners.find(banner => banner.position.toLowerCase() == position.toLowerCase());
 	},
 }));
 

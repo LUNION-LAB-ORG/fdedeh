@@ -1,6 +1,5 @@
 "use client";
 import React from 'react';
-import {Megaphone} from "lucide-react";
 import {cn} from "@/lib/utils";
 import {useBannerStore} from "@/features/banner/banner.store";
 import {addDomainToBackendImagePath} from "@/utils/image-utils";
@@ -26,7 +25,6 @@ function Publicite({bannerPosition, ...props}: React.HTMLAttributes<HTMLDivEleme
 					alt={banner.position || "Publicité"}
 					width={orientation == 'horizontal' ? 1232 : 400}
 					height={orientation == 'horizontal' ? 260 : 400}
-					layout="responsive"
 				/>
 			</Link>
 		);
