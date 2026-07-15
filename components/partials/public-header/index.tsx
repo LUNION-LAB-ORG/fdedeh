@@ -1,7 +1,6 @@
 "use client";
 
 import LogoFd from '@/components/logo-fd';
-import { publicMenuItems } from "@/components/partials/public-header/constants";
 import NavLink from "@/components/partials/public-header/nav-link";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger, } from "@/components/ui/collapsible";
 import { Link, usePathname } from "@/i18n/navigation";
@@ -11,6 +10,7 @@ import { ChevronRight, Menu, X } from "lucide-react";
 import { useEffect, useMemo, useState } from 'react';
 import { useCategorieListQuery } from "@/features/categories/queries/categorie-list.query";
 import { generatePublicMenuItems } from "@/utils/generate-menu";
+import { useArticleStore } from "@/features/articles/stores/article.store";
 
 function PublicHeader() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -19,9 +19,11 @@ function PublicHeader() {
   const pathName = usePathname();
 
   const { data: categories } = useCategorieListQuery();
+  // Les articles servent à masquer les catégories vides du sous-menu.
+  const { allArticles } = useArticleStore();
   const menuItems = useMemo(
-    () => generatePublicMenuItems(categories ?? []),
-    [categories]
+    () => generatePublicMenuItems(categories ?? [], allArticles),
+    [categories, allArticles]
   );
 
   const mobileMenuVariants = {
