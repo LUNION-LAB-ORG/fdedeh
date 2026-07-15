@@ -29,6 +29,7 @@ export function generatePublicMenuItems(categories: ICategorie[], articles: IArt
 			subMenuItems: sousMenu,
 		},
 		{ name: "Sports", href: "/sports" },
+		{ name: "Archives", href: "/dailies" },
 		{ name: "Podcasts", href: "/podcasts" },
 		{ name: "Galerie", href: "/galerie" },
 	];

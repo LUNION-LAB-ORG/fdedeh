@@ -32,5 +32,5 @@ export interface IDaily {
 }
 
 export interface IDailyParams {
-	
+	page?: number;
 }
