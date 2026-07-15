@@ -5,7 +5,8 @@ import Link from "next/link";
 
 const usefulLinks = [
 	{ text: 'Accueil', href: '/' },
-	{ text: 'A la une', href: '/about' },
+	{ text: 'A la une', href: '/a-la-une' },
+	{ text: 'Archives', href: '/dailies' },
 	{ text: 'Sports', href: '/sports' },
 
 ]
@@ -41,7 +42,7 @@ export default function PublicFooter() {
 
 				<div className="mt-10 pt-6 flex max-w-fit mx-auto">
 					<div className="text-center text-white/70 mt-4 text-sm transition sm:order-first sm:mt-0">
-						COPYRIGHT &copy; 2025 Fernand Dedeh, Développé par {" "}
+						COPYRIGHT &copy; {new Date().getFullYear()} Fernand Dedeh, Développé par {" "}
 						<Link
 							target="_blank"
 							href="https://www.lunion-lab.com?utm_source=fd-website&utm_medium=referral"

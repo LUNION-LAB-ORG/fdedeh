@@ -23,7 +23,7 @@ function OtherDailyNews() {
 	return (
 		<section>
 			<div className="flex items-center mb-8">
-				<SectionTitle text="Autres actualités du jour"/>
+				<SectionTitle text="Autres actualités"/>
 				<Link
 					href={`/a-la-une`}
 					className="ml-auto text-[#FF8D28] hover:underline uppercase"
