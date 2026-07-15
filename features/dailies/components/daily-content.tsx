@@ -14,11 +14,15 @@ const colors = [
 ];
 
 function DailyContent(props: { content: IDailyContent; index: number }) {
+	const hashtag = props.content.hashtag?.hashtag;
+
 	return (
 		<div className="text-justify">
-			<Badge className={cn("mb-3 text-base", colors[props.index % colors.length])}>
-				{props.content.hashtag.hashtag}
-			</Badge>
+			{hashtag && (
+				<Badge className={cn("mb-3 text-base", colors[props.index % colors.length])}>
+					{hashtag}
+				</Badge>
+			)}
 			<div dangerouslySetInnerHTML={{__html: props.content.body}}></div>
 		</div>
 	);

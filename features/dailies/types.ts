@@ -2,7 +2,9 @@ export interface IDailyContent {
 	id: string;
 	body: string;
 	hashtag_id: string;
-	hashtag: {
+	// Absent des réponses de `/dailies/{date}`, qui ne charge pas la relation :
+	// seul `/dailies` (la liste) la renvoie.
+	hashtag?: {
 		id: string;
 		hashtag: string;
 		created_at: string;

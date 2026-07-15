@@ -12,6 +12,9 @@ import { parseAsIsoDate, useQueryState } from "nuqs";
 import LoadingIndicator from "@/components/loading-indicator";
 import DailyContent from "@/features/dailies/components/daily-content";
 import DailyIntroduction from "@/features/dailies/components/daily-introduction";
+import { useDailyParDateQuery } from "@/features/dailies/query/daily-par-date.query";
+
+const enDateISO = (date: Date) => date.toISOString().split('T')[0];
 
 function DailiesSliderSection() {
   const { isLoading, isFetching, getDailyByDate, getLastDaily } = useDailyStore();
@@ -28,12 +31,16 @@ function DailiesSliderSection() {
     parseAsIsoDate.withDefault(defaultDate)
   );
 
-  if (isLoading || isFetching) {
+  // Le store s'arrête aux 10 derniers dailies ; au-delà on va chercher la date à l'API.
+  const dailyDuStore = getDailyByDate(selectedDate);
+  const dateARecuperer = !dailyDuStore && selectedDate ? enDateISO(selectedDate) : '';
+  const { data: dailyDistant, isLoading: chargementDistant } = useDailyParDateQuery(dateARecuperer);
+
+  if (isLoading || isFetching || chargementDistant) {
     return <LoadingIndicator />;
   }
 
-  // Filtrage par date si une date est sélectionnée
-  const daily = getDailyByDate(selectedDate);
+  const daily = dailyDuStore ?? dailyDistant;
 
   let images: string[] = [];
   if (daily) {

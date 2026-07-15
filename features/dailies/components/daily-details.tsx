@@ -15,12 +15,18 @@ import DailyContent from "@/features/dailies/components/daily-content";
 import DailyIntroduction from "@/features/dailies/components/daily-introduction";
 import AvisList from '@/features/commentaire/components/avis-list';
 import { useStats } from "@/hooks/use-stats";
+import { useDailyParDateQuery } from "@/features/dailies/query/daily-par-date.query";
 
 function DailyDetails({ dailyDate }: { dailyDate: string }) {
   const { isLoading, isFetching, getDailyByDate } = useDailyStore();
   const router = useRouter();
 
-  const daily = getDailyByDate(dailyDate);
+  // Le store ne contient que les 10 derniers dailies : sans ce repli sur l'API, toute date
+  // plus ancienne affichait « Aucun article trouvé » alors que le daily existe bel et bien.
+  const dailyDuStore = getDailyByDate(dailyDate);
+  const { data: dailyDistant, isLoading: chargementDistant } = useDailyParDateQuery(dailyDuStore ? '' : dailyDate);
+  const daily = dailyDuStore ?? dailyDistant;
+
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   useStats({
@@ -41,7 +47,7 @@ function DailyDetails({ dailyDate }: { dailyDate: string }) {
     router.push(`/dailies/${shortDate}`);
   }
 
-  if (isLoading || isFetching) {
+  if (isLoading || isFetching || chargementDistant) {
     return <LoadingIndicator />;
   }
 
