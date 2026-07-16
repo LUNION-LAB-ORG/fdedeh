@@ -26,6 +26,8 @@ export interface IDaily {
 	introduction: string;
 	contents: IDailyContent[];
 	user: IDailyUser;
+	view_count?: number;
+	read_count?: number;
 	created_at: string;
 	updated_at: string;
 	deleted_at: string;

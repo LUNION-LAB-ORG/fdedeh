@@ -12,6 +12,7 @@ export const publicRoutes = [
   "/a-la-une",
   "/sports",
   "/dailies",
+  "/design",
 ];
 
 const intlMiddleware = createIntlMiddleware(routing);

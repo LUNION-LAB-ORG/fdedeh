@@ -77,6 +77,29 @@
     }
 }
 
+/* ===== Layer éditorial « Brut » (fd.info × Brut) ===== */
+:root {
+    --brut-ground: #FCFBFA;
+    --brut-surface: #FFFFFF;
+    --brut-raise: #F5F2ED;
+    --brut-ink: #16120D;
+    --brut-ink-soft: #3B342B;
+    --brut-muted: #6F675B;
+    --brut-line: #E7E1D8;
+    --brut-signal: #FF7710;
+}
+
+.dark {
+    --brut-ground: #131009;
+    --brut-surface: #1C1810;
+    --brut-raise: #241F16;
+    --brut-ink: #F5F1E8;
+    --brut-ink-soft: #D8D1C4;
+    --brut-muted: #A69D8D;
+    --brut-line: #2E2819;
+    --brut-signal: #FF8A2B;
+}
+
 .grid-article-container {
     @apply grid grid-cols-1 gap-8 md:grid-cols-2;
 }

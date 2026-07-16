@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Archivo } from "next/font/google";
 import "./globals.css";
 import "./theme.css";
 import { ThemeProvider } from "@/providers/theme-provider";
@@ -19,6 +19,12 @@ import DataProvider from "@/providers/data.provider";
 import { GoogleAnalytics } from '@next/third-parties/google';
 //
 const inter = Inter({ subsets: ["latin"] });
+// Police display « grotesque massive » à la Brut, exposée via --font-display.
+const archivo = Archivo({
+  subsets: ["latin"],
+  weight: ["600", "700", "800", "900"],
+  variable: "--font-display",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://fdedeh.info"),
@@ -58,7 +64,7 @@ export default async function RootLayout(
   return (
     <html lang={locale} dir={direction} suppressHydrationWarning>
       <body
-        className={`${inter.className} bg-white`}
+        className={`${inter.className} ${archivo.variable} bg-white`}
         suppressHydrationWarning
       >
         <NextIntlClientProvider messages={messages} locale={locale}>
