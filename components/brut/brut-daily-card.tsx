@@ -1,6 +1,8 @@
 import React from "react";
+import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { IDaily } from "@/features/dailies/types";
+import { addDomainToBackendImagePath } from "@/utils/image-utils";
 import { dateFormat } from "@/utils/date-format";
 
 function dateISO(value: string) {
@@ -10,37 +12,45 @@ function dateISO(value: string) {
 export function BrutDailyCard({ daily }: { daily: IDaily }) {
   const rubriques = Array.from(
     new Set((daily.contents ?? []).map((c) => c.hashtag?.hashtag).filter(Boolean))
-  ).slice(0, 4) as string[];
+  ).slice(0, 3) as string[];
+
+  const image = daily.contents?.[0]?.path_image;
 
   return (
     <Link
       href={`/dailies/${dateISO(daily.published_at)}`}
-      className="group relative flex min-h-[340px] flex-col justify-end overflow-hidden rounded-2xl border border-brut-line p-5 text-white"
-      style={{ background: "radial-gradient(120% 120% at 15% 0%, #241a10 0%, #0d0a06 70%)" }}
+      className="group flex flex-col overflow-hidden rounded-2xl border border-brut-line bg-brut-surface"
     >
-      {rubriques.length > 0 && (
-        <div className="absolute left-4 top-4 flex max-w-[80%] flex-wrap gap-1.5">
-          {rubriques.map((r) => (
-            <span
-              key={r}
-              className="rounded-full bg-white/[0.14] px-2 py-[3px] font-mono text-[10.5px] font-semibold uppercase tracking-[0.04em] text-white backdrop-blur-sm"
-            >
-              {r}
-            </span>
-          ))}
-        </div>
-      )}
-
-      <div className="mb-2.5 font-mono text-[11px] uppercase tracking-[0.12em] text-brut-signal">
-        ● Le Daily · {dateFormat(daily.published_at)}
+      <div className="relative aspect-[16/10] overflow-hidden">
+        <Image
+          src={addDomainToBackendImagePath(image)}
+          alt=""
+          fill
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
+        />
+        {rubriques.length > 0 && (
+          <div className="absolute left-3 top-3 flex max-w-[85%] flex-wrap gap-1.5">
+            {rubriques.map((r) => (
+              <span
+                key={r}
+                className="rounded-full bg-black/55 px-2 py-[3px] font-mono text-[10px] font-semibold uppercase tracking-[0.04em] text-white backdrop-blur-sm"
+              >
+                {r}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
-      <h3 className="mb-3 line-clamp-5 font-display text-[23px] font-black leading-[1.06] -tracking-[0.025em]">
-        {daily.introduction}
-      </h3>
-      <div className="flex items-center gap-3.5 font-mono text-[11.5px] text-white/60">
-        <span>{daily.view_count ?? 0} vues</span>
-        <span>{(daily.contents ?? []).length} sujets</span>
-        <span className="transition-transform group-hover:translate-x-0.5">Lire →</span>
+
+      <div className="flex flex-1 flex-col gap-2.5 px-4 pb-4 pt-[15px]">
+        <div className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-brut-signal">● Le Daily</div>
+        <h3 className="line-clamp-3 text-[16px] font-extrabold leading-[1.25] -tracking-[0.01em] text-brut-ink">
+          {daily.introduction}
+        </h3>
+        <div className="mt-auto flex items-center gap-3.5 font-mono text-[11.5px] text-brut-muted">
+          <span>{dateFormat(daily.published_at)}</span>
+          <span>{daily.view_count ?? 0} vues</span>
+        </div>
       </div>
     </Link>
   );

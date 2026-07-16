@@ -5,6 +5,7 @@ import { BrutHero } from "@/components/brut/brut-hero";
 import { BrutArticleCard } from "@/components/brut/brut-article-card";
 import { BrutDailyCard } from "@/components/brut/brut-daily-card";
 import { BrutBadge } from "@/components/brut/brut-badge";
+import { dateFormat } from "@/utils/date-format";
 import { obtenirTousArticlesAction } from "@/features/articles/actions/article.action";
 import { obtenirTousDailiesAction } from "@/features/dailies/dailies.action";
 
@@ -30,7 +31,16 @@ export default async function DesignPreviewPage() {
 
       <main className="min-w-0 flex-1 pb-16">
         {/* Hero — mise en page adaptée au ratio de l'image (mesuré côté client) */}
-        {une && <BrutHero article={une} />}
+        {une && (
+          <BrutHero
+            imagePath={une.path_resource}
+            eyebrow={une.category?.name ? `À la Une · ${une.category.name}` : "À la Une"}
+            title={une.title}
+            metas={[une.category?.name, dateFormat(une.created_at), "Lecture 4 min"].filter(Boolean) as string[]}
+            href={`/articles/${une.slug}`}
+            ctaLabel="Lire l'article"
+          />
+        )}
 
         <div className="px-6 lg:px-11">
           {/* Cartes */}

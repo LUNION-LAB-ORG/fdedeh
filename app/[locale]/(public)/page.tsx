@@ -3,8 +3,15 @@ import { Link } from "@/i18n/navigation";
 import { BrutHero } from "@/components/brut/brut-hero";
 import { BrutArticleCard } from "@/components/brut/brut-article-card";
 import { BrutDailyCard } from "@/components/brut/brut-daily-card";
+import { IArticle } from "@/features/articles/types/article.type";
+import { slugify } from "@/features/articles/utils/slugify";
+import { dateFormat } from "@/utils/date-format";
 import { obtenirTousArticlesAction } from "@/features/articles/actions/article.action";
 import { obtenirTousDailiesAction } from "@/features/dailies/dailies.action";
+
+function dateISO(value: string) {
+  return new Date(value).toISOString().split("T")[0];
+}
 
 function SectionHead({
   eyebrow,
@@ -37,39 +44,78 @@ function SectionHead({
 
 export default async function HomePage() {
   const [articlesRes, dailiesRes] = await Promise.all([
-    obtenirTousArticlesAction({ page: 1 }),
+    obtenirTousArticlesAction({}),
     obtenirTousDailiesAction({ page: 1 }),
   ]);
 
   const articles = articlesRes.data?.data ?? [];
   const dailies = dailiesRes.data?.data ?? [];
 
-  const une = articles[0];
-  const grilleArticles = articles.slice(1, 7);
-  const derniersDailies = dailies.slice(0, 3);
+  const dailyUne = dailies[0];
+  const dailiesListe = dailies.slice(1, 7);
+
+  // Articles regroupés par catégorie (dans l'ordre d'apparition = du plus récent).
+  const parCategorie = new Map<string, IArticle[]>();
+  for (const article of articles) {
+    const cat = article.category?.name ?? "Divers";
+    const arr = parCategorie.get(cat) ?? [];
+    arr.push(article);
+    parCategorie.set(cat, arr);
+  }
+  const categories = [...parCategorie.entries()];
 
   return (
     <>
-      {une && <BrutHero article={une} />}
+      {dailyUne && (
+        <BrutHero
+          imagePath={dailyUne.contents?.[0]?.path_image}
+          eyebrow={`Le Daily du jour · ${dateFormat(dailyUne.published_at)}`}
+          badges={
+            Array.from(
+              new Set((dailyUne.contents ?? []).map((c) => c.hashtag?.hashtag).filter(Boolean))
+            ).slice(0, 4) as string[]
+          }
+          title={dailyUne.introduction}
+          metas={[`${dailyUne.view_count ?? 0} vues`, `${(dailyUne.contents ?? []).length} sujets`]}
+          href={`/dailies/${dateISO(dailyUne.published_at)}`}
+          ctaLabel="Lire le Daily"
+        />
+      )}
 
       <div className="px-6 pb-4 lg:px-11">
-        {derniersDailies.length > 0 && (
+        {dailiesListe.length > 0 && (
           <section className="pt-12">
-            <SectionHead eyebrow="Chaque jour" title="Le Daily" href="/dailies" hrefLabel="Toutes les archives" />
+            <SectionHead eyebrow="Le Daily" title="À la une" href="/dailies" hrefLabel="Toutes les archives" />
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {derniersDailies.map((daily) => (
+              {dailiesListe.map((daily) => (
                 <BrutDailyCard daily={daily} key={`daily-${daily.id}`} />
               ))}
             </div>
           </section>
         )}
 
-        {grilleArticles.length > 0 && (
-          <section className="pt-14">
-            <SectionHead eyebrow="La rédaction" title="À la une" href="/a-la-une" hrefLabel="Tout voir" />
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {grilleArticles.map((article) => (
-                <BrutArticleCard article={article} key={`article-${article.id}`} />
+        {categories.length > 0 && (
+          <section className="pt-16">
+            <SectionHead eyebrow="Le fil" title="Autres actualités" href="/a-la-une" hrefLabel="Tout voir" />
+            <div className="flex flex-col gap-12">
+              {categories.map(([categorie, liste]) => (
+                <div key={categorie}>
+                  <h3 className="mb-5 flex items-center gap-4 font-display text-[19px] font-black -tracking-[0.02em]">
+                    <span className="shrink-0">{categorie}</span>
+                    <span className="h-px flex-1 bg-brut-line" />
+                    <Link
+                      href={`/actualites-nationales/${slugify(categorie)}`}
+                      className="shrink-0 font-mono text-[11px] uppercase tracking-[0.08em] text-brut-muted transition-colors hover:text-brut-signal"
+                    >
+                      Voir →
+                    </Link>
+                  </h3>
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {liste.slice(0, 3).map((article) => (
+                      <BrutArticleCard article={article} key={`article-${article.id}`} />
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </section>

@@ -3,16 +3,24 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { IArticle } from "@/features/articles/types/article.type";
 import { addDomainToBackendImagePath } from "@/utils/image-utils";
-import { dateFormat } from "@/utils/date-format";
 import { cn } from "@/lib/utils";
+
+export type BrutHeroProps = {
+  imagePath?: string | null;
+  eyebrow?: string;
+  badges?: string[];
+  title: string;
+  metas?: string[];
+  href: string;
+  ctaLabel: string;
+};
 
 // Le hero s'adapte au ratio de l'image, lu directement depuis l'image chargée
 // (naturalWidth / naturalHeight) — aucune mesure serveur nécessaire.
 //  · bannière large (ratio ≥ 2) → texte en haut, image pleine largeur en bas ;
 //  · carré / portrait / photo    → image et texte côte à côte.
-export function BrutHero({ article }: { article: IArticle }) {
+export function BrutHero({ imagePath, eyebrow, badges, title, metas, href, ctaLabel }: BrutHeroProps) {
   const [ratio, setRatio] = useState<number | null>(null);
   const estBanniere = (ratio ?? 0) >= 2;
 
@@ -22,7 +30,7 @@ export function BrutHero({ article }: { article: IArticle }) {
       style={{ aspectRatio: ratio ? String(ratio) : "3 / 2" }}
     >
       <Image
-        src={addDomainToBackendImagePath(article.path_resource)}
+        src={addDomainToBackendImagePath(imagePath)}
         alt=""
         fill
         priority
@@ -40,42 +48,51 @@ export function BrutHero({ article }: { article: IArticle }) {
 
   const texte = (
     <div className={estBanniere ? "max-w-4xl" : undefined}>
+      {eyebrow && (
+        <p className="mb-3 font-mono text-[12px] uppercase tracking-[0.12em] text-brut-signal">{eyebrow}</p>
+      )}
+      {badges && badges.length > 0 && (
+        <div className="mb-4 flex flex-wrap gap-1.5">
+          {badges.map((b) => (
+            <span
+              key={b}
+              className="rounded-full bg-brut-raise px-2.5 py-1 font-mono text-[10.5px] font-semibold uppercase tracking-[0.04em] text-brut-ink-soft"
+            >
+              {b}
+            </span>
+          ))}
+        </div>
+      )}
       <h1
         className={cn(
           "font-display font-black -tracking-[0.035em] text-balance",
           estBanniere
-            ? "text-[clamp(32px,4.8vw,56px)] leading-[1.0] line-clamp-4"
-            : "text-[clamp(30px,4.2vw,58px)] leading-[0.98] line-clamp-5"
+            ? "text-[clamp(30px,4.6vw,54px)] leading-[1.02] line-clamp-4"
+            : "text-[clamp(28px,4vw,52px)] leading-[1.0] line-clamp-5"
         )}
       >
-        {article.title}
+        {title}
       </h1>
-      <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] text-brut-muted">
-        {article.category?.name && <span className="font-semibold text-brut-ink">{article.category.name}</span>}
-        <span>{dateFormat(article.created_at)}</span>
-        <span>Lecture 4 min</span>
-      </div>
+      {metas && metas.length > 0 && (
+        <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] text-brut-muted">
+          {metas.map((m, i) => (
+            <span key={i} className={i === 0 ? "font-semibold text-brut-ink" : undefined}>
+              {m}
+            </span>
+          ))}
+        </div>
+      )}
       <Link
-        href={`/articles/${article.slug}`}
+        href={href}
         className="mt-7 inline-flex items-center gap-2 rounded-full bg-brut-ink px-6 py-3 text-[15px] font-bold text-brut-ground"
       >
-        Lire l&apos;article →
+        {ctaLabel} →
       </Link>
     </div>
   );
 
   return (
     <header className="border-b-[3px] border-brut-ink px-6 py-10 lg:px-11 lg:py-12">
-      <nav aria-label="Fil d'Ariane" className="mb-7 flex items-center gap-2.5 text-[13.5px] font-semibold">
-        <span className="text-brut-ink">À la Une</span>
-        {article.category?.name && (
-          <>
-            <span className="text-brut-muted" aria-hidden>›</span>
-            <span className="text-brut-muted">{article.category.name}</span>
-          </>
-        )}
-      </nav>
-
       {estBanniere ? (
         <div className="flex flex-col gap-8">
           {texte}
