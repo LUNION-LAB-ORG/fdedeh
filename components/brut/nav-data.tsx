@@ -20,6 +20,9 @@ const I = {
   podcasts: (
     <svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M6 11a6 6 0 0012 0M12 17v4" /></svg>
   ),
+  ppef: (
+    <svg viewBox="0 0 24 24"><path d="M12 3v18M7 6h10M6 6l-3 6a3 3 0 006 0zM18 6l-3 6a3 3 0 006 0z" /></svg>
+  ),
 };
 
 export const RUBRIQUES: NavItem[] = [
@@ -35,6 +38,7 @@ export const RUBRIQUES: NavItem[] = [
 
 export const MEDIA: NavItem[] = [
   { name: "A Barthelemy Inabo", href: "/dailies", icon: I.archives },
+  { name: "PPEF", href: "/ppef", icon: I.ppef },
   { name: "Articles", href: "/a-la-une", icon: I.daily },
   { name: "Podcasts", href: "/podcasts", icon: I.podcasts },
 ];
