@@ -4,6 +4,9 @@ import FlashInfo from "@/components/flash-info";
 import { BrutHero } from "@/components/brut/brut-hero";
 import { BrutArticleCard } from "@/components/brut/brut-article-card";
 import { BrutDailyCard } from "@/components/brut/brut-daily-card";
+import { BrutAd } from "@/components/brut/brut-ad";
+import { BrutQuestion } from "@/components/brut/brut-question";
+import { BrutNewsletter } from "@/components/brut/brut-newsletter";
 import { IArticle } from "@/features/articles/types/article.type";
 import { slugify } from "@/features/articles/utils/slugify";
 import { dateFormat } from "@/utils/date-format";
@@ -97,6 +100,10 @@ export default async function HomePage() {
           </section>
         )}
 
+        <BrutAd position="HEADER" />
+
+        <BrutQuestion />
+
         {categories.length > 0 && (
           <section className="pt-16">
             <SectionHead eyebrow="Le fil" title="Autres actualités" href="/a-la-une" hrefLabel="Tout voir" />
@@ -123,6 +130,8 @@ export default async function HomePage() {
             </div>
           </section>
         )}
+
+        <BrutNewsletter />
       </div>
     </>
   );
