@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import SocialShare from "@/features/articles/components/social-share";
@@ -10,7 +9,7 @@ import AvisForm from "@/features/commentaire/components/avis-form";
 import AvisList from "@/features/commentaire/components/avis-list";
 import { useStats } from "@/hooks/use-stats";
 import { BrutAside } from "@/components/brut/brut-aside";
-import { addDomainToBackendImagePath } from "@/utils/image-utils";
+import { BrutContentImage } from "@/components/brut/brut-content-image";
 import { dateFormat } from "@/utils/date-format";
 
 function ArticleDetails({ slug }: { slug: string }) {
@@ -62,13 +61,12 @@ function ArticleDetails({ slug }: { slug: string }) {
         </div>
 
         <figure className="mt-8">
-          <Image
-            src={addDomainToBackendImagePath(article.path_resource)}
+          <BrutContentImage
+            path={article.path_resource}
             alt={article.title}
-            width={1200}
-            height={700}
             priority
-            className="max-h-[520px] w-full rounded-2xl border border-brut-line object-cover"
+            className="w-full"
+            sizes="(max-width: 1024px) 100vw, 1000px"
           />
         </figure>
 

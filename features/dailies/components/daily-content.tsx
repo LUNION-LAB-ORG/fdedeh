@@ -1,12 +1,12 @@
 import React from "react";
-import Image from "next/image";
 import { IDailyContent } from "@/features/dailies/types";
-import { addDomainToBackendImagePath } from "@/utils/image-utils";
+import { BrutContentImage } from "@/components/brut/brut-content-image";
 import { cn } from "@/lib/utils";
 
 // Chaque contenu du daily a sa particularité : la mise en page de l'image
 // alterne selon sa position (journal). 0 = image flottante à gauche,
 // 1 = image pleine largeur en haut, 2 = image flottante à droite.
+// L'image est affichée en entier (ratio réel), sans bordure ni zone vide.
 function DailyContent(props: { content: IDailyContent; index: number }) {
   const hashtag = props.content.hashtag?.hashtag;
   const image = props.content.path_image;
@@ -23,21 +23,19 @@ function DailyContent(props: { content: IDailyContent; index: number }) {
       )}
 
       {image && !flottante && (
-        <div className="relative mb-5 aspect-[16/9] w-full overflow-hidden rounded-2xl border border-brut-line">
-          <Image src={addDomainToBackendImagePath(image)} alt="" fill className="object-cover" sizes="(max-width: 768px) 100vw, 720px" />
-        </div>
+        <BrutContentImage path={image} className="mb-5 w-full" sizes="(max-width: 768px) 100vw, 720px" />
       )}
 
       <div className="brut-article-body">
         {image && flottante && (
-          <div
+          <BrutContentImage
+            path={image}
             className={cn(
-              "relative mb-3 aspect-[4/3] w-full overflow-hidden rounded-2xl border border-brut-line sm:w-[42%]",
+              "mb-3 w-full sm:w-[42%]",
               layout === 0 ? "sm:float-left sm:mr-6" : "sm:float-right sm:ml-6"
             )}
-          >
-            <Image src={addDomainToBackendImagePath(image)} alt="" fill className="object-cover" sizes="(max-width: 640px) 100vw, 320px" />
-          </div>
+            sizes="(max-width: 640px) 100vw, 320px"
+          />
         )}
         <div dangerouslySetInnerHTML={{ __html: props.content.body }} />
         <div className="clear-both" />
