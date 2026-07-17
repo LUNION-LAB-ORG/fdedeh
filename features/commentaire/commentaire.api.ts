@@ -5,11 +5,8 @@ import { LaravelPaginatedResponse } from "@/types";
 
 export interface ICommentaireApi {
 	ajouterCommentaire(data: CommentaireAddDTO): Promise<any>;
-	obtenirCommentaires({ entityId, entityType, page }: {
-		entityId: string;
-		entityType: string;
-		page?: number;
-	}): Promise<LaravelPaginatedResponse<ICommentaire>>;
+	obtenirCommentaires(p: { entityId: string; entityType: string; page?: number }): Promise<LaravelPaginatedResponse<ICommentaire>>;
+	obtenirFil(p: { entityType: string; entityId: string }): Promise<{ data: ICommentaire[] }>;
 }
 
 export const commentaireApi: ICommentaireApi = {
@@ -23,6 +20,8 @@ export const commentaireApi: ICommentaireApi = {
 				fullname: data.fullName,
 				email: data.email,
 				comments: data.comment,
+				// Renseigné uniquement pour une réponse à un commentaire.
+				...(data.parentId ? { parent_id: data.parentId } : {}),
 			},
 		});
 	},
@@ -33,5 +32,13 @@ export const commentaireApi: ICommentaireApi = {
 			method: "GET",
 			searchParams: { entityType, page },
 		})
-	}
+	},
+
+	// Fil communautaire : commentaires de premier niveau + réponses imbriquées.
+	obtenirFil({ entityType, entityId }: { entityType: string; entityId: string }): Promise<{ data: ICommentaire[] }> {
+		return api.request<{ data: ICommentaire[] }>({
+			endpoint: `/items/${entityType.toUpperCase()}/${entityId}/comments`,
+			method: "GET",
+		})
+	},
 }

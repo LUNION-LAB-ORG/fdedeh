@@ -10,9 +10,21 @@ import { Loader } from "lucide-react";
 import React, { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { jetonVisiteur, lireIdentiteVisiteur, memoriserIdentiteVisiteur } from "@/utils/visitor";
+import { cn } from "@/lib/utils";
 
-function AvisForm<T>({ data, type = "article" }: { data: T, type?: string }) {
-  // Identité connue (mémorisée dans le navigateur) + affichage ou non des champs.
+function AvisForm<T>({
+  data,
+  type = "article",
+  parentId,
+  compact = false,
+  onSubmitted,
+}: {
+  data: T;
+  type?: string;
+  parentId?: number | string;
+  compact?: boolean;
+  onSubmitted?: () => void;
+}) {
   const [identiteConnue, setIdentiteConnue] = useState<string | null>(null);
   const [modifierIdentite, setModifierIdentite] = useState(false);
 
@@ -31,16 +43,15 @@ function AvisForm<T>({ data, type = "article" }: { data: T, type?: string }) {
     }
   });
 
-  // Reconnait le visiteur depuis son navigateur (une fois, côté client).
   useEffect(() => {
-    jetonVisiteur(); // garantit un jeton d'appareil stable
+    jetonVisiteur();
     const id = lireIdentiteVisiteur();
     if (id) {
       setValue('fullName', id.fullName);
       setValue('email', id.email);
       setIdentiteConnue(id.fullName);
     } else {
-      setModifierIdentite(true); // inconnu : on montre les champs
+      setModifierIdentite(true);
     }
   }, [setValue]);
 
@@ -54,29 +65,32 @@ function AvisForm<T>({ data, type = "article" }: { data: T, type?: string }) {
       ...formData,
       entityId: data && typeof data === 'object' && 'id' in data ? (data as any).id.toString() : '',
       entityType: type,
+      ...(parentId ? { parentId } : {}),
     };
 
     await ajouterCommentaire(payload);
 
-    // On mémorise l'identité pour ne plus la redemander, et on ne vide que le message.
     memoriserIdentiteVisiteur({ fullName: formData.fullName, email: formData.email });
     setIdentiteConnue(formData.fullName);
     setModifierIdentite(false);
     resetForm({ fullName: formData.fullName, email: formData.email, comment: '' });
+    onSubmitted?.();
   }
 
   const champsIdentiteVisibles = modifierIdentite || !identiteConnue;
 
   return (
     <form onSubmit={handleSubmit(onSubmitForm)} className="flex flex-col">
-      <h3 className="text-lg text-primary mb-4">
-        Ajouter un avis
-      </h3>
-      <div className="mb-4">
+      {!compact && (
+        <h3 className="mb-4 font-display text-[18px] font-black -tracking-[0.02em] text-brut-ink">
+          Ajouter un commentaire
+        </h3>
+      )}
+      <div className="mb-3">
         <Textarea
-          className="text-sm bg-[#F5F5F5] focus:bg-white focus-visible:ring-1 focus-visible:ring-primary"
-          placeholder="Rédiger un commentaire"
-          rows={4}
+          className="rounded-xl border-brut-line bg-brut-raise text-[14px] focus-visible:ring-1 focus-visible:ring-brut-signal"
+          placeholder={compact ? "Votre réponse…" : "Partagez votre avis…"}
+          rows={compact ? 2 : 4}
           disabled={isAddingCommentaire}
           {...register('comment')}
         />
@@ -84,14 +98,14 @@ function AvisForm<T>({ data, type = "article" }: { data: T, type?: string }) {
       </div>
 
       {champsIdentiteVisibles ? (
-        <div className="grid sm:grid-cols-2 gap-4 mb-4">
+        <div className="mb-3 grid gap-3 sm:grid-cols-2">
           <div>
             <Input
               disabled={isAddingCommentaire}
               {...register('fullName')}
               type="text"
               placeholder="Nom & Prénoms"
-              className="text-sm bg-[#F5F5F5] focus:bg-white focus-visible:ring-1 focus-visible:ring-primary"
+              className="rounded-xl border-brut-line bg-brut-raise text-[14px] focus-visible:ring-1 focus-visible:ring-brut-signal"
             />
             <ErrorMessage message={errors.fullName?.message} />
           </div>
@@ -101,14 +115,14 @@ function AvisForm<T>({ data, type = "article" }: { data: T, type?: string }) {
               {...register('email')}
               type="email"
               placeholder="Email"
-              className="text-sm bg-[#F5F5F5] focus:bg-white focus-visible:ring-1 focus-visible:ring-primary"
+              className="rounded-xl border-brut-line bg-brut-raise text-[14px] focus-visible:ring-1 focus-visible:ring-brut-signal"
             />
             <ErrorMessage message={errors.email?.message} />
           </div>
         </div>
       ) : (
-        <div className="mb-4 text-sm text-brut-muted">
-          Vous commentez en tant que{" "}
+        <div className="mb-3 text-[13px] text-brut-muted">
+          {compact ? "Réponse en tant que " : "Vous commentez en tant que "}
           <span className="font-semibold text-brut-ink">{identiteConnue}</span>
           {" · "}
           <button
@@ -121,9 +135,12 @@ function AvisForm<T>({ data, type = "article" }: { data: T, type?: string }) {
         </div>
       )}
 
-      <Button type="submit" className="rounded-full bg-custom-gradient self-end">
-        Ajouter
-        {isAddingCommentaire && <Loader className={`ml-2 h-4 w-4 animate-spin`} />}
+      <Button
+        type="submit"
+        className={cn("self-end rounded-full bg-custom-gradient font-semibold text-white", compact && "h-9 px-4 text-[13px]")}
+      >
+        {compact ? "Répondre" : "Publier"}
+        {isAddingCommentaire && <Loader className="ml-2 h-4 w-4 animate-spin" />}
       </Button>
     </form>
   );
@@ -132,7 +149,7 @@ function AvisForm<T>({ data, type = "article" }: { data: T, type?: string }) {
 function ErrorMessage({ message }: { message: string | undefined }) {
   if (!message) return null;
   return (
-    <small className="text-xs text-red-500 mt-1">{message}</small>
+    <small className="mt-1 text-xs text-red-500">{message}</small>
   );
 }
 

@@ -5,8 +5,7 @@ import { Link } from "@/i18n/navigation";
 import SocialShare from "@/features/articles/components/social-share";
 import SimilarArticle from "@/features/articles/components/article/similar-article";
 import { useArticleDetailsQuery } from "@/features/articles/queries/article-detail.query";
-import AvisForm from "@/features/commentaire/components/avis-form";
-import AvisList from "@/features/commentaire/components/avis-list";
+import { BrutFil } from "@/components/brut/brut-fil";
 import { useStats } from "@/hooks/use-stats";
 import { BrutAside } from "@/components/brut/brut-aside";
 import { BrutContentImage } from "@/components/brut/brut-content-image";
@@ -84,10 +83,7 @@ function ArticleDetails({ slug }: { slug: string }) {
         </div>
 
         <div className="mt-12 max-w-3xl">
-          <AvisForm data={article} />
-          <div className="mt-12">
-            <AvisList entityId={article.id.toLocaleString()} entityType="article" />
-          </div>
+          <BrutFil entityData={article} entityType="ARTICLE" />
         </div>
 
         <div className="mt-16 border-t border-brut-line pt-10">

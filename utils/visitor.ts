@@ -47,3 +47,34 @@ export function jetonVisiteur(): string {
     return "";
   }
 }
+
+// ─── État « liké » par appareil ────────────────────────────────────────────
+// Les likes étant dédoublonnés par appareil côté serveur, l'état « j'ai liké »
+// est une vérité locale : on le garde dans le navigateur. Clé = "TYPE:id".
+const CLE_LIKES = "fdedeh:likes";
+
+function lireLikes(): Set<string> {
+  if (typeof window === "undefined") return new Set();
+  try {
+    const arr = JSON.parse(window.localStorage.getItem(CLE_LIKES) || "[]");
+    return new Set(Array.isArray(arr) ? (arr as string[]) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+export function aLikeLocal(cle: string): boolean {
+  return lireLikes().has(cle);
+}
+
+export function marquerLikeLocal(cle: string, like: boolean) {
+  if (typeof window === "undefined") return;
+  try {
+    const set = lireLikes();
+    if (like) set.add(cle);
+    else set.delete(cle);
+    window.localStorage.setItem(CLE_LIKES, JSON.stringify([...set]));
+  } catch {
+    // stockage indisponible : on ignore.
+  }
+}

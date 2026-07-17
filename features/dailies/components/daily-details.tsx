@@ -8,8 +8,7 @@ import LoadingIndicator from "@/components/loading-indicator";
 import DailyContent from "@/features/dailies/components/daily-content";
 import DailyIntroduction from "@/features/dailies/components/daily-introduction";
 import SocialShare from "@/features/articles/components/social-share";
-import AvisForm from "@/features/commentaire/components/avis-form";
-import AvisList from "@/features/commentaire/components/avis-list";
+import { BrutFil } from "@/components/brut/brut-fil";
 import { BrutDatePicker } from "@/components/brut/brut-date-picker";
 import { BrutAside } from "@/components/brut/brut-aside";
 import { useStats } from "@/hooks/use-stats";
@@ -91,10 +90,7 @@ function DailyDetails({ dailyDate }: { dailyDate: string }) {
             </div>
 
             <div className="mt-14 max-w-3xl">
-              <AvisForm data={daily} type="daily" />
-              <div className="mt-12">
-                <AvisList entityId={daily.id.toLocaleString()} entityType="DAILY" />
-              </div>
+              <BrutFil entityData={daily} entityType="DAILY" />
             </div>
           </>
         ) : (

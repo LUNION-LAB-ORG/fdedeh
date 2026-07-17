@@ -49,6 +49,8 @@ export const CommentaireAddSchema = z.object({
   comment: z.string({ message: "Le commentaire est requis" })
     .max(1000, "Le commentaire ne doit pas dépasser 1000 caractères")
     .trim(),
+  // Renseigné quand le commentaire est une réponse à un autre commentaire.
+  parentId: z.union([z.number(), z.string()]).nullable().optional(),
 });
 
 export const CommentaireUpdateSchema = CommentaireAddSchema.partial();

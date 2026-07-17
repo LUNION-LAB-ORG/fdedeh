@@ -42,3 +42,17 @@ export const obtenirCommentairesAction = async ({ entityId, entityType, page = 1
     }
 };
 
+export const obtenirFilAction = async ({ entityType, entityId }: { entityType: string; entityId: string }): Promise<ActionResponse<{ data: ICommentaire[] }>> => {
+    try {
+        const data = await commentaireApi.obtenirFil({ entityType, entityId });
+
+        return {
+            success: true,
+            data,
+            message: "Fil obtenu avec succès",
+        };
+    } catch (error) {
+        return handleServerActionError(error, "Erreur lors de la récupération du fil");
+    }
+};
+
