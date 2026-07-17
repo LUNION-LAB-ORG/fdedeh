@@ -4,6 +4,7 @@ import { BrutPageHeader } from "@/components/brut/brut-page-header";
 import { BrutFeatureCard } from "@/components/brut/brut-feature-card";
 import { BrutArticleCard } from "@/components/brut/brut-article-card";
 import { BrutFilterPills, FilterPill } from "@/components/brut/brut-filter-pills";
+import { BrutSeoBlock } from "@/components/brut/brut-seo-block";
 import { slugify } from "@/features/articles/utils/slugify";
 import { obtenirTousArticlesAction } from "@/features/articles/actions/article.action";
 
@@ -59,6 +60,11 @@ export default async function ALaUnePage() {
         ) : (
           <p className="text-brut-muted">Aucun article pour le moment.</p>
         )}
+
+        <BrutSeoBlock
+          title="À la une"
+          description="fd.info réunit tous les articles de la rédaction de Fernand Dédeh : analyses, décryptages et prises de position sur l'actualité ivoirienne, mis à jour chaque jour, rubrique par rubrique."
+        />
       </div>
     </>
   );

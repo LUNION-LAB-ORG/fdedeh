@@ -92,8 +92,11 @@ export default async function HomePage() {
         {dailiesListe.length > 0 && (
           <section className="pt-12">
             <SectionHead eyebrow="Le Daily" title="À la une" href="/dailies" hrefLabel="Toutes les archives" />
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {dailiesListe.map((daily) => (
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+              <div className="lg:col-span-2">
+                <BrutDailyCard daily={dailiesListe[0]} featured />
+              </div>
+              {dailiesListe.slice(1, 5).map((daily) => (
                 <BrutDailyCard daily={daily} key={`daily-${daily.id}`} />
               ))}
             </div>

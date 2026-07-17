@@ -4,6 +4,7 @@ import { BrutPageHeader } from "@/components/brut/brut-page-header";
 import { BrutFeatureCard } from "@/components/brut/brut-feature-card";
 import { BrutArticleCard } from "@/components/brut/brut-article-card";
 import { BrutFilterPills, FilterPill } from "@/components/brut/brut-filter-pills";
+import { BrutSeoBlock } from "@/components/brut/brut-seo-block";
 import { slugify } from "@/features/articles/utils/slugify";
 import { obtenirTousArticlesAction } from "@/features/articles/actions/article.action";
 
@@ -66,6 +67,11 @@ export default async function CategoriePage({ params }: Props) {
         ) : (
           <p className="mt-8 text-brut-muted">Aucun article dans cette rubrique pour le moment.</p>
         )}
+
+        <BrutSeoBlock
+          title={nomCategorie}
+          description={`Retrouvez sur fd.info toute l'actualité « ${nomCategorie} » en Côte d'Ivoire : analyses, décryptages et prises de position, suivis jour après jour par Fernand Dédeh et sa rédaction.`}
+        />
       </div>
     </>
   );
