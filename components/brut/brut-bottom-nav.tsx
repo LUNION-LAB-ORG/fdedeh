@@ -10,8 +10,8 @@ import { BrutThemeToggle } from "./brut-theme-toggle";
 
 const TABS = [
   { name: "Accueil", href: "/", Icon: Home },
-  { name: "À la une", href: "/a-la-une", Icon: Newspaper },
-  { name: "Le Daily", href: "/dailies", Icon: LayoutGrid },
+  { name: "Articles", href: "/a-la-une", Icon: Newspaper },
+  { name: "Inabo", href: "/dailies", Icon: LayoutGrid },
 ];
 
 function useIsActive() {

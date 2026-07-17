@@ -22,7 +22,7 @@ export function BrutNewsletter() {
           Restez informé chaque jour
         </h2>
         <p className="mx-auto mt-3 max-w-md text-[15px] text-brut-muted">
-          Recevez le Daily et les actualités qui comptent, directement dans votre boîte mail.
+          Recevez A Barthelemy Inabo et les actualités qui comptent, directement dans votre boîte mail.
         </p>
 
         {done ? (

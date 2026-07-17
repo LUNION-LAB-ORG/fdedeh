@@ -41,7 +41,7 @@ function DailyDetails({ dailyDate }: { dailyDate: string }) {
       <div className="mx-auto max-w-6xl">
         <nav aria-label="Fil d'Ariane" className="mb-6 flex items-center gap-2.5 text-[13.5px] font-semibold">
           <Link href="/dailies" className="text-brut-ink transition-colors hover:text-brut-signal">
-            Le Daily
+            A Barthelemy Inabo
           </Link>
           <span className="text-brut-muted" aria-hidden>›</span>
           <span className="text-brut-muted">Archives</span>
@@ -51,7 +51,7 @@ function DailyDetails({ dailyDate }: { dailyDate: string }) {
           <div>
             <p className="mb-2 font-mono text-[12px] uppercase tracking-[0.12em] text-brut-signal">L&apos;édition du jour</p>
             <h1 className="font-display text-[clamp(32px,5vw,56px)] font-black -tracking-[0.04em]">
-              {daily ? dateFormat(daily.published_at) : "Le Daily"}
+              {daily ? dateFormat(daily.published_at) : "A Barthelemy Inabo"}
             </h1>
           </div>
           <BrutDatePicker selected={dailyDate} label="Un autre jour" />

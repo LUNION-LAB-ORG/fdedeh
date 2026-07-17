@@ -1,30 +1,48 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
 import { Textarea } from "@/components/ui/textarea";
-import { CommentaireAddDTO, CommentaireAddSchema, CommentaireFormDto, CommentaireFormSchema } from "@/features/commentaire/commentaire.schema";
+import { CommentaireAddDTO, CommentaireFormDto, CommentaireFormSchema } from "@/features/commentaire/commentaire.schema";
 import { useAjouterCommentaireMutation } from "@/features/commentaire/queries/commentaire.mutation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader } from "lucide-react";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
+import { jetonVisiteur, lireIdentiteVisiteur, memoriserIdentiteVisiteur } from "@/utils/visitor";
 
 function AvisForm<T>({ data, type = "article" }: { data: T, type?: string }) {
+  // Identité connue (mémorisée dans le navigateur) + affichage ou non des champs.
+  const [identiteConnue, setIdentiteConnue] = useState<string | null>(null);
+  const [modifierIdentite, setModifierIdentite] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset: resetForm,
+    setValue,
   } = useForm<CommentaireFormDto>({
     resolver: zodResolver(CommentaireFormSchema),
-    values: {
+    defaultValues: {
       email: '',
       fullName: '',
       comment: '',
     }
   });
+
+  // Reconnait le visiteur depuis son navigateur (une fois, côté client).
+  useEffect(() => {
+    jetonVisiteur(); // garantit un jeton d'appareil stable
+    const id = lireIdentiteVisiteur();
+    if (id) {
+      setValue('fullName', id.fullName);
+      setValue('email', id.email);
+      setIdentiteConnue(id.fullName);
+    } else {
+      setModifierIdentite(true); // inconnu : on montre les champs
+    }
+  }, [setValue]);
 
   const {
     mutateAsync: ajouterCommentaire,
@@ -38,11 +56,16 @@ function AvisForm<T>({ data, type = "article" }: { data: T, type?: string }) {
       entityType: type,
     };
 
-    ajouterCommentaire(payload)
-      .then(() => {
-        resetForm();
-      });
+    await ajouterCommentaire(payload);
+
+    // On mémorise l'identité pour ne plus la redemander, et on ne vide que le message.
+    memoriserIdentiteVisiteur({ fullName: formData.fullName, email: formData.email });
+    setIdentiteConnue(formData.fullName);
+    setModifierIdentite(false);
+    resetForm({ fullName: formData.fullName, email: formData.email, comment: '' });
   }
+
+  const champsIdentiteVisibles = modifierIdentite || !identiteConnue;
 
   return (
     <form onSubmit={handleSubmit(onSubmitForm)} className="flex flex-col">
@@ -59,38 +82,45 @@ function AvisForm<T>({ data, type = "article" }: { data: T, type?: string }) {
         />
         <ErrorMessage message={errors.comment?.message} />
       </div>
-      {/* <div className="flex items-center mb-4 space-x-2">
-        <Switch
-          id='anonymous'
-          checked={isAnonymous}
-          onCheckedChange={(checked) => {
-            setIsAnonymous(checked);
-          }}
-        />
-        <Label htmlFor='anonymous'>Publier anonymement</Label>
-      </div> */}
-      <div className="grid sm:grid-cols-2 gap-4 mb-4">
-        <div>
-          <Input
-            disabled={isAddingCommentaire}
-            {...register('fullName')}
-            type="text"
-            placeholder="Nom & Prénoms"
-            className="text-sm bg-[#F5F5F5] focus:bg-white focus-visible:ring-1 focus-visible:ring-primary"
-          />
-          <ErrorMessage message={errors.fullName?.message} />
+
+      {champsIdentiteVisibles ? (
+        <div className="grid sm:grid-cols-2 gap-4 mb-4">
+          <div>
+            <Input
+              disabled={isAddingCommentaire}
+              {...register('fullName')}
+              type="text"
+              placeholder="Nom & Prénoms"
+              className="text-sm bg-[#F5F5F5] focus:bg-white focus-visible:ring-1 focus-visible:ring-primary"
+            />
+            <ErrorMessage message={errors.fullName?.message} />
+          </div>
+          <div>
+            <Input
+              disabled={isAddingCommentaire}
+              {...register('email')}
+              type="email"
+              placeholder="Email"
+              className="text-sm bg-[#F5F5F5] focus:bg-white focus-visible:ring-1 focus-visible:ring-primary"
+            />
+            <ErrorMessage message={errors.email?.message} />
+          </div>
         </div>
-        <div>
-          <Input
-            disabled={isAddingCommentaire}
-            {...register('email')}
-            type="email"
-            placeholder="Email"
-            className="text-sm bg-[#F5F5F5] focus:bg-white focus-visible:ring-1 focus-visible:ring-primary"
-          />
-          <ErrorMessage message={errors.email?.message} />
+      ) : (
+        <div className="mb-4 text-sm text-brut-muted">
+          Vous commentez en tant que{" "}
+          <span className="font-semibold text-brut-ink">{identiteConnue}</span>
+          {" · "}
+          <button
+            type="button"
+            onClick={() => setModifierIdentite(true)}
+            className="font-semibold text-brut-signal hover:underline"
+          >
+            changer
+          </button>
         </div>
-      </div>
+      )}
+
       <Button type="submit" className="rounded-full bg-custom-gradient self-end">
         Ajouter
         {isAddingCommentaire && <Loader className={`ml-2 h-4 w-4 animate-spin`} />}

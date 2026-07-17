@@ -24,7 +24,7 @@ function SectionHead({
   href,
   hrefLabel,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   href?: string;
   hrefLabel?: string;
@@ -32,7 +32,7 @@ function SectionHead({
   return (
     <div className="mb-6 flex items-end justify-between gap-4">
       <div>
-        <p className="mb-1 font-mono text-[11px] uppercase tracking-[0.15em] text-brut-signal">{eyebrow}</p>
+        {eyebrow && <p className="mb-1 font-mono text-[11px] uppercase tracking-[0.15em] text-brut-signal">{eyebrow}</p>}
         <h2 className="font-display text-[clamp(24px,3.6vw,34px)] font-black -tracking-[0.03em]">{title}</h2>
       </div>
       {href && (
@@ -76,7 +76,7 @@ export default async function HomePage() {
       {dailyUne && (
         <BrutHero
           imagePath={dailyUne.contents?.[0]?.path_image}
-          eyebrow={`Le Daily du jour · ${dateFormat(dailyUne.published_at)}`}
+          eyebrow={`A Barthelemy Inabo · ${dateFormat(dailyUne.published_at)}`}
           badges={
             Array.from(
               new Set((dailyUne.contents ?? []).map((c) => c.hashtag?.hashtag).filter(Boolean))
@@ -85,7 +85,7 @@ export default async function HomePage() {
           title={dailyUne.introduction}
           metas={[`${dailyUne.view_count ?? 0} vues`, `${(dailyUne.contents ?? []).length} sujets`]}
           href={`/dailies/${dateISO(dailyUne.published_at)}`}
-          ctaLabel="Lire le Daily"
+          ctaLabel="Lire A Barthelemy Inabo"
           extra={<BrutDatePicker selected={dateISO(dailyUne.published_at)} label="Un autre jour" />}
         />
       )}
@@ -93,7 +93,7 @@ export default async function HomePage() {
       <div className="px-6 pb-4 lg:px-11">
         {dailiesListe.length > 0 && (
           <section className="pt-12">
-            <SectionHead eyebrow="Le Daily" title="À la une" href="/dailies" hrefLabel="Toutes les archives" />
+            <SectionHead eyebrow="A Barthelemy Inabo" title="À la une" href="/dailies" hrefLabel="Toutes les archives" />
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
               <div className="lg:col-span-2">
                 <BrutDailyCard daily={dailiesListe[0]} featured />
@@ -111,7 +111,7 @@ export default async function HomePage() {
 
         {categories.length > 0 && (
           <section className="pt-16">
-            <SectionHead eyebrow="Le fil" title="Autres actualités" href="/a-la-une" hrefLabel="Tout voir" />
+            <SectionHead title="Autres actualités" href="/a-la-une" hrefLabel="Tout voir" />
             <div className="flex flex-col gap-12">
               {categories.map(([categorie, liste]) => (
                 <div key={categorie}>

@@ -46,7 +46,7 @@ export function BrutDailyCard({ daily, featured = false }: { daily: IDaily; feat
           {rubriquesOverlay}
         </div>
         <div className="flex flex-col justify-center gap-3 p-6 lg:p-8">
-          <div className="font-mono text-[11px] uppercase tracking-[0.1em] text-brut-signal">● Le Daily</div>
+          <div className="font-mono text-[11px] uppercase tracking-[0.1em] text-brut-signal">● A Barthelemy Inabo</div>
           <h3 className="line-clamp-5 font-display text-[clamp(19px,2.2vw,27px)] font-black leading-[1.12] -tracking-[0.02em] text-brut-ink">
             {daily.introduction}
           </h3>
@@ -75,7 +75,7 @@ export function BrutDailyCard({ daily, featured = false }: { daily: IDaily; feat
       </div>
 
       <div className="flex flex-1 flex-col gap-2.5 px-4 pb-4 pt-[15px]">
-        <div className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-brut-signal">● Le Daily</div>
+        <div className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-brut-signal">● A Barthelemy Inabo</div>
         <h3 className="line-clamp-3 text-[16px] font-extrabold leading-[1.25] -tracking-[0.01em] text-brut-ink">
           {daily.introduction}
         </h3>

@@ -9,7 +9,7 @@ import { slugify } from "@/features/articles/utils/slugify";
 import { obtenirTousArticlesAction } from "@/features/articles/actions/article.action";
 
 export const metadata: Metadata = {
-  title: "À la une",
+  title: "Articles",
   description: "Tous les articles de la rédaction de fd.info.",
 };
 
@@ -35,7 +35,7 @@ export default async function ALaUnePage() {
     <>
       <BrutPageHeader
         eyebrow="La rédaction"
-        title="À la une"
+        title="Articles"
         subtitle="Tous les articles de la rédaction, pour suivre toute l'actualité ivoirienne."
       />
       <div className="px-6 py-12 lg:px-11">
@@ -62,7 +62,7 @@ export default async function ALaUnePage() {
         )}
 
         <BrutSeoBlock
-          title="À la une"
+          title="Articles"
           description="fd.info réunit tous les articles de la rédaction de Fernand Dédeh : analyses, décryptages et prises de position sur l'actualité ivoirienne, mis à jour chaque jour, rubrique par rubrique."
         />
       </div>

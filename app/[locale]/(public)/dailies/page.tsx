@@ -7,7 +7,7 @@ import DailiesPagination from "@/features/dailies/components/dailies-pagination"
 import { obtenirTousDailiesAction } from "@/features/dailies/dailies.action";
 
 export const metadata: Metadata = {
-  title: "Archives des Dailies",
+  title: "A Barthelemy Inabo",
   description: "Toutes les publications quotidiennes de Fernand Dédeh, jour après jour.",
 };
 
@@ -32,7 +32,7 @@ async function DailiesArchivePage({ searchParams }: Props) {
   return (
     <>
       <BrutPageHeader
-        eyebrow="Le Daily"
+        eyebrow="A Barthelemy Inabo"
         title="Archives"
         subtitle={
           resultat.success && meta

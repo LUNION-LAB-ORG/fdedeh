@@ -34,7 +34,7 @@ export const RUBRIQUES: NavItem[] = [
 ];
 
 export const MEDIA: NavItem[] = [
-  { name: "Archives", href: "/dailies", icon: I.archives },
+  { name: "A Barthelemy Inabo", href: "/dailies", icon: I.archives },
   { name: "Articles", href: "/a-la-une", icon: I.daily },
   { name: "Podcasts", href: "/podcasts", icon: I.podcasts },
 ];
