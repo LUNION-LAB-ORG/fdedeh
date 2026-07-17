@@ -26,7 +26,7 @@ const I = {
 };
 
 export const RUBRIQUES: NavItem[] = [
-  { name: "À la Une", href: "/a-la-une", icon: I.une },
+  { name: "À la Une", href: "/", icon: I.une },
   { name: "Politique", href: "/actualites-nationales/politique", icon: I.politique },
   { name: "Société", href: "/actualites-nationales/societe", icon: I.societe },
   { name: "Sport", href: "/sports", icon: I.sport },

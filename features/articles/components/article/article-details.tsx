@@ -38,7 +38,7 @@ function ArticleDetails({ slug }: { slug: string }) {
     <article className="px-6 py-10 lg:px-11 lg:py-12">
       <div className="mx-auto max-w-3xl">
         <nav aria-label="Fil d'Ariane" className="mb-6 flex items-center gap-2.5 text-[13.5px] font-semibold">
-          <Link href="/a-la-une" className="text-brut-ink transition-colors hover:text-brut-signal">
+          <Link href="/" className="text-brut-ink transition-colors hover:text-brut-signal">
             À la Une
           </Link>
           {article.category?.name && (
