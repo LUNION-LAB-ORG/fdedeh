@@ -20,9 +20,6 @@ const I = {
   podcasts: (
     <svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M6 11a6 6 0 0012 0M12 17v4" /></svg>
   ),
-  galerie: (
-    <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2" /><circle cx="9" cy="10" r="1.6" /><path d="M5 17l4-4 4 4 3-3 3 3" /></svg>
-  ),
 };
 
 export const RUBRIQUES: NavItem[] = [
@@ -40,5 +37,4 @@ export const MEDIA: NavItem[] = [
   { name: "Archives", href: "/dailies", icon: I.archives },
   { name: "Articles", href: "/a-la-une", icon: I.daily },
   { name: "Podcasts", href: "/podcasts", icon: I.podcasts },
-  { name: "Galerie", href: "/galerie", icon: I.galerie },
 ];

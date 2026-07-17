@@ -14,24 +14,40 @@ import {useEffect, useState} from "react";
 import ContactButton from "./contact-button";
 import {useBannerStore} from "@/features/banner/banner.store";
 import {addDomainToBackendImagePath} from "@/utils/image-utils";
+import {usePathname} from "@/i18n/navigation";
 
 const CLE_POPUP_FERME = "fdedeh:popup-ferme";
 
 export default function BannerDialog() {
 	const [open, setOpen] = useState(false);
+	const pathname = usePathname();
 
 	const {getBannerByPosition} = useBannerStore()
 
 	const banner = getBannerByPosition('popup')
 
-	// Ouvert depuis un effet, pas à l'initialisation : sessionStorage n'existe pas au rendu
-	// serveur. La fermeture vaut pour la session — le trafic arrive de WhatsApp et de Google,
-	// donc par chargement complet, et le popup se rouvrait à chaque page d'atterrissage.
+	// Le popup ne s'ouvre que sur l'accueil, une seule fois par session, et
+	// seulement une fois que le visiteur a fait défiler jusqu'à un certain niveau
+	// (≈ un demi-écran) — pas dès l'arrivée. sessionStorage n'existe pas au rendu
+	// serveur, d'où l'effet. La marque « vu » vaut pour la session : le trafic
+	// arrive de WhatsApp et de Google, donc par chargement complet, et le popup
+	// se rouvrait à chaque page d'atterrissage.
 	useEffect(() => {
 		if (!banner) return;
+		if (pathname !== "/") return;
 		if (sessionStorage.getItem(CLE_POPUP_FERME) === "1") return;
-		setOpen(true);
-	}, [banner]);
+
+		const seuil = () => Math.min(window.innerHeight * 0.6, 700);
+		const onScroll = () => {
+			if (window.scrollY > seuil()) {
+				sessionStorage.setItem(CLE_POPUP_FERME, "1");
+				setOpen(true);
+				window.removeEventListener("scroll", onScroll);
+			}
+		};
+		window.addEventListener("scroll", onScroll, {passive: true});
+		return () => window.removeEventListener("scroll", onScroll);
+	}, [banner, pathname]);
 
 	const handleClose = () => {
 		sessionStorage.setItem(CLE_POPUP_FERME, "1");

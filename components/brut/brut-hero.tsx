@@ -67,9 +67,10 @@ export function BrutHero({ imagePath, eyebrow, badges, title, metas, href, ctaLa
       <h1
         className={cn(
           "font-display font-black -tracking-[0.035em] text-balance",
+          // Mobile et tablette (base→lg) nettement réduits ; desktop (lg+) fluide.
           estBanniere
-            ? "text-[clamp(30px,4.6vw,54px)] leading-[1.02] line-clamp-4"
-            : "text-[clamp(28px,4vw,52px)] leading-[1.0] line-clamp-5"
+            ? "text-[26px] leading-[1.1] line-clamp-4 sm:text-[30px] lg:text-[clamp(32px,4vw,52px)] lg:leading-[1.02]"
+            : "text-[24px] leading-[1.08] line-clamp-5 sm:text-[27px] lg:text-[clamp(30px,3.3vw,48px)] lg:leading-[1.0]"
         )}
       >
         {title}
@@ -103,9 +104,11 @@ export function BrutHero({ imagePath, eyebrow, badges, title, metas, href, ctaLa
           {image}
         </div>
       ) : (
-        <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,44%)_1fr] lg:gap-12">
-          {image}
-          {texte}
+        // Côte à côte (image gauche / texte droite) seulement à partir de lg.
+        // En dessous : empilé texte en haut, image en bas.
+        <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,44%)_1fr] lg:items-center lg:gap-12">
+          <div className="order-2 lg:order-1">{image}</div>
+          <div className="order-1 lg:order-2">{texte}</div>
         </div>
       )}
     </header>
