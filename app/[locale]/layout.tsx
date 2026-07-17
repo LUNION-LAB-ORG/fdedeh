@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Archivo } from "next/font/google";
 import "./globals.css";
 import "./theme.css";
@@ -16,6 +16,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import getQueryClient from "@/lib/get-query-client";
 import DataProvider from "@/providers/data.provider";
+import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import { GoogleAnalytics } from '@next/third-parties/google';
 //
 const inter = Inter({ subsets: ["latin"] });
@@ -43,6 +44,22 @@ export const metadata: Metadata = {
     index: true,
     follow: true
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "fd.info",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FCFBFA" },
+    { media: "(prefers-color-scheme: dark)", color: "#15120E" },
+  ],
 };
 
 export default async function RootLayout(
@@ -86,6 +103,7 @@ export default async function RootLayout(
             </HydrationBoundary>
           </QueryProvider>
         </NextIntlClientProvider>
+        <ServiceWorkerRegister />
         <GoogleAnalytics gaId="G-SYWNXWW3XW" />
       </body>
     </html>
