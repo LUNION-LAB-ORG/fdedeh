@@ -11,6 +11,11 @@ const nextConfig = {
         protocol: "https",
         hostname: "admin.fdedeh.info",
       },
+      {
+        // Miniatures des podcasts (liens YouTube)
+        protocol: "https",
+        hostname: "i.ytimg.com",
+      },
     ],
   },
   output: "standalone",

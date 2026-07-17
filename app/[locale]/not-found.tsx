@@ -1,23 +1,22 @@
-'use client';
-
-import {Link} from '@/i18n/navigation';
-import Image from "next/image";
+import { Link } from "@/i18n/navigation";
 
 export default function NotFound() {
-    return (
-        <div className="min-h-screen flex flex-col justify-center items-center text-center py-20 bg-background">
-            <Image
-              src="/images/illustrations/page-not-found.svg"
-              alt="illustrations 404"
-              width={300}
-              height={300}
-              className="mb-8"
-            />
-            <h1 className="text-4xl font-bold mt-6 mb-2">Page non trouvée</h1>
-            <p className="text-lg mb-6">Désolé, la page que vous recherchez n&#39;existe pas.</p>
-            <Link href="/" className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark transition">
-                Retour à l&#39;accueil
-            </Link>
-        </div>
-    );
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center bg-brut-ground px-6 text-center text-brut-ink">
+      <p className="font-mono text-[13px] uppercase tracking-[0.16em] text-brut-signal">Erreur 404</p>
+      <div className="mt-3 font-display text-[clamp(96px,22vw,220px)] font-black leading-none -tracking-[0.06em] text-brut-signal">
+        404
+      </div>
+      <h1 className="mt-2 font-display text-[clamp(26px,5vw,42px)] font-black -tracking-[0.03em]">Page introuvable</h1>
+      <p className="mt-5 max-w-md text-[16px] text-brut-muted">
+        La page que vous cherchez n&apos;existe pas ou a été déplacée.
+      </p>
+      <Link
+        href="/"
+        className="mt-8 inline-flex items-center gap-2 rounded-full bg-brut-ink px-6 py-3 text-[15px] font-bold text-brut-ground"
+      >
+        Retour à l&apos;accueil →
+      </Link>
+    </div>
+  );
 }
