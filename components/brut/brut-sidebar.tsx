@@ -5,6 +5,7 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import LogoFd from "@/components/logo-fd";
 import { RUBRIQUES, MEDIA, NavItem } from "./nav-data";
+import { BrutThemeToggle } from "./brut-theme-toggle";
 
 function NavLink({ item, active }: { item: NavItem; active: boolean }) {
   return (
@@ -49,6 +50,8 @@ export function BrutSidebar() {
           <NavLink key={item.name + item.href} item={item} active={isActive(item.href)} />
         ))}
       </nav>
+
+      <BrutThemeToggle className="mt-auto w-full" />
     </aside>
   );
 }

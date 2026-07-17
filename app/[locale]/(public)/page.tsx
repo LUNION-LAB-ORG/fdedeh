@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "@/i18n/navigation";
+import FlashInfo from "@/components/flash-info";
 import { BrutHero } from "@/components/brut/brut-hero";
 import { BrutArticleCard } from "@/components/brut/brut-article-card";
 import { BrutDailyCard } from "@/components/brut/brut-daily-card";
@@ -66,6 +67,8 @@ export default async function HomePage() {
 
   return (
     <>
+      <FlashInfo />
+
       {dailyUne && (
         <BrutHero
           imagePath={dailyUne.contents?.[0]?.path_image}

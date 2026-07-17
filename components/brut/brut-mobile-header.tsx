@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import LogoFd from "@/components/logo-fd";
 import { RUBRIQUES, MEDIA, NavItem } from "./nav-data";
+import { BrutThemeToggle } from "./brut-theme-toggle";
 
 function Group({ label, items, onNavigate, pathname }: { label: string; items: NavItem[]; onNavigate: () => void; pathname: string }) {
   return (
@@ -40,15 +41,18 @@ export function BrutMobileHeader() {
         <Link href="/" aria-label="fd.info — accueil" onClick={() => setOpen(false)}>
           <LogoFd width={78} />
         </Link>
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
-          aria-expanded={open}
-          className="rounded-lg p-2 text-brut-ink transition-colors hover:bg-brut-raise"
-        >
-          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        <div className="flex items-center gap-2">
+          <BrutThemeToggle />
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-expanded={open}
+            className="rounded-lg p-2 text-brut-ink transition-colors hover:bg-brut-raise"
+          >
+            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </div>
 
       {open && (
