@@ -100,6 +100,21 @@
     --brut-signal: #FF8A2B;
 }
 
+/* Corps d'article / daily rendu depuis du HTML (l'éditeur du backoffice) */
+.brut-article-body {
+    @apply text-[16.5px] leading-[1.75] text-brut-ink-soft;
+}
+.brut-article-body p { @apply mb-5; }
+.brut-article-body h2 { @apply mb-3 mt-9 font-display text-[26px] font-black -tracking-[0.02em] text-brut-ink; }
+.brut-article-body h3 { @apply mb-2 mt-7 text-[19px] font-extrabold text-brut-ink; }
+.brut-article-body a { @apply text-brut-signal underline underline-offset-2; }
+.brut-article-body img { @apply my-6 rounded-xl; }
+.brut-article-body ul { @apply mb-5 list-disc pl-6; }
+.brut-article-body ol { @apply mb-5 list-decimal pl-6; }
+.brut-article-body li { @apply mb-2; }
+.brut-article-body blockquote { @apply my-6 border-l-4 border-brut-signal pl-4 italic text-brut-ink; }
+.brut-article-body strong { @apply font-bold text-brut-ink; }
+
 .grid-article-container {
     @apply grid grid-cols-1 gap-8 md:grid-cols-2;
 }

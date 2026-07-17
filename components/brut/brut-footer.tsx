@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { Facebook, Youtube, Instagram } from "lucide-react";
 import { RUBRIQUES, MEDIA, NavItem } from "./nav-data";
@@ -28,9 +29,13 @@ export function BrutFooter() {
       <div className="mx-auto max-w-6xl px-6 py-14 lg:px-11">
         <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
           <div>
-            <div className="font-display text-[52px] font-black leading-none -tracking-[0.05em]">
-              fd<span className="text-brut-signal">.</span>info
-            </div>
+            <Image
+              src="/fd-info-blanc.png"
+              alt="fd.info"
+              width={140}
+              height={100}
+              className="h-auto w-[140px]"
+            />
             <p className="mt-4 max-w-xs text-[15px] font-semibold text-white/80">
               Le portail de référence de l&apos;actualité ivoirienne.
             </p>

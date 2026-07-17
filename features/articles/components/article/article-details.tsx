@@ -1,94 +1,97 @@
 "use client";
 
-import Publicite from "@/components/publicite";
-import SectionTitle from "@/components/section-title";
-import SimilarArticle from "@/features/articles/components/article/similar-article";
+import Image from "next/image";
+import { notFound } from "next/navigation";
+import { Link } from "@/i18n/navigation";
 import SocialShare from "@/features/articles/components/social-share";
+import SimilarArticle from "@/features/articles/components/article/similar-article";
 import { useArticleDetailsQuery } from "@/features/articles/queries/article-detail.query";
 import AvisForm from "@/features/commentaire/components/avis-form";
 import AvisList from "@/features/commentaire/components/avis-list";
 import { useStats } from "@/hooks/use-stats";
 import { addDomainToBackendImagePath } from "@/utils/image-utils";
-import Image from "next/image";
-import { notFound } from "next/navigation";
+import { dateFormat } from "@/utils/date-format";
 
 function ArticleDetails({ slug }: { slug: string }) {
+  const { data: article, isLoading } = useArticleDetailsQuery(slug);
 
-	const { data: article, isLoading: isArticleLoading, isError, error } = useArticleDetailsQuery(slug);
-	
-	// Call useStats unconditionally, using optional chaining to handle the case when article is undefined
-	useStats({ type: "article", id: article?.id });
+  useStats({ type: "article", id: article?.id });
 
-	if (!article && !isArticleLoading) {
-		return notFound();
-	}
+  if (!article && !isLoading) {
+    return notFound();
+  }
 
-	return (
-		<article className="page-container">
-			<figure className="relative mt-6">
-				{!isArticleLoading ? (
-					article && <>
-						<Image
-							src={addDomainToBackendImagePath(article?.path_resource)}
-							alt={article?.title || 'Article Image'}
-							width={1200}
-							height={600}
-							className="w-full max-h-[500px] object-cover object-center rounded-xl"
-						/>
-						<div
-							className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 to-transparent px-3 lg:px-6 pb-3 md:pb-5 lg:pb-10 rounded-b-xl"
-						>
-							<h1 className="text-white text-sm sm:text-lg md:text-xl lg:text-3xl font-bold transition duration-200">
-								{article.title}
-							</h1>
-						</div>
-					</>
-				) : (
-					<div className="w-full h-80 bg-gray-300 animate-pulse rounded-xl"></div>
-				)}
-			</figure>
-			<section className="mt-6 grid grid-cols-1 lg:grid-cols-[1fr,minmax(100px,25%)] grid-rows-2 gap-16">
-				<div className="prose max-w-none row-span-2">
-					{!isArticleLoading ? (
-						article && <>
-							<div className="text-justify text-sm md:text-base"
-								dangerouslySetInnerHTML={{ __html: article.content }}>
-							</div>
-							<SocialShare />
-							<div className="mt-5 ">
-								<AvisForm
-									data={article}
-								/>
-							</div>
-							<div className="mt-10">
-								<AvisList
-									entityId={article.id.toLocaleString()}
-									entityType="article"
-								/>
-							</div>
-							<div className="mt-14">
-								<div>
-									<SectionTitle
-										text="A suivre aussi"
-										className="w-2/3"
-									/>
-									<SimilarArticle />
-								</div>
-							</div>
-						</>
-					) : (
-						<>
-							{Array.from({ length: 5 }).map((_, index) => (
-								<div key={index} className="w-full h-6 bg-gray-300 animate-pulse rounded mb-2"></div>
-							))}
-							<div className="w-20 h-6 bg-gray-300 animate-pulse rounded mt-5 mb-2"></div>
-						</>
-					)}
-				</div>
-				<Publicite bannerPosition="SIDEBAR_RIGHT" />
-			</section>
-		</article>
-	);
+  if (isLoading || !article) {
+    return (
+      <div className="px-6 py-12 lg:px-11">
+        <div className="mx-auto max-w-3xl animate-pulse space-y-5">
+          <div className="h-5 w-40 rounded bg-brut-raise" />
+          <div className="h-12 w-full rounded bg-brut-raise" />
+          <div className="h-12 w-2/3 rounded bg-brut-raise" />
+          <div className="aspect-[16/9] w-full rounded-2xl bg-brut-raise" />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <article className="px-6 py-10 lg:px-11 lg:py-12">
+      <div className="mx-auto max-w-3xl">
+        <nav aria-label="Fil d'Ariane" className="mb-6 flex items-center gap-2.5 text-[13.5px] font-semibold">
+          <Link href="/a-la-une" className="text-brut-ink transition-colors hover:text-brut-signal">
+            À la Une
+          </Link>
+          {article.category?.name && (
+            <>
+              <span className="text-brut-muted" aria-hidden>›</span>
+              <span className="text-brut-muted">{article.category.name}</span>
+            </>
+          )}
+        </nav>
+
+        <h1 className="font-display text-[clamp(30px,4.6vw,52px)] font-black leading-[1.02] -tracking-[0.035em] text-balance">
+          {article.title}
+        </h1>
+
+        <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] text-brut-muted">
+          {article.category?.name && <span className="font-semibold text-brut-ink">{article.category.name}</span>}
+          <span>{dateFormat(article.created_at)}</span>
+        </div>
+      </div>
+
+      <figure className="mx-auto mt-8 max-w-4xl">
+        <Image
+          src={addDomainToBackendImagePath(article.path_resource)}
+          alt={article.title}
+          width={1200}
+          height={700}
+          priority
+          className="max-h-[520px] w-full rounded-2xl border border-brut-line object-cover"
+        />
+      </figure>
+
+      <div className="mx-auto mt-10 max-w-3xl">
+        <div className="brut-article-body" dangerouslySetInnerHTML={{ __html: article.content }} />
+
+        <div className="mt-8">
+          <SocialShare />
+        </div>
+
+        <div className="mt-10">
+          <AvisForm data={article} />
+        </div>
+
+        <div className="mt-12">
+          <AvisList entityId={article.id.toLocaleString()} entityType="article" />
+        </div>
+      </div>
+
+      <div className="mx-auto mt-16 max-w-5xl border-t border-brut-line pt-10">
+        <h2 className="mb-6 font-display text-[clamp(22px,3vw,28px)] font-black -tracking-[0.03em]">À suivre aussi</h2>
+        <SimilarArticle />
+      </div>
+    </article>
+  );
 }
 
 export default ArticleDetails;

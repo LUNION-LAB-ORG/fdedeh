@@ -1,24 +1,36 @@
-"use client";
-import React from 'react';
-import {useArticleStore} from "@/features/articles/stores/article.store";
-import NewsCard from "@/components/news/news-card";
-import PageTitle from "@/components/blocks/page-title";
+import React from "react";
+import { Metadata } from "next";
+import { BrutPageHeader } from "@/components/brut/brut-page-header";
+import { BrutArticleCard } from "@/components/brut/brut-article-card";
+import { obtenirTousArticlesAction } from "@/features/articles/actions/article.action";
 
-function ALaUnePage() {
-	const {allArticles} = useArticleStore();
+export const metadata: Metadata = {
+  title: "À la une",
+  description: "Tous les articles de la rédaction de fd.info.",
+};
 
-	return (
-		<div className="page-container">
-			<PageTitle
-				title="À la une"
-			/>
-			<div className="grid-article-screen">
-				{allArticles.map((article) => (
-					<NewsCard news={article} key={"article-" + article.id}/>
-				))}
-			</div>
-		</div>
-	);
+export default async function ALaUnePage() {
+  const res = await obtenirTousArticlesAction({});
+  const articles = res.data?.data ?? [];
+
+  return (
+    <>
+      <BrutPageHeader
+        eyebrow="La rédaction"
+        title="À la une"
+        subtitle="Tous les articles de la rédaction, pour suivre toute l'actualité ivoirienne."
+      />
+      <div className="px-6 py-12 lg:px-11">
+        {articles.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {articles.map((article) => (
+              <BrutArticleCard article={article} key={`article-${article.id}`} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-brut-muted">Aucun article pour le moment.</p>
+        )}
+      </div>
+    </>
+  );
 }
-
-export default ALaUnePage;

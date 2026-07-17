@@ -1,31 +1,20 @@
-import React from 'react';
-import {Badge} from "@/components/ui/badge";
-import {cn} from "@/lib/utils";
-import {IDailyContent} from "@/features/dailies/types";
-
-const colors = [
-	"bg-blue-100 text-blue-800 hover:bg-blue-200",
-	"bg-green-100 text-green-800 hover:bg-green-200",
-	"bg-red-100 text-red-800 hover:bg-red-200",
-	"bg-yellow-100 text-yellow-800 hover:bg-yellow-200",
-	"bg-purple-100 text-purple-800 hover:bg-purple-200",
-	"bg-pink-100 text-pink-800 hover:bg-pink-200",
-	"bg-indigo-100 text-indigo-800 hover:bg-indigo-200",
-];
+import React from "react";
+import { IDailyContent } from "@/features/dailies/types";
 
 function DailyContent(props: { content: IDailyContent; index: number }) {
-	const hashtag = props.content.hashtag?.hashtag;
+  const hashtag = props.content.hashtag?.hashtag;
 
-	return (
-		<div className="text-justify">
-			{hashtag && (
-				<Badge className={cn("mb-3 text-base", colors[props.index % colors.length])}>
-					{hashtag}
-				</Badge>
-			)}
-			<div dangerouslySetInnerHTML={{__html: props.content.body}}></div>
-		</div>
-	);
+  return (
+    <section>
+      {hashtag && (
+        <h2 className="mb-3 flex items-center gap-3 font-display text-[20px] font-black -tracking-[0.02em] text-brut-ink">
+          <span className="shrink-0">{hashtag}</span>
+          <span className="h-px flex-1 bg-brut-line" />
+        </h2>
+      )}
+      <div className="brut-article-body" dangerouslySetInnerHTML={{ __html: props.content.body }} />
+    </section>
+  );
 }
 
 export default DailyContent;
