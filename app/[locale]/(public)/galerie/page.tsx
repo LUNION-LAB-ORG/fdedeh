@@ -1,31 +1,25 @@
-import React from 'react';
-import PageTitle from "@/components/blocks/page-title";
-import SectionTitle from "@/components/section-title";
-import Publicite from "@/components/publicite";
+import React from "react";
+import { Metadata } from "next";
+import { BrutPageHeader } from "@/components/brut/brut-page-header";
 import ComingSoon from "@/components/coming-soon";
 
-function VideosPage() {
-	return (
-		<div className="page-container">
-			<PageTitle
-				title="Vidéos"
-			/>
-			<section>
-				<SectionTitle text="Emissions" className="mt-6 w-1/2"/>
-				{/*<div className="mt-6 grid md:grid-cols-2 lg:grid-cols-3 gap-8">*/}
-				{/*    {videosList.map((video) => (*/}
-				{/*        <VideoCard video={video} key={video.id}/>*/}
-				{/*    ))}*/}
-				{/*</div>*/}
-				<ComingSoon
-					title="La galerie sera bientôt disponibles."
-					description="Nous travaillons actuellement à la mise en place de cette section. Revenez bientôt pour découvrir nos
-				émissions vidéo passionnantes !"
-				/>
-				<Publicite className="w-full mt-14" bannerPosition="FOOTER"/>
-			</section>
-		</div>
-	);
+export const metadata: Metadata = {
+  title: "Galerie",
+  description: "La galerie vidéo de fd.info, bientôt disponible.",
+};
+
+function GaleriePage() {
+  return (
+    <>
+      <BrutPageHeader eyebrow="Le média" title="Galerie" subtitle="Nos contenus vidéo, en images." />
+      <div className="px-6 py-12 lg:px-11">
+        <ComingSoon
+          title="La galerie sera bientôt disponible."
+          description="Nous travaillons à la mise en place de cette section. Revenez bientôt pour découvrir nos vidéos."
+        />
+      </div>
+    </>
+  );
 }
 
-export default VideosPage;
+export default GaleriePage;

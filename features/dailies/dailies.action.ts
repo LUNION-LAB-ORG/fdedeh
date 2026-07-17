@@ -1,13 +1,22 @@
 "use server"
 
-import { ActionResponse, PaginatedResponse } from "@/types";
-import { IDaily } from "@/features/dailies/types";
+import { unstable_cache } from "next/cache";
+import { ActionResponse, LaravelPaginatedResponse } from "@/types";
+import { IDaily, IDailyParams } from "@/features/dailies/types";
 import { handleServerActionError } from "@/utils/handleServerActionError";
 import { dailyAPI } from "@/features/dailies/dailies.api";
 
-export const obtenirTousDailiesAction = async (): Promise<ActionResponse<PaginatedResponse<IDaily>>> => {
+// L'API répond en ~8s et le client coupe à 10s ; DataProvider redemande la liste sur
+// chaque page. Le cache évite de la saturer, et les pages blanches qui s'ensuivent.
+const obtenirTousDailiesEnCache = unstable_cache(
+	async (params: IDailyParams) => dailyAPI.obtenirTousDailies(params),
+	["dailies-liste"],
+	{ revalidate: 300, tags: ["dailies"] }
+);
+
+export const obtenirTousDailiesAction = async (params: IDailyParams = {}): Promise<ActionResponse<LaravelPaginatedResponse<IDaily>>> => {
 	try {
-		const data = await dailyAPI.obtenirTousDailies({});
+		const data = await obtenirTousDailiesEnCache(params);
 		return {
 			success: true,
 			data: data,

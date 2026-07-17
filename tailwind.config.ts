@@ -20,10 +20,24 @@ const config = {
     		}
     	},
     	extend: {
+    		fontFamily: {
+    			display: ['var(--font-display)', 'Archivo', 'Arial Black', 'Helvetica Neue', 'sans-serif']
+    		},
     		backgroundImage: {
     			'custom-gradient': 'linear-gradient(89.99deg, #FF383C 9.43%, #FF7710 91.09%)'
     		},
     		colors: {
+    			// Layer éditorial « Brut » — tokens dédiés, sans toucher au thème existant.
+    			brut: {
+    				ink: 'var(--brut-ink)',
+    				'ink-soft': 'var(--brut-ink-soft)',
+    				ground: 'var(--brut-ground)',
+    				surface: 'var(--brut-surface)',
+    				raise: 'var(--brut-raise)',
+    				line: 'var(--brut-line)',
+    				muted: 'var(--brut-muted)',
+    				signal: 'var(--brut-signal)'
+    			},
     			border: 'hsl(var(--border))',
     			'menu-arrow': 'hsl(var(--menu-arrow))',
     			'menu-arrow-active': 'hsl(var(--menu-arrow-active))',

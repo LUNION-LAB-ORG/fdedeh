@@ -1,27 +1,22 @@
-import type {MetadataRoute} from 'next'
+import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
-	return {
-		name: "Fernand Dedeh Blog",
-		short_name: "FDedeh Blog",
-		description: 'Le blog de Fernand Dédéh : analyses sportives, réflexions médiatiques et prises de position en Côte d\'Ivoire.',
-		start_url: '/',
-		display: 'standalone',
-		background_color: '#ffffff',
-		theme_color: '#000000',
-		icons: [
-			{
-				"src": "/web-app-manifest-192x192.png",
-				"sizes": "192x192",
-				"type": "image/png",
-				"purpose": "maskable"
-			},
-			{
-				"src": "/web-app-manifest-512x512.png",
-				"sizes": "512x512",
-				"type": "image/png",
-				"purpose": "maskable"
-			}
-		],
-	}
+  return {
+    id: "/",
+    name: "fd.info — L'actualité par Fernand Dédeh",
+    short_name: "fd.info",
+    description:
+      "Le portail de référence de l'actualité ivoirienne : le Daily, les articles et les podcasts de Fernand Dédeh.",
+    start_url: "/",
+    display: "standalone",
+    orientation: "portrait",
+    background_color: "#FCFBFA",
+    theme_color: "#FCFBFA",
+    icons: [
+      { src: "/web-app-manifest-192x192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+      { src: "/web-app-manifest-192x192.png", sizes: "192x192", type: "image/png", purpose: "maskable" },
+      { src: "/web-app-manifest-512x512.png", sizes: "512x512", type: "image/png", purpose: "any" },
+      { src: "/web-app-manifest-512x512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
+    ],
+  };
 }

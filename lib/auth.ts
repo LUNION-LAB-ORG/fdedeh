@@ -102,9 +102,7 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
     if (token.refreshTokenExpires && Date.now() >= token.refreshTokenExpires) {
       throw new Error("Refresh token expiré");
     }
-    console.log("Refresh token :", token.refreshToken);
     const response = await authAPI.refreshToken(token.refreshToken as string);
-    console.log("Rafraîchissement du jeton d'accès réussi :", response);
     return {
       ...token,
       accessToken: response.accessToken,

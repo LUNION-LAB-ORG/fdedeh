@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter, Archivo } from "next/font/google";
 import "./globals.css";
 import "./theme.css";
 import { ThemeProvider } from "@/providers/theme-provider";
@@ -16,9 +16,16 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import getQueryClient from "@/lib/get-query-client";
 import DataProvider from "@/providers/data.provider";
+import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import { GoogleAnalytics } from '@next/third-parties/google';
 //
 const inter = Inter({ subsets: ["latin"] });
+// Police display « grotesque massive » à la Brut, exposée via --font-display.
+const archivo = Archivo({
+  subsets: ["latin"],
+  weight: ["600", "700", "800", "900"],
+  variable: "--font-display",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://fdedeh.info"),
@@ -37,6 +44,22 @@ export const metadata: Metadata = {
     index: true,
     follow: true
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "fd.info",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FCFBFA" },
+    { media: "(prefers-color-scheme: dark)", color: "#15120E" },
+  ],
 };
 
 export default async function RootLayout(
@@ -58,7 +81,7 @@ export default async function RootLayout(
   return (
     <html lang={locale} dir={direction} suppressHydrationWarning>
       <body
-        className={`${inter.className} bg-white`}
+        className={`${inter.className} ${archivo.variable} bg-white`}
         suppressHydrationWarning
       >
         <NextIntlClientProvider messages={messages} locale={locale}>
@@ -80,6 +103,7 @@ export default async function RootLayout(
             </HydrationBoundary>
           </QueryProvider>
         </NextIntlClientProvider>
+        <ServiceWorkerRegister />
         <GoogleAnalytics gaId="G-SYWNXWW3XW" />
       </body>
     </html>

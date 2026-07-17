@@ -2,7 +2,9 @@ export interface IDailyContent {
 	id: string;
 	body: string;
 	hashtag_id: string;
-	hashtag: {
+	// Absent des réponses de `/dailies/{date}`, qui ne charge pas la relation :
+	// seul `/dailies` (la liste) la renvoie.
+	hashtag?: {
 		id: string;
 		hashtag: string;
 		created_at: string;
@@ -24,11 +26,13 @@ export interface IDaily {
 	introduction: string;
 	contents: IDailyContent[];
 	user: IDailyUser;
+	view_count?: number;
+	read_count?: number;
 	created_at: string;
 	updated_at: string;
 	deleted_at: string;
 }
 
 export interface IDailyParams {
-	
+	page?: number;
 }

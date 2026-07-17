@@ -1,34 +1,23 @@
 "use client";
-import React from 'react';
-import NewsCard from "@/components/news/news-card";
-import SkeletonArticleHorizontal from "@/features/articles/components/skeleton-article-horizontal";
-import {useArticleStore} from "@/features/articles/stores/article.store";
+import React from "react";
+import { useArticleStore } from "@/features/articles/stores/article.store";
+import { BrutArticleRow } from "@/components/brut/brut-article-row";
 
 function SimilarArticle() {
-	const {getFilteredArticles, isLoading, isFetching, isError,error, allArticles} = useArticleStore();
+  const { getFilteredArticles, allArticles } = useArticleStore();
 
-	const showLoading = isLoading || isFetching;
+  if (allArticles.length === 0) return null;
 
-	if (isError) {
-		return <div>Error loading similar articles: {error.message}</div>;
-	}
+  const articles = getFilteredArticles({ limit: 4 });
+  if (articles.length === 0) return null;
 
-	if (allArticles.length === 0) {
-		return <div>No similar articles available.</div>;
-	}
-	return (
-		<div className="grid grid-rows-2 gap-6 mt-6 ">
-			{!showLoading ? getFilteredArticles({limit:2}).map((item) => (
-				<div key={item.id} className="min-h-44">
-					<NewsCard news={item} orientation="horizontal" important/>
-				</div>
-			)) : Array.from({length: 2}).map((_, index) => (
-				<div key={index} className="min-h-44">
-					<SkeletonArticleHorizontal/>
-				</div>
-			))}
-		</div>
-	);
+  return (
+    <div className="grid gap-6 sm:grid-cols-2">
+      {articles.map((article) => (
+        <BrutArticleRow article={article} key={`similar-${article.id}`} />
+      ))}
+    </div>
+  );
 }
 
 export default SimilarArticle;
