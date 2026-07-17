@@ -28,6 +28,8 @@ export interface IDaily {
 	user: IDailyUser;
 	view_count?: number;
 	read_count?: number;
+	likes_count?: number;
+	comments_count?: number;
 	created_at: string;
 	updated_at: string;
 	deleted_at: string;

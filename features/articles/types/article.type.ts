@@ -20,6 +20,10 @@ export interface IArticle {
 	created_by: number;
 	category_id: number;
 	category: ICategorie;
+	view_count?: number;
+	read_count?: number;
+	likes_count?: number;
+	comments_count?: number;
 }
 
 export interface IArticleParams {

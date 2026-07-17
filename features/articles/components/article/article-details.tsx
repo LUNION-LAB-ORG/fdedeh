@@ -6,6 +6,8 @@ import SocialShare from "@/features/articles/components/social-share";
 import SimilarArticle from "@/features/articles/components/article/similar-article";
 import { useArticleDetailsQuery } from "@/features/articles/queries/article-detail.query";
 import { BrutFil } from "@/components/brut/brut-fil";
+import { BrutLikeButton } from "@/components/brut/brut-like-button";
+import { BrutStats } from "@/components/brut/brut-stats";
 import { useStats } from "@/hooks/use-stats";
 import { BrutAside } from "@/components/brut/brut-aside";
 import { BrutContentImage } from "@/components/brut/brut-content-image";
@@ -56,6 +58,8 @@ function ArticleDetails({ slug }: { slug: string }) {
           <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] text-brut-muted">
             {article.category?.name && <span className="font-semibold text-brut-ink">{article.category.name}</span>}
             <span>{dateFormat(article.created_at)}</span>
+            <BrutStats views={article.view_count} comments={article.comments_count} />
+            <BrutLikeButton likeableType="ARTICLE" likeableId={article.id} initialCount={article.likes_count ?? 0} />
           </div>
         </div>
 

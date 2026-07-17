@@ -10,6 +10,7 @@ export interface IPpefPublication {
   id: number;
   title: string;
   published_at: string | null;
+  view_count?: number;
   author_name: string | null;
   informations_count?: number;
   informations?: IPpefInformation[];

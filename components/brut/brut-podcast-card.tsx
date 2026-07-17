@@ -5,6 +5,7 @@ import { Play } from "lucide-react";
 import { IArticle } from "@/features/articles/types/article.type";
 import { youtubeThumbnail } from "@/utils/youtube";
 import { dateFormat } from "@/utils/date-format";
+import { BrutStats } from "./brut-stats";
 
 export function BrutPodcastCard({ podcast }: { podcast: IArticle }) {
   const thumb = youtubeThumbnail(podcast.path_resource) ?? "/images/default-image.png";
@@ -27,7 +28,10 @@ export function BrutPodcastCard({ podcast }: { podcast: IArticle }) {
         <h3 className="line-clamp-2 text-[16px] font-extrabold leading-[1.25] -tracking-[0.01em] text-brut-ink">
           {podcast.title}
         </h3>
-        <time className="mt-auto font-mono text-[11.5px] text-brut-muted">{dateFormat(podcast.created_at)}</time>
+        <div className="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1">
+          <time className="font-mono text-[11.5px] text-brut-muted">{dateFormat(podcast.created_at)}</time>
+          <BrutStats views={podcast.view_count} likes={podcast.likes_count} comments={podcast.comments_count} className="text-[11px]" />
+        </div>
       </div>
     </Link>
   );

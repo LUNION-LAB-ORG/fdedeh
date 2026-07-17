@@ -9,6 +9,8 @@ import DailyContent from "@/features/dailies/components/daily-content";
 import DailyIntroduction from "@/features/dailies/components/daily-introduction";
 import SocialShare from "@/features/articles/components/social-share";
 import { BrutFil } from "@/components/brut/brut-fil";
+import { BrutLikeButton } from "@/components/brut/brut-like-button";
+import { BrutStats } from "@/components/brut/brut-stats";
 import { BrutDatePicker } from "@/components/brut/brut-date-picker";
 import { BrutAside } from "@/components/brut/brut-aside";
 import { useStats } from "@/hooks/use-stats";
@@ -71,6 +73,10 @@ function DailyDetails({ dailyDate }: { dailyDate: string }) {
 
         {daily ? (
           <>
+            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] text-brut-muted">
+              <BrutStats views={daily.view_count} comments={daily.comments_count} />
+              <BrutLikeButton likeableType="DAILY" likeableId={daily.id} initialCount={daily.likes_count ?? 0} />
+            </div>
             <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_320px]">
               <div className="min-w-0">
                 <DailyIntroduction introduction={daily.introduction} />

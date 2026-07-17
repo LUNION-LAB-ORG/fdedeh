@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { obtenirPpefDetailAction } from "@/features/ppef/ppef.action";
 import { PpefInformationBlock } from "@/components/brut/ppef-information-block";
+import { StatsTracker } from "@/components/brut/stats-tracker";
+import { BrutStats } from "@/components/brut/brut-stats";
 import { dateFormat } from "@/utils/date-format";
 
 export default async function PpefDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -18,6 +20,7 @@ export default async function PpefDetailPage({ params }: { params: Promise<{ id:
 
   return (
     <article className="px-6 py-10 lg:px-11 lg:py-12">
+      <StatsTracker type="PPEF" id={pub.id} />
       <div className="mx-auto max-w-3xl">
         <nav aria-label="Fil d'Ariane" className="mb-6 flex items-center gap-2.5 text-[13.5px] font-semibold">
           <Link href="/ppef" className="text-brut-ink transition-colors hover:text-brut-signal">PPEF</Link>
@@ -35,6 +38,7 @@ export default async function PpefDetailPage({ params }: { params: Promise<{ id:
           {pub.author_name && <span className="font-semibold text-brut-ink">{pub.author_name}</span>}
           {pub.published_at && <span>{dateFormat(pub.published_at)}</span>}
           <span>{informations.length} information{informations.length > 1 ? "s" : ""}</span>
+          <BrutStats views={pub.view_count} />
         </div>
 
         {informations.length > 0 ? (

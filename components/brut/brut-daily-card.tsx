@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { IDaily } from "@/features/dailies/types";
 import { addDomainToBackendImagePath } from "@/utils/image-utils";
 import { dateFormat } from "@/utils/date-format";
+import { BrutStats } from "./brut-stats";
 
 function dateISO(value: string) {
   return new Date(value).toISOString().split("T")[0];
@@ -50,9 +51,9 @@ export function BrutDailyCard({ daily, featured = false }: { daily: IDaily; feat
           <h3 className="line-clamp-5 font-display text-[clamp(19px,2.2vw,27px)] font-black leading-[1.12] -tracking-[0.02em] text-brut-ink">
             {daily.introduction}
           </h3>
-          <div className="flex items-center gap-3.5 font-mono text-[12px] text-brut-muted">
+          <div className="flex flex-wrap items-center gap-x-3.5 gap-y-1 font-mono text-[12px] text-brut-muted">
             <span>{dateFormat(daily.published_at)}</span>
-            <span>{daily.view_count ?? 0} vues</span>
+            <BrutStats views={daily.view_count} likes={daily.likes_count} comments={daily.comments_count} />
           </div>
         </div>
       </Link>
@@ -79,9 +80,9 @@ export function BrutDailyCard({ daily, featured = false }: { daily: IDaily; feat
         <h3 className="line-clamp-3 text-[16px] font-extrabold leading-[1.25] -tracking-[0.01em] text-brut-ink">
           {daily.introduction}
         </h3>
-        <div className="mt-auto flex items-center gap-3.5 font-mono text-[11.5px] text-brut-muted">
+        <div className="mt-auto flex flex-wrap items-center gap-x-3.5 gap-y-1 font-mono text-[11.5px] text-brut-muted">
           <span>{dateFormat(daily.published_at)}</span>
-          <span>{daily.view_count ?? 0} vues</span>
+          <BrutStats views={daily.view_count} likes={daily.likes_count} comments={daily.comments_count} className="text-[11px]" />
         </div>
       </div>
     </Link>

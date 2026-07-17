@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { obtenirListePpefAction } from "@/features/ppef/ppef.action";
 import { BrutPageHeader } from "@/components/brut/brut-page-header";
+import { BrutStats } from "@/components/brut/brut-stats";
 import { dateFormat } from "@/utils/date-format";
 
 export const metadata: Metadata = {
@@ -38,9 +39,10 @@ export default async function PpefListPage() {
                 <h3 className="mt-3 font-display text-[19px] font-black leading-[1.15] -tracking-[0.02em] text-brut-ink transition-colors group-hover:text-brut-signal">
                   {p.title}
                 </h3>
-                <div className="mt-3 flex items-center gap-2 font-mono text-[12px] text-brut-muted">
+                <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[12px] text-brut-muted">
                   <span>{p.informations_count ?? 0} informations</span>
-                  {p.published_at && <span>· {dateFormat(p.published_at)}</span>}
+                  {p.published_at && <span>{dateFormat(p.published_at)}</span>}
+                  <BrutStats views={p.view_count} />
                 </div>
               </Link>
             ))}
