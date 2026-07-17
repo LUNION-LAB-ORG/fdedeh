@@ -7,6 +7,7 @@ import { BrutDailyCard } from "@/components/brut/brut-daily-card";
 import { BrutAd } from "@/components/brut/brut-ad";
 import { BrutQuestion } from "@/components/brut/brut-question";
 import { BrutNewsletter } from "@/components/brut/brut-newsletter";
+import { BrutDatePicker } from "@/components/brut/brut-date-picker";
 import { IArticle } from "@/features/articles/types/article.type";
 import { slugify } from "@/features/articles/utils/slugify";
 import { dateFormat } from "@/utils/date-format";
@@ -85,6 +86,7 @@ export default async function HomePage() {
           metas={[`${dailyUne.view_count ?? 0} vues`, `${(dailyUne.contents ?? []).length} sujets`]}
           href={`/dailies/${dateISO(dailyUne.published_at)}`}
           ctaLabel="Lire le Daily"
+          extra={<BrutDatePicker selected={dateISO(dailyUne.published_at)} label="Un autre jour" />}
         />
       )}
 

@@ -14,13 +14,14 @@ export type BrutHeroProps = {
   metas?: string[];
   href: string;
   ctaLabel: string;
+  extra?: React.ReactNode;
 };
 
 // Le hero s'adapte au ratio de l'image, lu directement depuis l'image chargée
 // (naturalWidth / naturalHeight) — aucune mesure serveur nécessaire.
 //  · bannière large (ratio ≥ 2) → texte en haut, image pleine largeur en bas ;
 //  · carré / portrait / photo    → image et texte côte à côte.
-export function BrutHero({ imagePath, eyebrow, badges, title, metas, href, ctaLabel }: BrutHeroProps) {
+export function BrutHero({ imagePath, eyebrow, badges, title, metas, href, ctaLabel, extra }: BrutHeroProps) {
   const [ratio, setRatio] = useState<number | null>(null);
   const estBanniere = (ratio ?? 0) >= 2;
 
@@ -82,12 +83,15 @@ export function BrutHero({ imagePath, eyebrow, badges, title, metas, href, ctaLa
           ))}
         </div>
       )}
-      <Link
-        href={href}
-        className="mt-7 inline-flex items-center gap-2 rounded-full bg-brut-ink px-6 py-3 text-[15px] font-bold text-brut-ground"
-      >
-        {ctaLabel} →
-      </Link>
+      <div className="mt-7 flex flex-wrap items-center gap-3">
+        <Link
+          href={href}
+          className="inline-flex items-center gap-2 rounded-full bg-brut-ink px-6 py-3 text-[15px] font-bold text-brut-ground"
+        >
+          {ctaLabel} →
+        </Link>
+        {extra}
+      </div>
     </div>
   );
 
