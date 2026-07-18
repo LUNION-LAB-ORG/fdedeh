@@ -20,15 +20,16 @@ import { dateFormat } from "@/utils/date-format";
 function DailyDetails({ dailyDate }: { dailyDate: string }) {
   const { isLoading, isFetching, getDailyByDate } = useDailyStore();
 
-  // Le store ne contient que les 10 derniers dailies : sans ce repli sur l'API, toute date
-  // plus ancienne affichait « Aucun daily » alors que le daily existe bel et bien.
+  // On récupère TOUJOURS la version fraîche (par date) et on la préfère au store.
+  // Le store (liste des 10 derniers) peut être périmé : titres de section édités
+  // depuis. On l'utilise seulement comme repli le temps que le frais arrive.
   const dailyDuStore = getDailyByDate(dailyDate);
-  const { data: dailyDistant, isLoading: chargementDistant } = useDailyParDateQuery(dailyDuStore ? "" : dailyDate);
-  const daily = dailyDuStore ?? dailyDistant;
+  const { data: dailyDistant, isLoading: chargementDistant } = useDailyParDateQuery(dailyDate);
+  const daily = dailyDistant ?? dailyDuStore;
 
   useStats({ type: "DAILY", id: daily?.id });
 
-  if (isLoading || isFetching || chargementDistant) {
+  if (!daily && (isLoading || isFetching || chargementDistant)) {
     return <LoadingIndicator />;
   }
 
