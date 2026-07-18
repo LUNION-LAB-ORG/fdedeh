@@ -6,7 +6,7 @@ import { obtenirTousArticlesAction } from "@/features/articles/actions/article.a
 
 export const metadata: Metadata = {
   title: "Podcasts",
-  description: "Les émissions et interviews vidéo de fd.info.",
+  description: "Les émissions et interviews audio de fd.info, à écouter.",
 };
 
 export default async function PodcastsPage() {
@@ -18,7 +18,7 @@ export default async function PodcastsPage() {
       <BrutPageHeader
         eyebrow="Le média"
         title="Podcasts"
-        subtitle="Nos émissions et interviews à regarder. Car fd.info, c'est aussi de la vidéo."
+        subtitle="Nos émissions et interviews à écouter, où que vous soyez."
       />
       <div className="px-6 py-12 lg:px-11">
         {podcasts.length > 0 ? (

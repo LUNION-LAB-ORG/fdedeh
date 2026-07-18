@@ -1,13 +1,17 @@
 import React from "react";
 import { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
+import { Headphones } from "lucide-react";
 import { obtenirUnArticleAction } from "@/features/articles/actions/article.action";
-import { youtubeEmbed } from "@/utils/youtube";
+import { youtubeThumbnail } from "@/utils/youtube";
+import { addDomainToBackendImagePath } from "@/utils/image-utils";
 import { dateFormat } from "@/utils/date-format";
 import { StatsTracker } from "@/components/brut/stats-tracker";
 import { BrutLikeButton } from "@/components/brut/brut-like-button";
 import { BrutStats } from "@/components/brut/brut-stats";
+import { BrutAudioPlayer } from "@/components/brut/brut-audio-player";
 import { BrutFil } from "@/components/brut/brut-fil";
 import { BrutDetailAd } from "@/components/brut/brut-detail-ad";
 
@@ -21,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? {
         title: podcast.title,
         description: "Un podcast de fd.info",
-        openGraph: { title: `${podcast.title} - fd.info`, type: "video.other" },
+        openGraph: { title: `${podcast.title} - fd.info`, type: "music.song" },
       }
     : {};
 }
@@ -35,7 +39,11 @@ export default async function PodcastDetailPage({ params }: Props) {
     notFound();
   }
 
-  const embed = youtubeEmbed(podcast.path_resource);
+  const cover = !podcast.path_resource
+    ? "/images/default-image.png"
+    : podcast.path_resource.includes("youtu")
+    ? youtubeThumbnail(podcast.path_resource) ?? "/images/default-image.png"
+    : addDomainToBackendImagePath(podcast.path_resource);
 
   return (
     <article className="px-6 py-10 lg:px-11 lg:py-12">
@@ -46,32 +54,33 @@ export default async function PodcastDetailPage({ params }: Props) {
             Podcasts
           </Link>
         </nav>
-        <h1 className="font-display text-[clamp(28px,4.4vw,50px)] font-black leading-[1.03] -tracking-[0.035em] text-balance">
-          {podcast.title}
-        </h1>
-        <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] text-brut-muted">
-          <span>{dateFormat(podcast.created_at)}</span>
-          <BrutStats views={podcast.view_count} comments={podcast.comments_count} />
-          <BrutLikeButton likeableType="ARTICLE" likeableId={podcast.id} initialCount={podcast.likes_count ?? 0} />
-        </div>
-      </div>
 
-      <div className="mx-auto mt-8 max-w-4xl">
-        {embed ? (
-          <div className="relative aspect-video overflow-hidden rounded-2xl border border-brut-line bg-black">
-            <iframe
-              src={embed}
-              title={podcast.title}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="absolute inset-0 h-full w-full"
-            />
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
+          <div className="relative aspect-square w-full max-w-[220px] shrink-0 self-center overflow-hidden rounded-2xl border border-brut-line bg-brut-raise sm:self-start">
+            <Image src={cover} alt="" fill className="object-cover" sizes="220px" />
           </div>
-        ) : (
-          <div className="rounded-2xl border border-brut-line bg-brut-raise p-10 text-center text-brut-muted">
-            La vidéo de ce podcast n&apos;est pas disponible.
+          <div className="min-w-0 flex-1">
+            <span className="inline-flex items-center gap-1.5 font-mono text-[11px] font-bold uppercase tracking-[0.12em] text-brut-signal">
+              <Headphones className="h-4 w-4" /> Podcast
+            </span>
+            <h1 className="mt-2 font-display text-[clamp(26px,4vw,42px)] font-black leading-[1.05] -tracking-[0.035em] text-balance">
+              {podcast.title}
+            </h1>
+            <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] text-brut-muted">
+              <span>{dateFormat(podcast.created_at)}</span>
+              <BrutStats views={podcast.view_count} comments={podcast.comments_count} />
+              <BrutLikeButton likeableType="ARTICLE" likeableId={podcast.id} initialCount={podcast.likes_count ?? 0} />
+            </div>
+
+            {podcast.path_audio ? (
+              <BrutAudioPlayer src={podcast.path_audio} className="mt-5" />
+            ) : (
+              <p className="mt-5 rounded-xl border border-brut-line bg-brut-raise px-4 py-3 text-[13.5px] text-brut-muted">
+                L&apos;audio de ce podcast n&apos;est pas encore disponible.
+              </p>
+            )}
           </div>
-        )}
+        </div>
       </div>
 
       {podcast.content && (

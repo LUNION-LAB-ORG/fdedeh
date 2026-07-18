@@ -13,6 +13,7 @@ export interface IArticle {
 	slug: string;
 	content: string;
 	path_resource: string;
+	path_audio?: string | null;
 	status: boolean;
 	created_at: string;
 	updated_at: string;
