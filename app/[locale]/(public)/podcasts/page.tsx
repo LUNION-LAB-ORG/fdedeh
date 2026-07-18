@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { Mic } from "lucide-react";
 import { BrutPodcastCard } from "@/components/brut/brut-podcast-card";
 import { BrutPodcastPlayer } from "@/components/brut/brut-podcast-player";
+import { podcastLisible } from "@/utils/podcast";
 import { obtenirTousArticlesAction } from "@/features/articles/actions/article.action";
 
 export const metadata: Metadata = {
@@ -16,7 +17,11 @@ export const dynamic = "force-dynamic";
 export default async function PodcastsPage() {
   const res = await obtenirTousArticlesAction({ type: "PODCAST" });
   const podcasts = res.data?.data ?? [];
-  const featured = podcasts.find((p) => p.path_audio);
+  // Le dernier podcast lisible (audio ou vidéo YouTube) mis en avant, quel que
+  // soit l'ordre renvoyé par l'API — on trie par date décroissante.
+  const featured = [...podcasts]
+    .filter(podcastLisible)
+    .sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at))[0];
 
   return (
     <div className="px-6 py-10 lg:px-11 lg:py-12">
@@ -34,12 +39,7 @@ export default async function PodcastsPage() {
 
       {featured && (
         <div className="mb-12">
-          <BrutPodcastPlayer
-            src={featured.path_audio!}
-            coverRaw={featured.path_resource}
-            title={featured.title}
-            eyebrow="Le dernier podcast"
-          />
+          <BrutPodcastPlayer podcast={featured} eyebrow="Le dernier podcast" />
         </div>
       )}
 

@@ -9,6 +9,7 @@ import { StatsTracker } from "@/components/brut/stats-tracker";
 import { BrutLikeButton } from "@/components/brut/brut-like-button";
 import { BrutStats } from "@/components/brut/brut-stats";
 import { BrutPodcastPlayer } from "@/components/brut/brut-podcast-player";
+import { podcastLisible } from "@/utils/podcast";
 import { BrutFil } from "@/components/brut/brut-fil";
 import { BrutDetailAd } from "@/components/brut/brut-detail-ad";
 
@@ -61,17 +62,11 @@ export default async function PodcastDetailPage({ params }: Props) {
           <BrutLikeButton likeableType="ARTICLE" likeableId={podcast.id} initialCount={podcast.likes_count ?? 0} />
         </div>
 
-        {podcast.path_audio ? (
-          <BrutPodcastPlayer
-            src={podcast.path_audio}
-            coverRaw={podcast.path_resource}
-            title={podcast.title}
-            eyebrow="fd.info · Podcast"
-            className="mt-6"
-          />
+        {podcastLisible(podcast) ? (
+          <BrutPodcastPlayer podcast={podcast} eyebrow="fd.info · Podcast" className="mt-6" />
         ) : (
           <p className="mt-6 rounded-xl border border-brut-line bg-brut-raise px-4 py-3 text-[13.5px] text-brut-muted">
-            L&apos;audio de ce podcast n&apos;est pas encore disponible.
+            Le média de ce podcast n&apos;est pas encore disponible.
           </p>
         )}
       </div>

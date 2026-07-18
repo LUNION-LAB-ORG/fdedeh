@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { Play, Pause, RotateCcw, RotateCw } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { couverturePodcast } from "@/utils/podcast";
+import { couverturePodcast, mediaPodcast } from "@/utils/podcast";
 import { addDomainToBackendImagePath } from "@/utils/image-utils";
 
 function estEmbed(url: string) {
@@ -24,35 +24,84 @@ function fmt(s: number) {
   return h > 0 ? `${h}:${(m % 60).toString().padStart(2, "0")}:${sec}` : `${m}:${sec}`;
 }
 
+type PodcastLike = {
+  path_audio?: string | null;
+  path_resource?: string | null;
+  title: string;
+};
+
+// Lecteur unifié : décide seul du média à monter.
+//  - audio (fichier/lien MP3)  → lecteur waveform sombre (maquette Brut),
+//  - audio Spotify/SoundCloud  → intégration native,
+//  - vidéo YouTube             → lecture de la vidéo,
+//  - rien de lisible           → null (l'appelant affiche un repli).
 export function BrutPodcastPlayer({
-  src,
-  coverRaw,
+  podcast,
+  eyebrow,
+  className,
+}: {
+  podcast: PodcastLike;
+  eyebrow?: string;
+  className?: string;
+}) {
+  const media = mediaPodcast(podcast);
+
+  if (media.kind === "audio") {
+    const src = media.src;
+    const url = src.startsWith("http") ? src : addDomainToBackendImagePath(src);
+    if (estEmbed(src)) {
+      return (
+        <iframe
+          src={url}
+          title={podcast.title}
+          className={cn("w-full rounded-2xl border border-brut-line", className)}
+          style={{ height: 232 }}
+          allow="autoplay; encrypted-media; clipboard-write; fullscreen"
+          loading="lazy"
+        />
+      );
+    }
+    return <PodcastAudioPlayer url={url} coverRaw={podcast.path_resource} title={podcast.title} eyebrow={eyebrow} className={className} />;
+  }
+
+  if (media.kind === "video") {
+    return <PodcastVideoPlayer embed={media.embed} title={podcast.title} eyebrow={eyebrow} className={className} />;
+  }
+
+  return null;
+}
+
+// Podcast vidéo (ancien format YouTube) : la vidéo redevient lisible, dans le
+// même habillage sombre que le lecteur audio pour rester cohérent.
+function PodcastVideoPlayer({
+  embed,
   title,
   eyebrow,
   className,
 }: {
-  src: string;
-  coverRaw?: string | null;
+  embed: string;
   title: string;
   eyebrow?: string;
   className?: string;
 }) {
-  const url = src.startsWith("http") ? src : addDomainToBackendImagePath(src);
-
-  if (estEmbed(src)) {
-    return (
-      <iframe
-        src={url}
-        title={title}
-        className={cn("w-full rounded-2xl border border-brut-line", className)}
-        style={{ height: 232 }}
-        allow="autoplay; encrypted-media; clipboard-write; fullscreen"
-        loading="lazy"
-      />
-    );
-  }
-
-  return <PodcastAudioPlayer url={url} coverRaw={coverRaw} title={title} eyebrow={eyebrow} className={className} />;
+  return (
+    <div className={cn("overflow-hidden rounded-2xl bg-brut-ink text-white", className)}>
+      <div className="p-4 sm:p-5">
+        {eyebrow && <div className="mb-2 font-mono text-[11px] uppercase tracking-[0.12em] text-white/45">{eyebrow}</div>}
+        <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-black">
+          <iframe
+            src={embed}
+            title={title}
+            className="absolute inset-0 h-full w-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            loading="lazy"
+          />
+        </div>
+        <div className="mt-3 line-clamp-2 font-semibold leading-snug">{title}</div>
+      </div>
+    </div>
+  );
 }
 
 function PodcastAudioPlayer({
