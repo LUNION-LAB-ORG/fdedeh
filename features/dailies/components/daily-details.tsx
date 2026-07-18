@@ -13,6 +13,7 @@ import { BrutLikeButton } from "@/components/brut/brut-like-button";
 import { BrutStats } from "@/components/brut/brut-stats";
 import { BrutDatePicker } from "@/components/brut/brut-date-picker";
 import { BrutAside } from "@/components/brut/brut-aside";
+import { BrutDetailAd } from "@/components/brut/brut-detail-ad";
 import { useStats } from "@/hooks/use-stats";
 import { dateFormat } from "@/utils/date-format";
 
@@ -79,6 +80,7 @@ function DailyDetails({ dailyDate }: { dailyDate: string }) {
             <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_320px]">
               <div className="min-w-0">
                 <DailyIntroduction introduction={daily.introduction} />
+                <BrutDetailAd />
                 <div className="mt-8 space-y-12">
                   {daily.contents.map((content: IDailyContent, index: number) => (
                     <DailyContent key={content.id} content={content} index={index} />

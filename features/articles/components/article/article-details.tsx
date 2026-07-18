@@ -11,6 +11,7 @@ import { BrutStats } from "@/components/brut/brut-stats";
 import { useStats } from "@/hooks/use-stats";
 import { BrutAside } from "@/components/brut/brut-aside";
 import { BrutContentImage } from "@/components/brut/brut-content-image";
+import { BrutDetailAd } from "@/components/brut/brut-detail-ad";
 import { dateFormat } from "@/utils/date-format";
 
 function ArticleDetails({ slug }: { slug: string }) {
@@ -72,6 +73,9 @@ function ArticleDetails({ slug }: { slug: string }) {
             sizes="(max-width: 1024px) 100vw, 1000px"
           />
         </figure>
+
+        <BrutDetailAd />
+
 
         <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_320px]">
           <div className="min-w-0">

@@ -4,7 +4,6 @@ import FlashInfo from "@/components/flash-info";
 import { BrutHero } from "@/components/brut/brut-hero";
 import { BrutArticleCard } from "@/components/brut/brut-article-card";
 import { BrutDailyCard } from "@/components/brut/brut-daily-card";
-import { BrutAd } from "@/components/brut/brut-ad";
 import { BrutQuestion } from "@/components/brut/brut-question";
 import { BrutNewsletter } from "@/components/brut/brut-newsletter";
 import { BrutDatePicker } from "@/components/brut/brut-date-picker";
@@ -122,8 +121,6 @@ export default async function HomePage() {
             </div>
           </section>
         )}
-
-        <BrutAd position="HEADER" />
 
         <BrutQuestion />
 

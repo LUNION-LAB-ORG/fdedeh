@@ -9,6 +9,7 @@ import { StatsTracker } from "@/components/brut/stats-tracker";
 import { BrutLikeButton } from "@/components/brut/brut-like-button";
 import { BrutStats } from "@/components/brut/brut-stats";
 import { BrutFil } from "@/components/brut/brut-fil";
+import { BrutDetailAd } from "@/components/brut/brut-detail-ad";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -78,6 +79,10 @@ export default async function PodcastDetailPage({ params }: Props) {
           <div className="brut-article-body" dangerouslySetInnerHTML={{ __html: podcast.content }} />
         </div>
       )}
+
+      <div className="mx-auto max-w-3xl">
+        <BrutDetailAd />
+      </div>
 
       <div className="mx-auto mt-12 max-w-3xl">
         <BrutFil entityData={podcast} entityType="ARTICLE" />

@@ -7,6 +7,7 @@ import { StatsTracker } from "@/components/brut/stats-tracker";
 import { BrutStats } from "@/components/brut/brut-stats";
 import { BrutLikeButton } from "@/components/brut/brut-like-button";
 import { BrutFil } from "@/components/brut/brut-fil";
+import { BrutDetailAd } from "@/components/brut/brut-detail-ad";
 import { ScrollToHash } from "@/components/brut/scroll-to-hash";
 import { dateFormat } from "@/utils/date-format";
 
@@ -45,6 +46,8 @@ export default async function PpefDetailPage({ params }: { params: Promise<{ slu
           <BrutStats views={pub.view_count} comments={pub.comments_count} />
           <BrutLikeButton likeableType="PPEF" likeableId={pub.id} initialCount={pub.likes_count ?? 0} />
         </div>
+
+        <BrutDetailAd />
 
         {informations.length > 0 ? (
           <div className="mt-10 space-y-12">

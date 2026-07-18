@@ -23,8 +23,8 @@ function DailyContent(props: { content: IDailyContent; index: number }) {
   return (
     <section>
       {titre && (
-        <h2 className="mb-4 flex items-center gap-3 font-display text-[21px] font-black -tracking-[0.02em] text-brut-ink">
-          <span className="shrink-0">{titre}</span>
+        <h2 className="mb-4 flex items-center gap-3 font-display text-[21px] font-black leading-tight -tracking-[0.02em] text-brut-ink">
+          <span className="min-w-0 break-words">{titre}</span>
           <span className="h-px flex-1 bg-brut-line" />
         </h2>
       )}
