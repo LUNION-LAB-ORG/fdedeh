@@ -13,6 +13,8 @@ import { slugify } from "@/features/articles/utils/slugify";
 import { dateFormat } from "@/utils/date-format";
 import { obtenirTousArticlesAction } from "@/features/articles/actions/article.action";
 import { obtenirTousDailiesAction } from "@/features/dailies/dailies.action";
+import { obtenirListePpefAction } from "@/features/ppef/ppef.action";
+import { PpefFeedCard } from "@/components/brut/ppef-feed-card";
 
 function dateISO(value: string) {
   return new Date(value).toISOString().split("T")[0];
@@ -48,13 +50,15 @@ function SectionHead({
 }
 
 export default async function HomePage() {
-  const [articlesRes, dailiesRes] = await Promise.all([
+  const [articlesRes, dailiesRes, ppefRes] = await Promise.all([
     obtenirTousArticlesAction({}),
     obtenirTousDailiesAction({ page: 1 }),
+    obtenirListePpefAction(),
   ]);
 
   const articles = articlesRes.data?.data ?? [];
   const dailies = dailiesRes.data?.data ?? [];
+  const dernierPpef = (ppefRes.success ? ppefRes.data?.data ?? [] : [])[0];
 
   const dailyUne = dailies[0];
   const dailiesListe = dailies.slice(1, 7);
@@ -101,6 +105,20 @@ export default async function HomePage() {
               {dailiesListe.slice(1, 5).map((daily) => (
                 <BrutDailyCard daily={daily} key={`daily-${daily.id}`} />
               ))}
+            </div>
+          </section>
+        )}
+
+        {dernierPpef && (
+          <section className="pt-16">
+            <SectionHead
+              eyebrow="Pôle Pénal Économique et Financier"
+              title="La dernière audience PPEF"
+              href="/ppef"
+              hrefLabel="Toutes les audiences"
+            />
+            <div className="max-w-[600px]">
+              <PpefFeedCard publication={dernierPpef} />
             </div>
           </section>
         )}

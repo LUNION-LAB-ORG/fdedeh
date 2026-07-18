@@ -7,9 +7,9 @@ import { StatsTracker } from "@/components/brut/stats-tracker";
 import { BrutStats } from "@/components/brut/brut-stats";
 import { dateFormat } from "@/utils/date-format";
 
-export default async function PpefDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const res = await obtenirPpefDetailAction(id);
+export default async function PpefDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const res = await obtenirPpefDetailAction(slug);
   const pub = res.success ? res.data?.data : null;
 
   if (!pub) {

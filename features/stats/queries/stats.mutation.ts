@@ -27,11 +27,9 @@ export const useEnregistrerStatsMutation = () => {
 
 			return result.data!;
 		},
-		onSuccess: async (data: Stats) => {
-			await invalidateStatsQuery(data.id, data.type);
-			// toast.success("Statistiques enregistrées avec succès");
-			console.log("Statistiques enregistrées avec succès");
-
+		// `variables` = l'entrée envoyée (id + type) ; la réponse API ne contient que view_count.
+		onSuccess: async (_result, variables) => {
+			await invalidateStatsQuery(variables.id, variables.type);
 		},
 		onError: async (error) => {
 			console.error("Erreur lors de l'enregistrement des statistiques", error);

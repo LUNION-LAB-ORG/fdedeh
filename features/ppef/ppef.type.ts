@@ -8,10 +8,13 @@ export interface IPpefInformation {
 
 export interface IPpefPublication {
   id: number;
+  slug: string;
   title: string;
   published_at: string | null;
   view_count?: number;
   author_name: string | null;
   informations_count?: number;
+  likes_total?: number;
+  comments_total?: number;
   informations?: IPpefInformation[];
 }

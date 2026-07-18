@@ -1,6 +1,16 @@
 import React from "react";
 
-export type NavItem = { name: string; href: string; icon: React.ReactNode };
+export type NavItem = { name: string; href: string; icon: React.ReactNode; match?: string[] };
+
+// Un item reste actif sur ses pages de détail : on teste le href ET les préfixes
+// `match` (ex. « Articles » pointe sur /a-la-une mais les détails sont sous /articles).
+// La home (« / ») ne matche qu'en exact, sinon elle serait active partout.
+export function estItemActif(item: { href: string; match?: string[] }, pathname: string): boolean {
+  const cibles = [item.href, ...(item.match ?? [])];
+  return cibles.some((href) =>
+    href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href + "/")
+  );
+}
 
 const I = {
   une: <svg viewBox="0 0 24 24"><path d="M4 21V4h9l1 2h6v9h-7l-1-2H4" /></svg>,
@@ -39,6 +49,6 @@ export const RUBRIQUES: NavItem[] = [
 export const MEDIA: NavItem[] = [
   { name: "A Barthelemy Inabo", href: "/dailies", icon: I.archives },
   { name: "PPEF", href: "/ppef", icon: I.ppef },
-  { name: "Articles", href: "/a-la-une", icon: I.daily },
+  { name: "Articles", href: "/a-la-une", icon: I.daily, match: ["/articles"] },
   { name: "Podcasts", href: "/podcasts", icon: I.podcasts },
 ];

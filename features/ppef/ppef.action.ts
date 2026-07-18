@@ -20,9 +20,9 @@ export const obtenirListePpefAction = async (): Promise<ActionResponse<{ data: I
   }
 };
 
-export const obtenirPpefDetailAction = async (id: string | number): Promise<ActionResponse<{ data: IPpefPublication }>> => {
+export const obtenirPpefDetailAction = async (slug: string): Promise<ActionResponse<{ data: IPpefPublication }>> => {
   try {
-    const data = await ppefApi.detail(id);
+    const data = await ppefApi.detail(slug);
     return { success: true, data };
   } catch (error) {
     return handleServerActionError(error, "Erreur lors de la récupération de la publication PPEF");

@@ -5,19 +5,14 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { Home, Newspaper, LayoutGrid, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import LogoFd from "@/components/logo-fd";
-import { RUBRIQUES, MEDIA, NavItem } from "./nav-data";
+import { RUBRIQUES, MEDIA, NavItem, estItemActif } from "./nav-data";
 import { BrutThemeToggle } from "./brut-theme-toggle";
 
 const TABS = [
   { name: "Accueil", href: "/", Icon: Home },
-  { name: "Articles", href: "/a-la-une", Icon: Newspaper },
+  { name: "Articles", href: "/a-la-une", match: ["/articles"], Icon: Newspaper },
   { name: "Inabo", href: "/dailies", Icon: LayoutGrid },
 ];
-
-function useIsActive() {
-  const pathname = usePathname();
-  return (href: string) => (href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href + "/"));
-}
 
 function SheetLink({ item, active, onClose }: { item: NavItem; active: boolean; onClose: () => void }) {
   return (
@@ -37,7 +32,7 @@ function SheetLink({ item, active, onClose }: { item: NavItem; active: boolean; 
 }
 
 export function BrutBottomNav() {
-  const isActive = useIsActive();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
   // Verrouille le défilement de l'arrière-plan quand le menu est ouvert.
@@ -65,8 +60,9 @@ export function BrutBottomNav() {
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <div className="flex items-stretch">
-          {TABS.map(({ name, href, Icon }) => {
-            const active = isActive(href);
+          {TABS.map((tab) => {
+            const { name, href, Icon } = tab;
+            const active = estItemActif(tab, pathname);
             return (
               <Link key={href} href={href} className={tabClass(active)}>
                 <Icon className="h-[22px] w-[22px]" strokeWidth={active ? 2.4 : 2} />
@@ -108,14 +104,14 @@ export function BrutBottomNav() {
               <div className="px-1 pb-2 pt-3 font-mono text-[11px] uppercase tracking-[0.12em] text-brut-muted">Rubriques</div>
               <div className="grid grid-cols-2 gap-1">
                 {RUBRIQUES.map((item) => (
-                  <SheetLink key={item.name} item={item} active={isActive(item.href)} onClose={close} />
+                  <SheetLink key={item.name} item={item} active={estItemActif(item, pathname)} onClose={close} />
                 ))}
               </div>
 
               <div className="px-1 pb-2 pt-5 font-mono text-[11px] uppercase tracking-[0.12em] text-brut-muted">Le média</div>
               <div className="grid grid-cols-2 gap-1">
                 {MEDIA.map((item) => (
-                  <SheetLink key={item.name + item.href} item={item} active={isActive(item.href)} onClose={close} />
+                  <SheetLink key={item.name + item.href} item={item} active={estItemActif(item, pathname)} onClose={close} />
                 ))}
               </div>
 

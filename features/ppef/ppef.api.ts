@@ -9,9 +9,9 @@ export const ppefApi = {
     });
   },
 
-  detail(id: string | number): Promise<{ data: IPpefPublication }> {
+  detail(slug: string): Promise<{ data: IPpefPublication }> {
     return api.request<{ data: IPpefPublication }>({
-      endpoint: `/ppef/${id}`,
+      endpoint: `/ppef/${slug}`,
       method: "GET",
     });
   },
