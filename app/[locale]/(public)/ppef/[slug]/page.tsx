@@ -5,6 +5,9 @@ import { obtenirPpefDetailAction } from "@/features/ppef/ppef.action";
 import { PpefInformationBlock } from "@/components/brut/ppef-information-block";
 import { StatsTracker } from "@/components/brut/stats-tracker";
 import { BrutStats } from "@/components/brut/brut-stats";
+import { BrutLikeButton } from "@/components/brut/brut-like-button";
+import { BrutFil } from "@/components/brut/brut-fil";
+import { ScrollToHash } from "@/components/brut/scroll-to-hash";
 import { dateFormat } from "@/utils/date-format";
 
 export default async function PpefDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -21,6 +24,7 @@ export default async function PpefDetailPage({ params }: { params: Promise<{ slu
   return (
     <article className="px-6 py-10 lg:px-11 lg:py-12">
       <StatsTracker type="PPEF" id={pub.id} />
+      <ScrollToHash id="commentaires" />
       <div className="mx-auto max-w-3xl">
         <nav aria-label="Fil d'Ariane" className="mb-6 flex items-center gap-2.5 text-[13.5px] font-semibold">
           <Link href="/ppef" className="text-brut-ink transition-colors hover:text-brut-signal">PPEF</Link>
@@ -38,7 +42,8 @@ export default async function PpefDetailPage({ params }: { params: Promise<{ slu
           {pub.author_name && <span className="font-semibold text-brut-ink">{pub.author_name}</span>}
           {pub.published_at && <span>{dateFormat(pub.published_at)}</span>}
           <span>{informations.length} information{informations.length > 1 ? "s" : ""}</span>
-          <BrutStats views={pub.view_count} />
+          <BrutStats views={pub.view_count} comments={pub.comments_count} />
+          <BrutLikeButton likeableType="PPEF" likeableId={pub.id} initialCount={pub.likes_count ?? 0} />
         </div>
 
         {informations.length > 0 ? (
@@ -50,6 +55,13 @@ export default async function PpefDetailPage({ params }: { params: Promise<{ slu
         ) : (
           <p className="mt-10 text-brut-muted">Aucune information pour cette publication.</p>
         )}
+
+        <div id="commentaires" className="mt-16 scroll-mt-24 border-t border-brut-line pt-10">
+          <h2 className="mb-6 font-display text-[clamp(20px,3vw,26px)] font-black -tracking-[0.03em]">
+            Commentaires sur la publication
+          </h2>
+          <BrutFil entityData={pub} entityType="PPEF" />
+        </div>
       </div>
     </article>
   );

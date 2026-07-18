@@ -14,7 +14,7 @@ export interface IPpefPublication {
   view_count?: number;
   author_name: string | null;
   informations_count?: number;
-  likes_total?: number;
-  comments_total?: number;
+  likes_count?: number;
+  comments_count?: number;
   informations?: IPpefInformation[];
 }
