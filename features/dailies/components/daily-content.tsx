@@ -3,33 +3,48 @@ import { IDailyContent } from "@/features/dailies/types";
 import { BrutContentImage } from "@/components/brut/brut-content-image";
 import { cn } from "@/lib/utils";
 
-// Chaque contenu du daily a sa particularité : la mise en page de l'image
-// alterne selon sa position (journal). 0 = image flottante à gauche,
-// 1 = image pleine largeur en haut, 2 = image flottante à droite.
-// L'image est affichée en entier (ratio réel), sans bordure ni zone vide.
+// Une section de diffusion : son TITRE en en-tête, puis ses images, puis le contenu.
+// - 1 image : mise en page journal (flottante gauche/droite ou pleine largeur selon la position).
+// - plusieurs images : galerie en grille au-dessus du texte.
 function DailyContent(props: { content: IDailyContent; index: number }) {
-  const hashtag = props.content.hashtag?.hashtag;
-  const image = props.content.path_image;
-  const layout = props.index % 3;
+  const { content, index } = props;
+  const titre = content.title || content.hashtag?.hashtag; // repli ancien modèle
+  const images =
+    content.images && content.images.length > 0
+      ? content.images.map((i) => i.path_image)
+      : content.path_image
+      ? [content.path_image]
+      : [];
+
+  const layout = index % 3;
   const flottante = layout !== 1;
+  const unique = images.length === 1;
 
   return (
     <section>
-      {hashtag && (
+      {titre && (
         <h2 className="mb-4 flex items-center gap-3 font-display text-[21px] font-black -tracking-[0.02em] text-brut-ink">
-          <span className="shrink-0">{hashtag}</span>
+          <span className="shrink-0">{titre}</span>
           <span className="h-px flex-1 bg-brut-line" />
         </h2>
       )}
 
-      {image && !flottante && (
-        <BrutContentImage path={image} className="mb-5 w-full" sizes="(max-width: 768px) 100vw, 720px" />
+      {images.length > 1 && (
+        <div className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {images.map((src, i) => (
+            <BrutContentImage key={i} path={src} className="w-full" sizes="(max-width: 640px) 100vw, 360px" />
+          ))}
+        </div>
+      )}
+
+      {unique && !flottante && (
+        <BrutContentImage path={images[0]} className="mb-5 w-full" sizes="(max-width: 768px) 100vw, 720px" />
       )}
 
       <div className="brut-article-body">
-        {image && flottante && (
+        {unique && flottante && (
           <BrutContentImage
-            path={image}
+            path={images[0]}
             className={cn(
               "mb-3 w-full sm:w-[42%]",
               layout === 0 ? "sm:float-left sm:mr-6" : "sm:float-right sm:ml-6"
@@ -37,7 +52,7 @@ function DailyContent(props: { content: IDailyContent; index: number }) {
             sizes="(max-width: 640px) 100vw, 320px"
           />
         )}
-        <div dangerouslySetInnerHTML={{ __html: props.content.body }} />
+        <div dangerouslySetInnerHTML={{ __html: content.body }} />
         <div className="clear-both" />
       </div>
     </section>

@@ -31,10 +31,9 @@ function DailyDetails({ dailyDate }: { dailyDate: string }) {
     return <LoadingIndicator />;
   }
 
+  // Les rubriques (puces) viennent des hashtags de la diffusion (niveau diffusion).
   const rubriques = daily
-    ? (Array.from(
-        new Set((daily.contents ?? []).map((c) => c.hashtag?.hashtag).filter(Boolean))
-      ).slice(0, 5) as string[])
+    ? ((daily.hashtags ?? []).map((h) => h.hashtag).filter(Boolean).slice(0, 8) as string[])
     : [];
 
   return (
