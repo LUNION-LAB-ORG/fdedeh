@@ -15,6 +15,7 @@ import { obtenirTousDailiesAction } from "@/features/dailies/dailies.action";
 import { obtenirListePpefAction } from "@/features/ppef/ppef.action";
 import { PpefFeedCard } from "@/components/brut/ppef-feed-card";
 import { AdSlot } from "@/components/ad-slot";
+import { JsonLd, organizationLd, websiteLd } from "@/components/seo/json-ld";
 
 function dateISO(value: string) {
   return new Date(value).toISOString().split("T")[0];
@@ -75,6 +76,8 @@ export default async function HomePage() {
 
   return (
     <>
+      <JsonLd data={organizationLd()} />
+      <JsonLd data={websiteLd()} />
       <FlashInfo />
 
       {dailyUne && (

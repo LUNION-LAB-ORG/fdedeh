@@ -1,10 +1,11 @@
-import React from "react";
+import React, { cache } from "react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { Headphones } from "lucide-react";
 import { obtenirUnArticleAction } from "@/features/articles/actions/article.action";
 import { dateFormat } from "@/utils/date-format";
+import { addDomainToBackendImagePath } from "@/utils/image-utils";
 import { StatsTracker } from "@/components/brut/stats-tracker";
 import { BrutLikeButton } from "@/components/brut/brut-like-button";
 import { BrutStats } from "@/components/brut/brut-stats";
@@ -12,29 +13,49 @@ import { BrutPodcastPlayer } from "@/components/brut/brut-podcast-player";
 import { podcastLisible } from "@/utils/podcast";
 import { BrutFil } from "@/components/brut/brut-fil";
 import { BrutDetailAd } from "@/components/brut/brut-detail-ad";
+import { absUrl, excerpt } from "@/lib/seo/content";
+import { JsonLd, newsArticleLd } from "@/components/seo/json-ld";
 
 type Props = { params: Promise<{ slug: string }> };
 
 // Rendu frais : l'audio/contenu ajouté par l'admin apparaît sans attendre le cache.
 export const dynamic = "force-dynamic";
 
+const getPodcast = cache(async (slug: string) =>
+  obtenirUnArticleAction(slug)
+    .then((res) => res.data)
+    .catch(() => null)
+);
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const res = await obtenirUnArticleAction(slug);
-  const podcast = res.data;
-  return podcast
-    ? {
-        title: podcast.title,
-        description: "Un podcast de fd.info",
-        openGraph: { title: `${podcast.title} - fd.info`, type: "music.song" },
-      }
-    : {};
+  const podcast = await getPodcast(slug);
+  if (!podcast) return {};
+
+  const url = absUrl(`/podcasts/${slug}`);
+  const description = excerpt(podcast.content) || "Un podcast de Fernand Dédeh.";
+  const image = podcast.path_resource ? addDomainToBackendImagePath(podcast.path_resource) : undefined;
+
+  return {
+    title: podcast.title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title: podcast.title,
+      description,
+      type: "article",
+      url,
+      images: image ? [image] : undefined,
+      publishedTime: podcast.created_at,
+      section: "Podcast",
+    },
+    twitter: { card: "summary_large_image", title: podcast.title, description, images: image ? [image] : undefined },
+  };
 }
 
 export default async function PodcastDetailPage({ params }: Props) {
   const { slug } = await params;
-  const res = await obtenirUnArticleAction(slug);
-  const podcast = res.data;
+  const podcast = await getPodcast(slug);
 
   if (!podcast) {
     notFound();
@@ -42,6 +63,17 @@ export default async function PodcastDetailPage({ params }: Props) {
 
   return (
     <article className="px-6 py-10 lg:px-11 lg:py-12">
+      <JsonLd
+        data={newsArticleLd({
+          headline: podcast.title,
+          description: excerpt(podcast.content),
+          url: absUrl(`/podcasts/${slug}`),
+          image: podcast.path_resource ? addDomainToBackendImagePath(podcast.path_resource) : undefined,
+          datePublished: podcast.created_at,
+          dateModified: podcast.updated_at,
+          section: "Podcast",
+        })}
+      />
       <StatsTracker type="ARTICLE" id={podcast.id} />
       <div className="mx-auto max-w-3xl">
         <nav aria-label="Fil d'Ariane" className="mb-6 flex items-center gap-2.5 text-[13.5px] font-semibold">

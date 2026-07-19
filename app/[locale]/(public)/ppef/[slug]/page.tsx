@@ -1,5 +1,6 @@
-import React from "react";
+import React, { cache } from "react";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { obtenirPpefDetailAction } from "@/features/ppef/ppef.action";
 import { PpefInformationBlock } from "@/components/brut/ppef-information-block";
@@ -10,11 +11,49 @@ import { BrutFil } from "@/components/brut/brut-fil";
 import { BrutDetailAd } from "@/components/brut/brut-detail-ad";
 import { ScrollToHash } from "@/components/brut/scroll-to-hash";
 import { dateFormat } from "@/utils/date-format";
+import { absUrl, excerpt } from "@/lib/seo/content";
+import { JsonLd, newsArticleLd } from "@/components/seo/json-ld";
 
-export default async function PpefDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+type Props = { params: Promise<{ slug: string }> };
+
+const getPpef = cache(async (slug: string) =>
+  obtenirPpefDetailAction(slug)
+    .then((res) => (res.success ? res.data?.data : null))
+    .catch(() => null)
+);
+
+function ppefDescription(pub: any): string {
+  const raw = pub?.description || (pub?.informations ?? []).map((i: any) => i?.content).filter(Boolean).join(" ");
+  return excerpt(raw) || `${pub?.title ?? ""} — Pôle Pénal Économique et Financier.`.trim();
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const res = await obtenirPpefDetailAction(slug);
-  const pub = res.success ? res.data?.data : null;
+  const pub = await getPpef(slug);
+  if (!pub) return {};
+
+  const url = absUrl(`/ppef/${slug}`);
+  const description = ppefDescription(pub);
+
+  return {
+    title: pub.title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title: pub.title,
+      description,
+      type: "article",
+      url,
+      publishedTime: pub.published_at ?? undefined,
+      section: "PPEF",
+    },
+    twitter: { card: "summary_large_image", title: pub.title, description },
+  };
+}
+
+export default async function PpefDetailPage({ params }: Props) {
+  const { slug } = await params;
+  const pub = await getPpef(slug);
 
   if (!pub) {
     notFound();
@@ -24,6 +63,16 @@ export default async function PpefDetailPage({ params }: { params: Promise<{ slu
 
   return (
     <article className="px-6 py-10 lg:px-11 lg:py-12">
+      <JsonLd
+        data={newsArticleLd({
+          headline: pub.title,
+          description: ppefDescription(pub),
+          url: absUrl(`/ppef/${slug}`),
+          datePublished: pub.published_at ?? new Date().toISOString(),
+          section: "PPEF",
+          authorName: pub.author_name || "Fernand Dédeh",
+        })}
+      />
       <StatsTracker type="PPEF" id={pub.id} />
       <ScrollToHash id="commentaires" />
       <div className="mx-auto max-w-3xl">
