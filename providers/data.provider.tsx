@@ -5,8 +5,6 @@ import {useArticleStore} from "@/features/articles/stores/article.store";
 import {useArticleListQuery} from "@/features/articles/queries/article-list.query";
 import {useDailyListQuery} from "@/features/dailies/query/dailies-list.query";
 import {useDailyStore} from "@/features/dailies/store/dailiesStore";
-import {useBannerListQuery} from "@/features/banner/queries/banner-list";
-import {useBannerStore} from "@/features/banner/banner.store";
 import {useFlashStore} from "@/features/infos-flash/flash.store";
 import {useExclusivityListQuery} from "@/features/infos-flash/queries/flash-list";
 import {useQuestionListQuery} from "@/features/question/queries/question-list";
@@ -31,14 +29,6 @@ export default function DataProvider() {
 
 
 	const {
-		data: bannersList,
-		isLoading: bannersLoading,
-		isError: bannersIsError,
-		error: bannersError,
-		isFetching: bannersIsFetching
-	} = useBannerListQuery();
-
-	const {
 		data: exclusivities,
 		isLoading: exclusivitiesLoading,
 		isError: exclusivitiesIsError,
@@ -57,13 +47,11 @@ export default function DataProvider() {
 	const dailiesList = React.useMemo(() => {
 		return dailies?.data || []; // Adaptez selon la structure réelle de `dailies`
 	}, [dailies]);
-	const banners = React.useMemo(() => bannersList?.data || [], [bannersList]);
 	const flashInfos = React.useMemo(() => exclusivities?.data || [], [exclusivities]);
 
 	// Stockage dans Zustand
 	const {setAllArticles, setQueryState} = useArticleStore();
 	const {setAllDailies, setQueryState: setDailyQueryState} = useDailyStore();
-	const {setAllBanners, setQueryState: setBannerQueryState} = useBannerStore();
 	const {setAllFlashInfos, setQueryState: setFlashQueryState} = useFlashStore();
 	const {setAllQuestions, setQueryState: setQuestionsQueryState} = useQuestionStore();
 
@@ -99,19 +87,6 @@ export default function DataProvider() {
 			});
 		}
 	}, [questionsData, questionsError, questionsIsError, questionsIsFetching, questionsLoading, setAllQuestions, setQueryState, setQuestionsQueryState]);
-
-	useEffect(() => {
-		setBannerQueryState({
-			isLoading: bannersLoading,
-			isError: bannersIsError,
-			error: bannersError,
-			isFetching: bannersIsFetching
-		});
-	}, [bannersLoading, bannersIsError, bannersError, bannersIsFetching, setBannerQueryState]);
-
-	useEffect(() => {
-		if (banners.length) setAllBanners(banners);
-	}, [banners, setAllBanners]);
 
 	useEffect(() => {
 		if (flashInfos.length) setAllFlashInfos(flashInfos);

@@ -14,6 +14,7 @@ import { obtenirTousArticlesAction } from "@/features/articles/actions/article.a
 import { obtenirTousDailiesAction } from "@/features/dailies/dailies.action";
 import { obtenirListePpefAction } from "@/features/ppef/ppef.action";
 import { PpefFeedCard } from "@/components/brut/ppef-feed-card";
+import { AdSlot } from "@/components/ad-slot";
 
 function dateISO(value: string) {
   return new Date(value).toISOString().split("T")[0];
@@ -94,6 +95,8 @@ export default async function HomePage() {
       )}
 
       <div className="px-6 pb-4 lg:px-11">
+        <AdSlot zone="homepage_top" className="max-w-5xl pt-10" />
+
         {dailiesListe.length > 0 && (
           <section className="pt-12">
             <SectionHead eyebrow="A Barthelemy Inabo" title="À la une" href="/dailies" hrefLabel="Toutes les archives" />
@@ -124,6 +127,8 @@ export default async function HomePage() {
 
         <BrutQuestion />
 
+        <AdSlot zone="homepage_middle" className="max-w-5xl pt-16" />
+
         {categories.length > 0 && (
           <section className="pt-16">
             <SectionHead title="Autres actualités" href="/a-la-une" hrefLabel="Tout voir" />
@@ -150,6 +155,8 @@ export default async function HomePage() {
             </div>
           </section>
         )}
+
+        <AdSlot zone="homepage_bottom" className="max-w-5xl pt-16" />
 
         <BrutNewsletter />
       </div>
