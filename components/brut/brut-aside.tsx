@@ -81,6 +81,7 @@ export function BrutAside() {
       )}
 
       <BrutAd position="SIDEBAR_RIGHT" className="pt-0" />
+      <BrutAd position="SIDEBAR_LEFT" className="pt-0" />
     </aside>
   );
 }
