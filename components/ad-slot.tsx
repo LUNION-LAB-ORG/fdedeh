@@ -89,33 +89,44 @@ export function AdSlot({
 		};
 	}, [zone, type, slug, pathname]);
 
-	// 2) Compte l'impression quand la pub devient visible (≥ 50 %).
+	// 2) Compte l'impression quand la pub devient visible (≥ 50 % dans le viewport).
+	//    Détection au scroll par bounding-rect : fiable dans tous les navigateurs.
 	useEffect(() => {
-		if (!data?.creative || !data.impression_url || !data.token || !containerRef.current) return;
+		if (!data?.creative || !data.impression_url || !data.token) return;
 		const el = containerRef.current;
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting && !counted.current) {
-						counted.current = true;
-						fetch(data.impression_url!, {
-							method: "POST",
-							headers: { "Content-Type": "application/json" },
-							body: JSON.stringify({
-								token: data.token,
-								page_path: window.location.pathname,
-								device: currentDevice(),
-							}),
-							keepalive: true,
-						}).catch(() => {});
-						observer.disconnect();
-					}
-				});
-			},
-			{ threshold: 0.5 }
-		);
-		observer.observe(el);
-		return () => observer.disconnect();
+		if (!el) return;
+
+		const fire = () => {
+			counted.current = true;
+			fetch(data.impression_url!, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					token: data.token,
+					page_path: window.location.pathname,
+					device: currentDevice(),
+				}),
+				keepalive: true,
+			}).catch(() => {});
+			window.removeEventListener("scroll", check);
+			window.removeEventListener("resize", check);
+		};
+
+		const check = () => {
+			if (counted.current) return;
+			const r = el.getBoundingClientRect();
+			if (r.height === 0) return;
+			const visible = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0);
+			if (visible >= r.height * 0.5) fire();
+		};
+
+		check(); // au cas où la pub est déjà visible au montage
+		window.addEventListener("scroll", check, { passive: true });
+		window.addEventListener("resize", check);
+		return () => {
+			window.removeEventListener("scroll", check);
+			window.removeEventListener("resize", check);
+		};
 	}, [data]);
 
 	if (!data?.creative) return null;
