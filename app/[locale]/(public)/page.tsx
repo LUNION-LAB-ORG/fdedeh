@@ -12,6 +12,7 @@ import { slugify } from "@/features/articles/utils/slugify";
 import { dateFormat } from "@/utils/date-format";
 import { obtenirTousArticlesAction } from "@/features/articles/actions/article.action";
 import { obtenirTousDailiesAction } from "@/features/dailies/dailies.action";
+import { getDailyCoverPath } from "@/features/dailies/utils/images";
 import { obtenirListePpefAction } from "@/features/ppef/ppef.action";
 import { PpefFeedCard } from "@/components/brut/ppef-feed-card";
 import { AdSlot } from "@/components/ad-slot";
@@ -82,7 +83,7 @@ export default async function HomePage() {
 
       {dailyUne && (
         <BrutHero
-          imagePath={dailyUne.contents?.[0]?.path_image}
+          imagePath={getDailyCoverPath(dailyUne)}
           eyebrow={`A Barthelemy Inabo · ${dateFormat(dailyUne.published_at)}`}
           badges={
             Array.from(

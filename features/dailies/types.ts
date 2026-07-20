@@ -37,6 +37,8 @@ export interface IDaily {
 	id: string;
 	published_at: string;
 	introduction: string;
+	// Image principale (miniature/couverture) de la diffusion.
+	path_image?: string | null;
 	hashtags?: IDailyHashtag[];
 	contents: IDailyContent[];
 	user: IDailyUser;

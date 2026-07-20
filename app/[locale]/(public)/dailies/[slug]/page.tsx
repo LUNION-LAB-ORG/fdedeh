@@ -5,6 +5,7 @@ import { obtenirUnDailyAction } from "@/features/dailies/dailies.action";
 import { prefetchDailyQuery } from "@/features/dailies/query/daily-details.query";
 import { IDaily } from "@/features/dailies/types";
 import { addDomainToBackendImagePath } from "@/utils/image-utils";
+import { getDailyCoverPath } from "@/features/dailies/utils/images";
 import { absUrl, excerpt } from "@/lib/seo/content";
 import { JsonLd, newsArticleLd } from "@/components/seo/json-ld";
 
@@ -26,7 +27,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const url = absUrl(`/dailies/${slug}`);
   const title = daily.introduction ? excerpt(daily.introduction, 70) : "A Barthelemy Inabo";
   const description = excerpt(daily.introduction) || "A Barthelemy Inabo — la chronique quotidienne de Fernand Dédeh.";
-  const image = daily.contents?.[0]?.path_image ? addDomainToBackendImagePath(daily.contents[0].path_image) : undefined;
+  const cover = getDailyCoverPath(daily);
+  const image = cover ? addDomainToBackendImagePath(cover) : undefined;
 
   return {
     title,
@@ -58,7 +60,7 @@ async function DailyDetailsPage({ params }: Props) {
             headline: daily.introduction ? excerpt(daily.introduction, 100) : "A Barthelemy Inabo",
             description: excerpt(daily.introduction),
             url: absUrl(`/dailies/${slug}`),
-            image: daily.contents?.[0]?.path_image ? addDomainToBackendImagePath(daily.contents[0].path_image) : undefined,
+            image: getDailyCoverPath(daily) ? addDomainToBackendImagePath(getDailyCoverPath(daily)!) : undefined,
             datePublished: (daily as { published_at?: string }).published_at || new Date().toISOString(),
             section: "A Barthelemy Inabo",
           })}

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { IDaily } from "@/features/dailies/types";
 import { addDomainToBackendImagePath } from "@/utils/image-utils";
+import { getDailyCoverPath } from "@/features/dailies/utils/images";
 import { dateFormat } from "@/utils/date-format";
 import { BrutStats } from "./brut-stats";
 
@@ -15,7 +16,7 @@ export function BrutDailyCard({ daily, featured = false }: { daily: IDaily; feat
     new Set((daily.contents ?? []).map((c) => c.hashtag?.hashtag).filter(Boolean))
   ).slice(0, featured ? 4 : 3) as string[];
 
-  const image = daily.contents?.[0]?.path_image;
+  const image = getDailyCoverPath(daily);
 
   const rubriquesOverlay = rubriques.length > 0 && (
     <div className="absolute left-3 top-3 flex max-w-[85%] flex-wrap gap-1.5">
