@@ -123,7 +123,15 @@ export default async function HomePage() {
               href="/ppef"
               hrefLabel="Toutes les audiences"
             />
-            <div className="grid grid-cols-1 items-start gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            <div
+              className={`grid grid-cols-1 gap-6 ${
+                derniersPpef.length >= 3
+                  ? "sm:grid-cols-2 xl:grid-cols-3"
+                  : derniersPpef.length === 2
+                    ? "sm:grid-cols-2"
+                    : ""
+              }`}
+            >
               {derniersPpef.map((p) => (
                 <PpefFeedCard key={p.id} publication={p} />
               ))}

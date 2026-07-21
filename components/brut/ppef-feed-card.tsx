@@ -16,7 +16,7 @@ export function PpefFeedCard({ publication }: { publication: IPpefPublication })
   const restant = Math.max(0, total - montres.length);
 
   return (
-    <article className="overflow-hidden rounded-2xl border border-brut-line bg-brut-surface">
+    <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-brut-line bg-brut-surface">
       {/* Entête auteur */}
       <div className="flex items-center gap-3 px-4 pt-4">
         <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-custom-gradient font-display text-[15px] font-black text-white">
@@ -53,13 +53,15 @@ export function PpefFeedCard({ publication }: { publication: IPpefPublication })
         )}
       </Link>
 
-      <PpefCardActions
-        slug={publication.slug}
-        publicationId={publication.id}
-        initialLikes={publication.likes_count ?? 0}
-        comments={publication.comments_count ?? 0}
-        views={publication.view_count ?? 0}
-      />
+      <div className="mt-auto">
+        <PpefCardActions
+          slug={publication.slug}
+          publicationId={publication.id}
+          initialLikes={publication.likes_count ?? 0}
+          comments={publication.comments_count ?? 0}
+          views={publication.view_count ?? 0}
+        />
+      </div>
     </article>
   );
 }

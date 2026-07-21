@@ -24,7 +24,15 @@ export default async function PpefListPage() {
         {publications.length === 0 ? (
           <p className="text-brut-muted">Aucune publication pour le moment.</p>
         ) : (
-          <div className="mx-auto grid max-w-6xl grid-cols-1 items-start gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          <div
+            className={`mx-auto grid grid-cols-1 gap-5 ${
+              publications.length >= 3
+                ? "max-w-6xl sm:grid-cols-2 xl:grid-cols-3"
+                : publications.length === 2
+                  ? "max-w-6xl sm:grid-cols-2"
+                  : "max-w-[600px]"
+            }`}
+          >
             {publications.map((p) => (
               <PpefFeedCard key={p.id} publication={p} />
             ))}
