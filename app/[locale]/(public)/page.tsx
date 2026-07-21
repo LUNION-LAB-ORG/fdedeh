@@ -60,7 +60,7 @@ export default async function HomePage() {
 
   const articles = articlesRes.data?.data ?? [];
   const dailies = dailiesRes.data?.data ?? [];
-  const dernierPpef = (ppefRes.success ? ppefRes.data?.data ?? [] : [])[0];
+  const derniersPpef = (ppefRes.success ? ppefRes.data?.data ?? [] : []).slice(0, 3);
 
   const dailyUne = dailies[0];
   const dailiesListe = dailies.slice(1, 7);
@@ -115,16 +115,18 @@ export default async function HomePage() {
           </section>
         )}
 
-        {dernierPpef && (
+        {derniersPpef.length > 0 && (
           <section className="pt-16">
             <SectionHead
               eyebrow="Pôle Pénal Économique et Financier"
-              title="La dernière audience PPEF"
+              title={derniersPpef.length > 1 ? "Dernières audiences PPEF" : "La dernière audience PPEF"}
               href="/ppef"
               hrefLabel="Toutes les audiences"
             />
-            <div className="max-w-[600px]">
-              <PpefFeedCard publication={dernierPpef} />
+            <div className="grid grid-cols-1 items-start gap-6 sm:grid-cols-2 xl:grid-cols-3">
+              {derniersPpef.map((p) => (
+                <PpefFeedCard key={p.id} publication={p} />
+              ))}
             </div>
           </section>
         )}
