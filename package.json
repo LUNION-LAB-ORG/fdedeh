@@ -1,6 +1,7 @@
 {
   "name": "starter-next",
   "version": "0.1.0",
+  "packageManager": "pnpm@10.33.4",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
