@@ -1,9 +1,8 @@
 import React from "react";
-import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { IArticle } from "@/features/articles/types/article.type";
-import { addDomainToBackendImagePath } from "@/utils/image-utils";
 import { dateFormat } from "@/utils/date-format";
+import { BrutArticleThumb } from "./brut-article-thumb";
 import { BrutBadge } from "./brut-badge";
 import { BrutStats } from "./brut-stats";
 
@@ -14,12 +13,7 @@ export function BrutArticleCard({ article }: { article: IArticle }) {
       className="group flex flex-col overflow-hidden rounded-2xl border border-brut-line bg-brut-surface"
     >
       <div className="relative aspect-[16/10] overflow-hidden">
-        <Image
-          src={addDomainToBackendImagePath(article.path_resource)}
-          alt=""
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
-        />
+        <BrutArticleThumb article={article} className="transition-transform duration-300 group-hover:scale-105" />
         {article.category?.name && (
           <BrutBadge variant="soft" className="absolute left-3 top-3 bg-brut-ground text-brut-ink">
             {article.category.name}

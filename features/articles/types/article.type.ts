@@ -12,8 +12,14 @@ export interface IArticle {
 	title: string;
 	slug: string;
 	content: string;
-	path_resource: string;
+	// Image principale. Vide ('' ou null) pour un article vidéo publié sans image de
+	// couverture : passer par `couvertureArticle` (utils/article-media.ts) pour l'afficher.
+	path_resource: string | null;
 	path_audio?: string | null;
+	// Vidéo de l'article, à la place de l'image : chemin d'un fichier servi par le backend
+	// (`storage/articles/videos/…`) OU lien YouTube. Vide/absent = article image.
+	// À lire via `videoArticle` (utils/article-media.ts), jamais directement.
+	path_video?: string | null;
 	status: boolean;
 	created_at: string;
 	updated_at: string;

@@ -1,9 +1,8 @@
 import React from "react";
-import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { IArticle } from "@/features/articles/types/article.type";
-import { addDomainToBackendImagePath } from "@/utils/image-utils";
 import { dateFormat } from "@/utils/date-format";
+import { BrutArticleThumb } from "./brut-article-thumb";
 
 // Carte horizontale compacte : vignette + rubrique + titre. Pour les listes
 // secondaires (« À suivre aussi », colonnes latérales), façon maquette Brut.
@@ -11,11 +10,10 @@ export function BrutArticleRow({ article }: { article: IArticle }) {
   return (
     <Link href={`/articles/${article.slug}`} className="group flex items-center gap-4">
       <div className="relative aspect-[4/3] w-28 shrink-0 overflow-hidden rounded-xl border border-brut-line sm:w-36">
-        <Image
-          src={addDomainToBackendImagePath(article.path_resource)}
-          alt=""
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+        <BrutArticleThumb
+          article={article}
+          pastille="sm"
+          className="transition-transform duration-300 group-hover:scale-105"
         />
       </div>
       <div className="min-w-0">

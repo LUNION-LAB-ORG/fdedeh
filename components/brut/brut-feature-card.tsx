@@ -1,9 +1,8 @@
 import React from "react";
-import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { IArticle } from "@/features/articles/types/article.type";
-import { addDomainToBackendImagePath } from "@/utils/image-utils";
 import { dateFormat } from "@/utils/date-format";
+import { BrutArticleThumb } from "./brut-article-thumb";
 import { BrutBadge } from "./brut-badge";
 
 // Carte « vedette » : un article mis en avant en grand, image et texte côte à côte.
@@ -15,12 +14,7 @@ export function BrutFeatureCard({ article }: { article: IArticle }) {
       className="group grid overflow-hidden rounded-2xl border border-brut-line bg-brut-surface lg:grid-cols-2"
     >
       <div className="relative aspect-[16/10] overflow-hidden lg:aspect-auto lg:min-h-[340px]">
-        <Image
-          src={addDomainToBackendImagePath(article.path_resource)}
-          alt=""
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
-        />
+        <BrutArticleThumb article={article} className="transition-transform duration-300 group-hover:scale-105" />
         {article.category?.name && (
           <BrutBadge variant="signal" className="absolute left-4 top-4">
             {article.category.name}

@@ -74,3 +74,28 @@ export function newsArticleLd(opts: {
         url: opts.url,
     };
 }
+
+/**
+ * Vidéo d'un article. Google exige une miniature : n'appeler que si elle existe.
+ * `contentUrl` pour un fichier servi par le backend, `embedUrl` pour YouTube.
+ */
+export function videoObjectLd(opts: {
+    name: string;
+    description?: string;
+    thumbnailUrl: string;
+    uploadDate: string;
+    contentUrl?: string;
+    embedUrl?: string;
+}): Record<string, unknown> {
+    return {
+        "@context": "https://schema.org",
+        "@type": "VideoObject",
+        name: opts.name,
+        // La description est obligatoire pour Google : à défaut d'extrait, le titre.
+        description: opts.description || opts.name,
+        thumbnailUrl: [opts.thumbnailUrl],
+        uploadDate: opts.uploadDate,
+        contentUrl: opts.contentUrl,
+        embedUrl: opts.embedUrl,
+    };
+}

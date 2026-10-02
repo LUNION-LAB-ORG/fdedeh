@@ -1,14 +1,13 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { Facebook, Twitter, Youtube } from "lucide-react";
 import { useArticleStore } from "@/features/articles/stores/article.store";
-import { addDomainToBackendImagePath } from "@/utils/image-utils";
 import { dateFormat } from "@/utils/date-format";
 import { cn } from "@/lib/utils";
 import { BrutAd } from "./brut-ad";
+import { BrutArticleThumb } from "./brut-article-thumb";
 
 const SOCIALS = [
   { name: "Facebook", href: "https://www.facebook.com/fernand.tagro", Icon: Facebook, bg: "bg-[#448AE9]" },
@@ -61,11 +60,10 @@ export function BrutAside() {
                 style={{ animationDelay: `${i * 90}ms` }}
               >
                 <div className="relative aspect-square w-16 shrink-0 overflow-hidden rounded-lg border border-brut-line">
-                  <Image
-                    src={addDomainToBackendImagePath(article.path_resource)}
-                    alt=""
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  <BrutArticleThumb
+                    article={article}
+                    pastille="sm"
+                    className="transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
                 <div className="min-w-0">

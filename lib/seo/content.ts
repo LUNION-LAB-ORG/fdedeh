@@ -2,6 +2,7 @@ import { obtenirTousArticlesAction } from "@/features/articles/actions/article.a
 import { obtenirTousDailiesAction } from "@/features/dailies/dailies.action";
 import { obtenirListePpefAction } from "@/features/ppef/ppef.action";
 import { addDomainToBackendImagePath } from "@/utils/image-utils";
+import { couvertureArticle } from "@/utils/article-media";
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_BASE_URL || "https://fdedeh.info").replace(/\/+$/, "");
 
@@ -60,7 +61,8 @@ export async function getArticleEntries(): Promise<SeoEntry[]> {
             description: excerpt(a.content),
             lastModified: toDate(a.updated_at || a.created_at),
             publishedAt: toDate(a.created_at),
-            image: a.path_resource ? addDomainToBackendImagePath(a.path_resource) : undefined,
+            // Article vidéo sans image : la miniature YouTube sert d'illustration.
+            image: couvertureArticle(a) ?? undefined,
             section: a.category?.name,
             kind: "article" as const,
         }));

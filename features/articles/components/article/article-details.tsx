@@ -11,6 +11,8 @@ import { BrutStats } from "@/components/brut/brut-stats";
 import { useStats } from "@/hooks/use-stats";
 import { BrutAside } from "@/components/brut/brut-aside";
 import { BrutContentImage } from "@/components/brut/brut-content-image";
+import { BrutArticleVideo } from "@/components/brut/brut-article-video";
+import { videoArticle } from "@/utils/article-media";
 import { BrutDetailAd } from "@/components/brut/brut-detail-ad";
 import { dateFormat } from "@/utils/date-format";
 
@@ -65,13 +67,18 @@ function ArticleDetails({ slug }: { slug: string }) {
         </div>
 
         <figure className="mt-8">
-          <BrutContentImage
-            path={article.path_resource}
-            alt={article.title}
-            priority
-            className="w-full"
-            sizes="(max-width: 1024px) 100vw, 1000px"
-          />
+          {videoArticle(article) ? (
+            // Article vidéo : le lecteur (YouTube ou fichier) remplace l'image principale.
+            <BrutArticleVideo article={article} title={article.title} />
+          ) : (
+            <BrutContentImage
+              path={article.path_resource}
+              alt={article.title}
+              priority
+              className="w-full"
+              sizes="(max-width: 1024px) 100vw, 1000px"
+            />
+          )}
         </figure>
 
         <BrutDetailAd />
